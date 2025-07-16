@@ -1,0 +1,63 @@
+[
+    {
+        "adliExecutionId": "9374c35d-644a-47e3-b1e7-eb54e7c0b87c",
+        "adliExecutionIndex": 34,
+        "adliValue": {
+            "asp_uid": "a1deab95-33fd-4b50-8d04-72c3923b8e8a",
+            "code": 1,
+            "type": "bubbleSort",
+            "worker": true
+        },
+        "funcName": "send_response",
+        "outputName": "response",
+        "programName": "Bubble Sort",
+        "timestamp": 1745265678864,
+        "type": "adli_output",
+        "uid": "e1fbbb5d-1d2c-4e56-bbb3-ae7c18112121"
+    },
+    {
+        "adliExecutionId": "9374c35d-644a-47e3-b1e7-eb54e7c0b87c",
+        "adliExecutionIndex": 34,
+        "adliValue": {
+            "asp_uid": "a1deab95-33fd-4b50-8d04-72c3923b8e8a",
+            "code": 1,
+            "type": "bubbleSort",
+            "worker": true
+        },
+        "funcName": "handle_message",
+        "output": [
+            {
+                "adliExecutionId": "0365447b-5d5e-4500-ac11-d8e718569c6f",
+                "adliExecutionIndex": 62,
+                "adliValue": {
+                    "asp_uid": "a1deab95-33fd-4b50-8d04-72c3923b8e8a",
+                    "code": 1,
+                    "type": "bubbleSort",
+                    "worker": true
+                },
+                "funcName": "send_to_worker",
+                "outputName": "message",
+                "programName": "Job Handler",
+                "timestamp": 1745265678865,
+                "type": "adli_output"
+            }
+        ],
+        "programName": "Job Handler",
+        "timestamp": 1745265678864,
+        "type": "adli_input"
+    },
+    {
+        "adliExecutionId": "0365447b-5d5e-4500-ac11-d8e718569c6f",
+        "adliExecutionIndex": 62,
+        "adliValue": {
+            "asp_uid": "a1deab95-33fd-4b50-8d04-72c3923b8e8a",
+            "code": 1,
+            "type": "bubbleSort",
+            "worker": true
+        },
+        "funcName": "handle_message",
+        "programName": "Bubble Sort",
+        "timestamp": 1745265678865,
+        "type": "adli_input"
+    }
+]
