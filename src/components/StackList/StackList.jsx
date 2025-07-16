@@ -49,7 +49,7 @@ StackRow.propTypes = {
     fileName: PropTypes.string,
     lineNumber: PropTypes.number,
     selected: PropTypes.bool,
-    onSelectStackPos: PropTypes.func,
+    selectTraceItem: PropTypes.func,
     hasException: PropTypes.bool,
 }
 
@@ -65,7 +65,7 @@ export const StackList = ({traces, selectTraceItem}) => {
     const generateStackList = () => {
         const traceList = traces.map((trace, index) => {
             return <StackRow 
-                key={`${trace.fileName}-${trace.lineNumber}-${trace.functionName}`}
+                key={`${trace.fileName}-${trace.lineNumber}-${trace.functionName}-${index}`}
                 functionName={trace.functionName}
                 fileName={trace.fileName}
                 lineNumber={trace.lineNumber}     

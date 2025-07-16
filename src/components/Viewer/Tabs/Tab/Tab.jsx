@@ -20,7 +20,7 @@ export const Tab = ({file, activeTab, selectTab, closeTab}) => {
 
     const getTabStyle = () => {
         return {
-            backgroundColor: (activeTab == file.key)?tabColors.active:tabColors.disabled
+            backgroundColor: (activeTab === file.key)?tabColors.active:tabColors.disabled
         };
     }
 
@@ -45,7 +45,7 @@ Tab.propTypes = {
         fileName: PropTypes.oneOfType([PropTypes.string, PropTypes.array]).isRequired,
         path: PropTypes.string
     }).isRequired,
-    isActive: PropTypes.string.isRequired,
+    activeTab: PropTypes.string.isRequired,
     selectTab: PropTypes.func.isRequired,
     closeTab: PropTypes.func.isRequired
 }

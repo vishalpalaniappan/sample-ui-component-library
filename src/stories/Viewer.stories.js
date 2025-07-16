@@ -25,7 +25,7 @@ const Template = (args) => {
     }, []);
 
     return (
-        <div className="viewerContainer">
+        <div className="viewerStoryWrapper">
             <Viewer {...args} />
         </div>
     )

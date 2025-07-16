@@ -31,7 +31,7 @@ export const Viewer = ({systemTree, onFileSelect}) => {
                 const info = {
                     program: program,
                     key: key,
-                    fileName: filePath.split("/").slice(-1),
+                    fileName: filePath.split("/").slice(-1)[0],
                     path: filePath
                 }
                 content[key] = file.source
@@ -39,7 +39,7 @@ export const Viewer = ({systemTree, onFileSelect}) => {
             }
         }
 
-        if (files.length == 0) {
+        if (files.length === 0) {
             // TODO: Replace monaco editor with prompt until a tab is added
             setEditorContent("Select file using file navigator or drop down on top right.");
             setFileContent({});

@@ -22,7 +22,7 @@ const Template = (args) => {
         action('Selected Stack Position:')(selectedIndex);
         const newTraces = [];
         args.traces.forEach((value, index) => {
-            value.selected = (selectedIndex == index);
+            value.selected = (selectedIndex === index);
             newTraces.push(value);
         });
         updateArgs({traces : newTraces});

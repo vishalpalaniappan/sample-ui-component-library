@@ -40,7 +40,7 @@ export const Tabs = ({files, selectFile, systemTree}) => {
     const addTab = (key) => {
         const currTabsList = [...tabsList];
 
-        let hasKey = currTabsList.find((tab) => tab.key == key)
+        let hasKey = currTabsList.find((tab) => tab.key === key)
 
         if (hasKey) {
             // Set the active tab and select the file.
@@ -49,7 +49,7 @@ export const Tabs = ({files, selectFile, systemTree}) => {
         } else {
             // Add tab to the tabs list.
             files.forEach((file, index) => {
-                if (file.key == key) {
+                if (file.key === key) {
                     currTabsList.push(file);
                     setActiveTab(file.key);
                     selectFile(file.key);
@@ -71,7 +71,7 @@ export const Tabs = ({files, selectFile, systemTree}) => {
         setTabsList(currTabsList);
 
         // Select new tab
-        if (currTabsList.length == 0) {
+        if (currTabsList.length === 0) {
             selectFile(null);
             setActiveTab(null);
         } else {
@@ -91,14 +91,14 @@ export const Tabs = ({files, selectFile, systemTree}) => {
 
         // Build files list from system
         for (const program in systemTree) {
-            items.push(<Dropdown.Header>{program}</Dropdown.Header>);
+            items.push(<Dropdown.Header key={`header-${program}`}>{program}</Dropdown.Header>);
             for (const fileName in systemTree[program]) {
                 const key = program + "_" + fileName;
                 items.push(
                     <Dropdown.Item key={key} onClick={() => addTab(key)}>{fileName}</Dropdown.Item>
                 );
             }
-            items.push(<Dropdown.Divider />);
+            items.push(<Dropdown.Divider key={`divider-${program}`} />);
         }
 
         // Remove last divider
