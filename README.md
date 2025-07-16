@@ -1,7 +1,7 @@
-# sample-component-library
+# sample-ui-component-library
 A library with sample components that can be used to develop the layout. 
 
-Link to [storybook](https://vishalpalaniappan.github.io/sample-component-library/).
+Link to [storybook](https://vishalpalaniappan.github.io/sample-ui-component-library/).
 
 ## Developing
 Install Libraries:
