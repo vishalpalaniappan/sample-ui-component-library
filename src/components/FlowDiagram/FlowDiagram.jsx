@@ -15,6 +15,8 @@ import "@xyflow/react/dist/style.css";
 import { getLayoutedElements } from "./DagreLayout.js";
 import { getNodesFromTrace } from "./helper.js"
 
+import sample from "./SampleNodes.json"
+
 const Flow = ({trace}) => {
   const { fitView } = useReactFlow();
   const [colorMode, setColorMode] = useState("dark");
@@ -37,8 +39,8 @@ const Flow = ({trace}) => {
   );
 
   useEffect(() => {
-    if (trace) {
-      const flowInfo = getNodesFromTrace(trace);
+    if (sample) {
+      const flowInfo = getNodesFromTrace(sample);
       
       const layouted = getLayoutedElements(
         flowInfo.nodes,
@@ -51,7 +53,7 @@ const Flow = ({trace}) => {
  
       fitView();
     }
-  }, [trace]);
+  }, [sample]);
 
   return (
     <ReactFlow
@@ -63,19 +65,6 @@ const Flow = ({trace}) => {
       fitView
     >
       <Controls />
-
-      <Panel position="top-right">
-        <select onChange={onChange} data-testid="colormode-select">
-          <option value="dark">dark</option>
-          <option value="light">light</option>
-          <option value="system">system</option>
-        </select>
-      </Panel>
-
-      <Panel position="top-left">
-        <button onClick={() => onLayout('TB')}>vertical layout</button>
-        <button onClick={() => onLayout('LR')}>horizontal layout</button>
-      </Panel>
     </ReactFlow>
   );
 };

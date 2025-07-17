@@ -5,7 +5,7 @@ export const getLayoutedElements = (nodes, edges, options) => {
     // Reference: https://reactflow.dev/learn/layouting/layouting
 
     const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));
-    g.setGraph({ rankdir: options.direction, ranksep: 100 });
+    g.setGraph({ rankdir: options.direction, ranksep: 100, nodesep: 170});
    
     edges.forEach((edge) => g.setEdge(edge.source, edge.target));
     nodes.forEach((node) =>

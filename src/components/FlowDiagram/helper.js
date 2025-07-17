@@ -17,36 +17,39 @@ const arrowStyle = {
  * @param {Object} trace 
  * @returns {Array} An array co
  */
-export const getNodesFromTrace = (trace) => {
+export const getNodesFromTrace = (variableTree) => {
     const edges = [];
     const nodes = [];
+    Object.keys(variableTree).forEach((branchName, index1) => {
+        variableTree[branchName].forEach((node, index) => {
 
-    trace.forEach((node, index) => {
-        node.flowId = String(index) + node.adliExecutionId;
-        const flowNode = {
-            id: node.flowId,
-            position: { x: 250, y: index * 200 },
-            data: { label: node.programName }
-        }
-
-        if (index == 0) {
-            flowNode.type = "input";
-        }
-
-        if (index > 0) {
-            const prevNode = trace[index - 1];
-            const edge = {
-                id: prevNode.flowId + "-" + node.flowId,
-                source: prevNode.flowId,
-                target: node.flowId,
-                animated: true,
-                markerEnd: marker,
-                style: arrowStyle
+            // Position doesn't matter, it will be set by layout algorithm
+            const flowNode = {
+                id: node,
+                flowId: node,
+                position: { x: 250, y: index * 200 },
+                data: { label: String(node) }
             }
-            edges.push(edge);
-        }
 
-        nodes.push(flowNode);
+            if (index == 0) {
+                flowNode.type = "input"
+            }
+
+            if (index > 0) {
+                const prevNode = nodes[nodes.length-1]
+                const edge = {
+                    id: prevNode.id + "-" + flowNode.id,
+                    source: prevNode.flowId,
+                    target: flowNode.flowId,
+                    animated: true,
+                    markerEnd: marker,
+                    style: arrowStyle
+                }
+                edges.push(edge);
+            }
+
+            nodes.push(flowNode);
+        });
     });
 
     return {
