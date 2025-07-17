@@ -3,6 +3,7 @@ import commonjs from '@rollup/plugin-commonjs';
 import terser from '@rollup/plugin-terser';
 import external from 'rollup-plugin-peer-deps-external';
 import postcss from 'rollup-plugin-postcss';
+import json from '@rollup/plugin-json';
 import { babel } from '@rollup/plugin-babel';
 
 export default {
@@ -31,5 +32,6 @@ export default {
             exclude: 'node_modules/**',
         }),
         commonjs(),
+        json()
     ]
 }
