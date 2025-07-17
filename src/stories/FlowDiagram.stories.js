@@ -1,13 +1,13 @@
 import { FlowDiagram } from "../components/FlowDiagram";
 import "./FlowDiagram.scss"
 
-import systemtrace from "./data/flow/flowDiagramSample.json";
+import sampleTree from "./data/flow/SampleTree.json";
 
 export default {
     title: 'FlowDiagram', 
     component: FlowDiagram,
     argTypes: {
-        traces: {
+        treeInfo: {
             type: 'array'
         }
     }
@@ -22,9 +22,8 @@ const Template = (args) => {
     )
 }
 
-
 export const Default = Template.bind({})
 
 Default.args = {
-    traces: [systemtrace]
+    treeInfo: sampleTree
 }

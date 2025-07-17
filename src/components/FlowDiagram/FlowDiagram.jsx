@@ -4,56 +4,36 @@ import {
   ReactFlowProvider,
   useNodesState,
   useEdgesState,
-  MiniMap,
-  Background,
   Controls,
-  Panel,
   useReactFlow
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 
 import { getLayoutedElements } from "./DagreLayout.js";
-import { getNodesFromTrace } from "./helper.js"
+import { getLayoutInfoFromTree } from "./helper.js"
 
-import sample from "./SampleNodes.json"
-
-const Flow = ({trace}) => {
+const Flow = ({tree}) => {
   const { fitView } = useReactFlow();
-  const [colorMode, setColorMode] = useState("dark");
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 
-  const onChange = (evt) =>
-    setColorMode(evt.target.value);
-
-  const onLayout = useCallback(
-    (direction) => {
-      const layouted = getLayoutedElements(nodes, edges, { direction });
- 
-      setNodes([...layouted.nodes]);
-      setEdges([...layouted.edges]);
- 
-      fitView();
-    },
-    [nodes, edges],
-  );
-
   useEffect(() => {
-    if (sample) {
-      const flowInfo = getNodesFromTrace(sample);
-      
-      const layouted = getLayoutedElements(
-        flowInfo.nodes,
-        flowInfo.edges,
-        {direction:"TB"}
-      );
+    if (tree) {
+        const flowInfo = getLayoutInfoFromTree(tree.data);
+        
+        //direction: TB, BT, LR, or RL, where T = top, B = bottom, L = left, and R = right.
+        const layouted = getLayoutedElements(
+            flowInfo.nodes,
+            flowInfo.edges,
+            {direction:tree.orientation}
+        );
 
-      setNodes([...layouted.nodes]);
-      setEdges([...layouted.edges]);
- 
-      fitView();
+        setNodes([...layouted.nodes]);
+        setEdges([...layouted.edges]);
+
+        fitView();
     }
-  }, [sample]);
+  }, [tree]);
 
   return (
     <ReactFlow
@@ -61,7 +41,7 @@ const Flow = ({trace}) => {
       edges={edges}
       onNodesChange={onNodesChange}
       onEdgesChange={onEdgesChange}
-      colorMode={colorMode}
+      colorMode={"dark"}
       fitView
     >
       <Controls />
@@ -69,16 +49,16 @@ const Flow = ({trace}) => {
   );
 };
 
-export const FlowDiagram = ({traces}) => {
-  const [traceList, setTraceList] = useState();
+export const FlowDiagram = ({treeInfo}) => {
+  const [tree, setTree] = useState();
 
   useEffect(() => {
-    setTraceList(traces[0])
-  }, [traces])
+    setTree(treeInfo)
+  }, [treeInfo])
 
   return (
     <ReactFlowProvider>
-      <Flow trace={traceList} />
+      <Flow tree={tree} />
     </ReactFlowProvider>
   );
 }

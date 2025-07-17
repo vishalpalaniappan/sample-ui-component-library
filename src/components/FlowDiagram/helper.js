@@ -13,15 +13,15 @@ const arrowStyle = {
 }
 
 /**
- * Returns react flow nodes and edges from the given trace.
- * @param {Object} trace 
+ * Returns react flow nodes and edges from the given tree.
+ * @param {Object} tree 
  * @returns {Array} An array co
  */
-export const getNodesFromTrace = (variableTree) => {
+export const getLayoutInfoFromTree = (tree) => {
     const edges = [];
     const nodes = [];
-    Object.keys(variableTree).forEach((branchName, index1) => {
-        variableTree[branchName].forEach((node, index) => {
+    Object.keys(tree).forEach((branchName, index1) => {
+        tree[branchName].forEach((node, index) => {
 
             // Position doesn't matter, it will be set by layout algorithm
             const flowNode = {
@@ -38,7 +38,7 @@ export const getNodesFromTrace = (variableTree) => {
             if (index > 0) {
                 const prevNode = nodes[nodes.length-1]
                 const edge = {
-                    id: prevNode.id + "-" + flowNode.id,
+                    id: prevNode.flowId + "-" + branchName + "-" + index + "-" + flowNode.flowId,
                     source: prevNode.flowId,
                     target: flowNode.flowId,
                     animated: true,
