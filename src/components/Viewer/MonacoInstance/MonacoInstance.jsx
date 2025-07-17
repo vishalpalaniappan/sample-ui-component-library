@@ -32,7 +32,10 @@ export const MonacoInstance = ({editorContent}) => {
             theme="vs-dark"
             options={{
                 scrollBeyondLastLine:false,
-                fontSize:"12px"
+                fontSize:"12px",
+                minimap: {
+                    enabled: false  
+                }
             }}
         />
     );

@@ -67,11 +67,11 @@ export const Viewer = ({systemTree, onFileSelect}) => {
     }
     
     return (
-        <div className="viewerContainer d-flex flex-column">
-            <div>
+        <div className="viewerContainer">
+            <div className="tabContainer">
                 <Tabs files={files} selectFile={selectFile} systemTree={systemTree}/>
             </div>
-            <div className="d-flex flex-grow-1">
+            <div className="monacoContainer">
                 <MonacoInstance editorContent={editorContent}/>
             </div>
         </div>

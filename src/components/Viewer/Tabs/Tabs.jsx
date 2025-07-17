@@ -109,9 +109,12 @@ export const Tabs = ({files, selectFile, systemTree}) => {
 
     useEffect(() => {
         if (files && files.length > 0) {    
-            setTabsList(files);
-            setActiveTab(files[0].key);
-            selectFile(files[0].key);
+            const numFiles = Math.floor(Math.random() * files.length) + 1;
+            const newFiles = files.slice(0, numFiles);
+            setTabsList(newFiles);
+            const randomFileIndex = Math.floor(Math.random() * newFiles.length);
+            setActiveTab(newFiles[randomFileIndex].key);
+            selectFile(newFiles[randomFileIndex].key);
         }
     }, [files]);
     
