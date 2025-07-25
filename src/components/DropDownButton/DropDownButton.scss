@@ -1,0 +1,18 @@
+.buttonContainer{
+    color:white;
+    display: flex;
+    align-items: center;  
+}
+
+.buttonContainer > .button {
+    border-radius: 5px;
+}
+
+.buttonContainer > .button:hover {
+    background-color: #666;
+    cursor:pointer;
+}
+
+.buttonContainer > .button > .icon {
+    padding: 2px;
+}
