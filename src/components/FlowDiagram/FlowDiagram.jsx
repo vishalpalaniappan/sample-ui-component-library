@@ -15,11 +15,11 @@ import { getLayoutInfoFromTree } from "./helper.js"
 const Flow = ({tree}) => {
   const { fitView } = useReactFlow();
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
-  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState([]);  
 
   useEffect(() => {
     if (tree) {
-        const flowInfo = getLayoutInfoFromTree(tree.data);
+        const flowInfo = getLayoutInfoFromTree(tree.data, tree.animated);
         
         //direction: TB, BT, LR, or RL, where T = top, B = bottom, L = left, and R = right.
         const layouted = getLayoutedElements(

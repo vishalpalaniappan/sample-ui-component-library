@@ -14,10 +14,11 @@ const arrowStyle = {
 
 /**
  * Returns react flow nodes and edges from the given tree.
- * @param {Object} tree 
+ * @param {Object} tree Layout tree object.
+ * @param {boolean} animated Indicates if the edges should be animated.
  * @returns {Array} An array co
  */
-export const getLayoutInfoFromTree = (tree) => {
+export const getLayoutInfoFromTree = (tree, animated) => {
     const edges = [];
     const nodes = [];
     Object.keys(tree).forEach((branchName, index1) => {
@@ -41,7 +42,7 @@ export const getLayoutInfoFromTree = (tree) => {
                     id: prevNode.flowId + "-" + branchName + "-" + index + "-" + flowNode.flowId,
                     source: prevNode.flowId,
                     target: flowNode.flowId,
-                    animated: true,
+                    animated: animated,
                     markerEnd: marker,
                     style: arrowStyle
                 }
