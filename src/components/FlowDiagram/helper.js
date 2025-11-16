@@ -16,7 +16,7 @@ const arrowStyle = {
  * Returns react flow nodes and edges from the given tree.
  * @param {Object} tree Layout tree object.
  * @param {boolean} animated Indicates if the edges should be animated.
- * @returns {Array} An array co
+ * @returns {Array} An object containing nodes and edges arrays.
  */
 export const getLayoutInfoFromTree = (tree, animated) => {
     const edges = [];

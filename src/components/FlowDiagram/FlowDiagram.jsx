@@ -19,7 +19,7 @@ const Flow = ({tree}) => {
 
   useEffect(() => {
     if (tree) {
-        const flowInfo = getLayoutInfoFromTree(tree.data, tree.animated);
+        const flowInfo = getLayoutInfoFromTree(tree.data, tree.animated ?? false);
         
         //direction: TB, BT, LR, or RL, where T = top, B = bottom, L = left, and R = right.
         const layouted = getLayoutedElements(
