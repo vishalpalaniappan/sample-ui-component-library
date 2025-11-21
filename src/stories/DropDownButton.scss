@@ -1,0 +1,35 @@
+$row-height: 30px;
+
+.rootButtonContainer {
+    position: absolute;
+    top:0;
+    bottom:0;
+    left:0;
+    right:0;
+    background: black;
+    display: flex;
+    flex-direction: column;
+}
+
+.top {
+    background-color: #111;
+    height:$row-height;
+    display: flex;
+    justify-content: space-between; /* Left, center, right */ 
+}
+
+.middle {
+    background-color: #111;
+    height:$row-height;
+    margin-top: auto;
+    margin-bottom: auto;
+    display: flex;
+    justify-content: space-between; /* Left, center, right */
+}
+
+.bottom {
+    background-color: #111;
+    height:$row-height;
+    display: flex;
+    justify-content: space-between; /* Left, center, right */
+}
