@@ -17,14 +17,12 @@ const Flow = ({diagram}) => {
 
   useEffect(() => {
     if (diagram) {
-      
-        console.log(diagram);
-        const nodes = drawioToReactFlow(diagram);
+        const layout = drawioToReactFlow(diagram);
 
-        console.log(nodes);
+        console.log(layout);
 
-        setNodes([...nodes]);
-        setEdges([]);
+        setNodes([...layout.nodes]);
+        setEdges([...layout.edges]);
 
         fitView();
     }
