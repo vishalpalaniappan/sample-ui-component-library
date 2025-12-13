@@ -8,21 +8,27 @@ import {
   useReactFlow
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
+import { drawioToReactFlow } from "./helper";
 
-const Flow = ({tree}) => {
+const Flow = ({diagram}) => {
   const { fitView } = useReactFlow();
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);  
 
   useEffect(() => {
-    if (tree) {
+    if (diagram) {
+      
+        console.log(diagram);
+        const nodes = drawioToReactFlow(diagram);
 
-        setNodes([]);
+        console.log(nodes);
+
+        setNodes([...nodes]);
         setEdges([]);
 
         fitView();
     }
-  }, [tree]);
+  }, [diagram]);
 
   return (
     <ReactFlow
@@ -39,15 +45,15 @@ const Flow = ({tree}) => {
 };
 
 export const SystemDiagramViewer = ({diagramJSON}) => {
-  const [tree, setTree] = useState();
+  const [diagram, setDiagram] = useState();
 
   useEffect(() => {
-    console.log(diagramJSON);
+    setDiagram(diagramJSON);
   }, [diagramJSON])
 
   return (
     <ReactFlowProvider>
-      <Flow tree={tree} />
+      <Flow diagram={diagram} />
     </ReactFlowProvider>
   );
 }
