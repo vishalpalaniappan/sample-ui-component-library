@@ -1,0 +1,106 @@
+{
+  "mxGraphModel@dx": "1687",
+  "mxGraphModel@dy": "993",
+  "mxGraphModel@grid": "0",
+  "mxGraphModel@gridSize": "10",
+  "mxGraphModel@guides": "1",
+  "mxGraphModel@tooltips": "1",
+  "mxGraphModel@connect": "1",
+  "mxGraphModel@arrows": "1",
+  "mxGraphModel@fold": "1",
+  "mxGraphModel@page": "1",
+  "mxGraphModel@pageScale": "1",
+  "mxGraphModel@pageWidth": "1400",
+  "mxGraphModel@pageHeight": "850",
+  "mxGraphModel@math": "0",
+  "mxGraphModel@shadow": "0",
+  "mxGraphModel": {
+    "root": [
+      {
+        "mxCell@id": "0"
+      },
+      {
+        "mxCell@id": "1",
+        "mxCell@parent": "0"
+      },
+      {
+        "mxCell@id": "WcGXvPDrtN7Y4DXhmcHZ-4",
+        "mxCell@style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;",
+        "mxCell@edge": "1",
+        "mxCell@parent": "1",
+        "mxCell@source": "WcGXvPDrtN7Y4DXhmcHZ-1",
+        "mxCell@target": "WcGXvPDrtN7Y4DXhmcHZ-2",
+        "mxCell": {
+          "mxGeometry@relative": "1",
+          "mxGeometry@as": "geometry"
+        }
+      },
+      {
+        "mxCell@id": "WcGXvPDrtN7Y4DXhmcHZ-1",
+        "mxCell@value": "",
+        "mxCell@style": "rounded=0;whiteSpace=wrap;html=1;",
+        "mxCell@vertex": "1",
+        "mxCell@parent": "1",
+        "mxCell": {
+          "mxGeometry@x": "292",
+          "mxGeometry@y": "142",
+          "mxGeometry@width": "120",
+          "mxGeometry@height": "60",
+          "mxGeometry@as": "geometry"
+        }
+      },
+      {
+        "mxCell@id": "WcGXvPDrtN7Y4DXhmcHZ-5",
+        "mxCell@style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;",
+        "mxCell@edge": "1",
+        "mxCell@parent": "1",
+        "mxCell@source": "WcGXvPDrtN7Y4DXhmcHZ-2",
+        "mxCell@target": "WcGXvPDrtN7Y4DXhmcHZ-3",
+        "mxCell": {
+          "mxGeometry@relative": "1",
+          "mxGeometry@as": "geometry"
+        }
+      },
+      {
+        "mxCell@id": "WcGXvPDrtN7Y4DXhmcHZ-2",
+        "mxCell@value": "",
+        "mxCell@style": "rounded=0;whiteSpace=wrap;html=1;",
+        "mxCell@vertex": "1",
+        "mxCell@parent": "1",
+        "mxCell": {
+          "mxGeometry@x": "661",
+          "mxGeometry@y": "395",
+          "mxGeometry@width": "120",
+          "mxGeometry@height": "60",
+          "mxGeometry@as": "geometry"
+        }
+      },
+      {
+        "mxCell@id": "WcGXvPDrtN7Y4DXhmcHZ-6",
+        "mxCell@style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;",
+        "mxCell@edge": "1",
+        "mxCell@parent": "1",
+        "mxCell@source": "WcGXvPDrtN7Y4DXhmcHZ-3",
+        "mxCell@target": "WcGXvPDrtN7Y4DXhmcHZ-1",
+        "mxCell": {
+          "mxGeometry@relative": "1",
+          "mxGeometry@as": "geometry"
+        }
+      },
+      {
+        "mxCell@id": "WcGXvPDrtN7Y4DXhmcHZ-3",
+        "mxCell@value": "",
+        "mxCell@style": "rounded=0;whiteSpace=wrap;html=1;",
+        "mxCell@vertex": "1",
+        "mxCell@parent": "1",
+        "mxCell": {
+          "mxGeometry@x": "990",
+          "mxGeometry@y": "141",
+          "mxGeometry@width": "120",
+          "mxGeometry@height": "60",
+          "mxGeometry@as": "geometry"
+        }
+      }
+    ]
+  }
+}
