@@ -1,0 +1,143 @@
+{
+	"mxfile": {
+		"diagram": {
+			"mxGraphModel": {
+				"root": {
+					"mxCell": [
+						{
+							"_id": "0"
+						},
+						{
+							"_id": "1",
+							"_parent": "0"
+						},
+						{
+							"mxGeometry": {
+								"_relative": "1",
+								"_as": "geometry"
+							},
+							"_id": "2",
+							"_style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;",
+							"_edge": "1",
+							"_source": "3",
+							"_target": "4",
+							"_parent": "1"
+						},
+						{
+							"mxGeometry": {
+								"_x": "509",
+								"_y": "135",
+								"_width": "120",
+								"_height": "60",
+								"_as": "geometry"
+							},
+							"_id": "3",
+							"_value": "",
+							"_style": "rounded=0;whiteSpace=wrap;html=1;",
+							"_vertex": "1",
+							"_parent": "1"
+						},
+						{
+							"mxGeometry": {
+								"_x": "661",
+								"_y": "395",
+								"_width": "120",
+								"_height": "60",
+								"_as": "geometry"
+							},
+							"_id": "4",
+							"_value": "",
+							"_style": "rounded=0;whiteSpace=wrap;html=1;",
+							"_vertex": "1",
+							"_parent": "1"
+						},
+						{
+							"mxGeometry": {
+								"_relative": "1",
+								"_as": "geometry"
+							},
+							"_id": "5",
+							"_style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;",
+							"_edge": "1",
+							"_source": "7",
+							"_target": "3",
+							"_parent": "1"
+						},
+						{
+							"mxGeometry": {
+								"_relative": "1",
+								"_as": "geometry"
+							},
+							"_id": "6",
+							"_style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;",
+							"_edge": "1",
+							"_source": "7",
+							"_target": "9",
+							"_parent": "1"
+						},
+						{
+							"mxGeometry": {
+								"_x": "990",
+								"_y": "141",
+								"_width": "120",
+								"_height": "60",
+								"_as": "geometry"
+							},
+							"_id": "7",
+							"_value": "",
+							"_style": "rounded=0;whiteSpace=wrap;html=1;",
+							"_vertex": "1",
+							"_parent": "1"
+						},
+						{
+							"mxGeometry": {
+								"_relative": "1",
+								"_as": "geometry"
+							},
+							"_id": "8",
+							"_style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;",
+							"_edge": "1",
+							"_source": "9",
+							"_target": "4",
+							"_parent": "1"
+						},
+						{
+							"mxGeometry": {
+								"_x": "920",
+								"_y": "379",
+								"_width": "120",
+								"_height": "60",
+								"_as": "geometry"
+							},
+							"_id": "9",
+							"_value": "",
+							"_style": "rounded=0;whiteSpace=wrap;html=1;",
+							"_vertex": "1",
+							"_parent": "1"
+						}
+					]
+				},
+				"_dx": "1687",
+				"_dy": "993",
+				"_grid": "0",
+				"_gridSize": "10",
+				"_guides": "1",
+				"_tooltips": "1",
+				"_connect": "1",
+				"_arrows": "1",
+				"_fold": "1",
+				"_page": "1",
+				"_pageScale": "1",
+				"_pageWidth": "1400",
+				"_pageHeight": "850",
+				"_math": "0",
+				"_shadow": "0"
+			},
+			"_name": "Page-1",
+			"_id": "iL3vYbeKspdyjC68-Wn0"
+		},
+		"_host": "Electron",
+		"_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.7.17 Chrome/128.0.6613.36 Electron/32.0.1 Safari/537.36",
+		"_version": "24.7.17"
+	}
+}
