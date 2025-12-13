@@ -19,7 +19,7 @@ const Flow = ({diagram}) => {
     if (diagram) {
         const layout = drawioToReactFlow(diagram);
 
-        console.log(layout);
+        console.log(diagram, layout);
 
         setNodes([...layout.nodes]);
         setEdges([...layout.edges]);

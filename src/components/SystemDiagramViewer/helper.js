@@ -4,29 +4,29 @@ export const drawioToReactFlow = (diagram) => {
 
     const nodes = [];
     const edges = [];
-    const graphModel = diagram.mxGraphModel;
-    const diagramRoot = graphModel.root;
+    const graphModel = diagram.mxfile.diagram.mxGraphModel;
+    const diagramRoot = graphModel.root.mxCell;
 
     for (let i = 0; i < diagramRoot.length; i++) {
         const elem = diagramRoot[i];
-        const isEdge = "mxCell@edge" in elem;
+        const isEdge = "_edge" in elem;
 
-        if (!isEdge && "mxCell" in elem ) {
-            const geo = elem.mxCell;
-            const width = geo["mxGeometry@width"];
-            const height = geo["mxGeometry@height"];
-            const x = geo["mxGeometry@x"];
-            const y = geo["mxGeometry@y"];
+        if (!isEdge && "mxGeometry" in elem ) {
+            const geo = elem.mxGeometry;
+            const width = geo["_width"];
+            const height = geo["_height"];
+            const x = geo["_x"];
+            const y = geo["_y"];
 
             const node = {
-                id: elem["mxCell@id"],
+                id: elem["_id"],
                 data: { label: 'Node 1' },
                 position: { x: x, y: y },
             }
             nodes.push(node);
         } else if (isEdge) {
-            const source = elem["mxCell@source"];
-            const target = elem["mxCell@target"];
+            const source = elem["_source"];
+            const target = elem["_target"];
             const edge = {
                 id: i.toString(),
                 source: source,
