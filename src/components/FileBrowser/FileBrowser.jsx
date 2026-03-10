@@ -76,10 +76,10 @@ const TreeNode = ({node, onRowClick}) => {
             <div className="indent" style={{ width: node.level * INDENT_WIDTH + "px"}} />
             {
                 node.type === "folder" ? 
-                <span className="folder-icon">{getCollapsedIcon()}</span> :
-                <span className="file-icon">{getFileIcon()}</span>
+                <span className="center folder-icon">{getCollapsedIcon()}</span> :
+                <span className="center file-icon">{getFileIcon()}</span>
             }
-            <span className="file-name">{node.name}</span>
+            <span className="center file-name">{node.name}</span>
         </div>
     )
 }
