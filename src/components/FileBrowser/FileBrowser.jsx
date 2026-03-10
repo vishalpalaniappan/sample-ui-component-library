@@ -67,7 +67,7 @@ const TreeNode = ({node, onRowClick}) => {
             case "py":
                 return <FiletypePy color="#686affbd" />;
             default:
-                return <FileCode color="#000000" />;
+                return <FileCode color="#ffffff" />;
         }
     }
 
