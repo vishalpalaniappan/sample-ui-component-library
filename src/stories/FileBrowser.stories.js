@@ -18,12 +18,12 @@ export default {
 const Template = (args) => {
     const [, updateArgs] = useArgs();
 
-    const onFileSelect = (selectedFile) => {
-        action('Selected File:')(selectedFile);
+    const onNodeSelect = (selectedFile) => {
+        action('Selected Node:')(selectedFile);
     }
 
     useEffect(() => {
-        updateArgs({onFileSelect : onFileSelect});
+        updateArgs({onNodeSelect : onNodeSelect});
     }, []);
 
     return (

@@ -89,7 +89,7 @@ const TreeNode = ({node, onRowClick}) => {
  * 
  * @return {JSX}
  */
-export const FileBrowser = ({tree, onFileSelect}) => {
+export const FileBrowser = ({tree, onNodeSelect}) => {
 
     const [nodes, setNodes] = useState([]);
     const treeRef = useRef();
@@ -97,8 +97,8 @@ export const FileBrowser = ({tree, onFileSelect}) => {
     const handleFileClick = useEvent((node) => {
         selectNode(treeRef.current, node);
         drawTree();
-        if (onFileSelect) {
-            onFileSelect(node);
+        if (onNodeSelect) {
+            onNodeSelect(node);
         }
     });
 
