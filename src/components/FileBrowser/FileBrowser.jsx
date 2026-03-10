@@ -47,7 +47,7 @@ export const FileBrowser = ({}) => {
 
     return (
         <div className="file-browser">
-        {nodes}
+            {nodes}
         </div>
     )
 }
