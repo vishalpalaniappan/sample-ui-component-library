@@ -1,13 +1,57 @@
 {
     "tree": [
-        {"id": 1, "level": 0, "name": "root", "type": "folder"},
-        {"id": 2, "level": 1, "name": "folder1", "type": "folder"},
-        {"id": 3, "level": 2, "name": "file1.txt", "type": "file"},
-        {"id": 4, "level": 2, "name": "file2.txt", "type": "file"},
-        {"id": 5, "level": 1, "name": "folder2", "type": "folder"},
-        {"id": 6, "level": 2, "name": "file3.txt", "type": "file"},
-        {"id": 7, "level": 0, "name": "file4.txt", "type": "file"},
-        {"id": 8, "level": 0, "name": "folder3", "type": "folder"},
-        {"id": 9, "level": 1, "name": "file5.txt", "type": "file"}
+        {
+            "id": 1,
+            "name": "root",
+            "type": "folder",
+            "children": [
+                {
+                    "id": 2,
+                    "name": "TraceViewer",
+                    "type": "folder",
+                    "children": [
+                        {
+                            "id": 3,
+                            "name": "file1.js",
+                            "type": "file"
+                        },
+                        {
+                            "id": 4,
+                            "name": "file2.scss",
+                            "type": "file"
+                        }
+                    ]
+                },
+                {
+                    "id": 5,
+                    "name": "LogInjector",
+                    "type": "folder",
+                    "children": [
+                        {
+                            "id": 6,
+                            "name": "injector.py",
+                            "type": "file"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": 7,
+            "name": "sample.py",
+            "type": "file"
+        },
+        {
+            "id": 8,
+            "name": "DesignViewer",
+            "type": "folder",
+            "children": [
+                {
+                    "id": 9,
+                    "name": "test.js",
+                    "type": "file"
+                }
+            ]
+        }
     ]
 }

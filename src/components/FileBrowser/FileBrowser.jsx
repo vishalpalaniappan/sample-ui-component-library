@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef, useLayoutEffect, useCallback } from "react";
 import "./FileBrowser.scss";
 
-import { setDefaultCollapsed, collapseTree, selectNode } from "./helper";
+import { setDefaultCollapsed, collapseTree, selectNode, flattenTree } from "./helper";
 
 import { FileCode, ChevronRight, ChevronDown } from "react-bootstrap-icons";
 import PropTypes from 'prop-types';
@@ -70,18 +70,19 @@ const TreeNode = ({node, onRowClick}) => {
 export const FileBrowser = ({tree, onFileSelect}) => {
 
     const [nodes, setNodes] = useState([]);
+    const treeRef = useRef();
 
     const handleFileClick = useEvent((node) => {
-        selectNode(tree, node);
+        selectNode(treeRef.current, node);
         drawTree();
-        console.log("Selected file:", node.name);
         if (onFileSelect) {
             onFileSelect(node);
         }
     }, [onFileSelect]);
 
     useEffect(() => {
-        setDefaultCollapsed(tree);
+        treeRef.current = flattenTree(tree);
+        setDefaultCollapsed(treeRef.current);
         drawTree();
     }, []);
 
@@ -89,7 +90,7 @@ export const FileBrowser = ({tree, onFileSelect}) => {
      * Draws the tree given the nodes and the collapsed state of each node.
      */
     const drawTree = () => {
-        const nodes = collapseTree(tree);
+        const nodes = collapseTree(treeRef.current);
         const rows = [];
         nodes.forEach((node) => {
             rows.push(<TreeNode key={node.id} node={node} onRowClick={handleFileClick}/>);
