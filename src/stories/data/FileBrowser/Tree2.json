@@ -1,0 +1,13 @@
+{
+    "tree": [
+        {"id": 1, "level": 0, "name": "root", "type": "folder"},
+        {"id": 2, "level": 1, "name": "TraceViewer", "type": "folder"},
+        {"id": 3, "level": 2, "name": "file1.js", "type": "file"},
+        {"id": 4, "level": 2, "name": "file2.scss", "type": "file"},
+        {"id": 5, "level": 1, "name": "LogInjector", "type": "folder"},
+        {"id": 6, "level": 2, "name": "injector.py", "type": "file"},
+        {"id": 7, "level": 0, "name": "sample.py", "type": "file"},
+        {"id": 8, "level": 0, "name": "DesignViewer", "type": "folder"},
+        {"id": 9, "level": 1, "name": "test.js", "type": "file"}
+    ]
+}

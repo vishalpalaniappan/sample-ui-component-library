@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef, useLayoutEffect, useCallback } from "react";
 import "./FileBrowser.scss";
 
 import { setDefaultCollapsed, collapseTree, selectNode } from "./helper";
@@ -8,6 +8,21 @@ import PropTypes from 'prop-types';
 
 const INDENT_WIDTH = 20;
 const SELECTED_FILE_COLOR = "#00426b";
+
+/**
+ * Used for creating a stable callback function.
+ */
+function useEvent(fn) {
+    const fnRef = useRef(fn);
+
+    useLayoutEffect(() => {
+        fnRef.current = fn;
+    });
+
+    return useCallback((...args) => {
+        return fnRef.current(...args);
+    }, []);
+}
 
 /**
  * Renders a single node in the file tree.
@@ -56,17 +71,19 @@ export const FileBrowser = ({tree, onFileSelect}) => {
 
     const [nodes, setNodes] = useState([]);
 
-    /**
-     * Callback function for when file is clicked.
-     */
-    function handleFileClick(node) {
+    const handleFileClick = useEvent((node) => {
         selectNode(tree, node);
         drawTree();
         console.log("Selected file:", node.name);
         if (onFileSelect) {
             onFileSelect(node);
         }
-    }
+    }, [onFileSelect]);
+
+    useEffect(() => {
+        setDefaultCollapsed(tree);
+        drawTree();
+    }, []);
 
     /**
      * Draws the tree given the nodes and the collapsed state of each node.
@@ -79,12 +96,6 @@ export const FileBrowser = ({tree, onFileSelect}) => {
         });
         setNodes(rows);
     }
-
-    useEffect(() => {
-        setDefaultCollapsed(tree);
-        drawTree();
-    }, []);
-
     return (
         <div className="file-browser">
             {nodes}
