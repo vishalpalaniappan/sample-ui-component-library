@@ -1,0 +1,19 @@
+.node-row{
+    height: 10px;
+    width:100%;
+    display:flex;
+    padding: 6px 0;
+    font-size:11px;
+    font-family: monospace;
+}
+
+.indent {
+    height:100%;
+}
+
+.file-browser{
+    padding:10px;
+    overflow: auto;
+    background-color: #333;
+    color:white;
+}
