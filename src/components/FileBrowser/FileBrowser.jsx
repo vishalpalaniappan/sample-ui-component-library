@@ -3,7 +3,7 @@ import "./FileBrowser.scss";
 
 import { setDefaultCollapsed, collapseTree, selectNode, flattenTree } from "./helper";
 
-import { FileCode, ChevronRight, ChevronDown } from "react-bootstrap-icons";
+import { FileCode, ChevronRight, ChevronDown, Braces, FiletypeScss, FiletypeJs, FiletypePy} from "react-bootstrap-icons";
 import PropTypes from 'prop-types';
 
 const INDENT_WIDTH = 20;
@@ -49,13 +49,35 @@ const TreeNode = ({node, onRowClick}) => {
         }
     }
 
+
+    /**
+     * Get the file icon based on the extension.
+     * 
+     * TODO: This can be improved by having a mapping of extensions to icons and color.
+     */
+    const getFileIcon = () => {
+        const extension = node.name.split('.').pop();
+        switch (extension) {
+            case "js":
+                return <FiletypeJs color="#f1e05a" />;
+            case "json":
+                return <Braces color="#fffb00" />;
+            case "scss":
+                return <FiletypeScss color="#f12727" />;
+            case "py":
+                return <FiletypePy color="#686affbd" />;
+            default:
+                return <FileCode color="#000000" />;
+        }
+    }
+
     return (
         <div className="node-row" style={getRowStyle()} onClick={() => onRowClick(node)}>
             <div className="indent" style={{ width: node.level * INDENT_WIDTH + "px"}} />
             {
                 node.type === "folder" ? 
                 <span className="folder-icon">{getCollapsedIcon()}</span> :
-                <span className="file-icon"><FileCode /></span>
+                <span className="file-icon">{getFileIcon()}</span>
             }
             {node.name}
         </div>
