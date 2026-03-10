@@ -100,7 +100,7 @@ export const FileBrowser = ({tree, onFileSelect}) => {
         if (onFileSelect) {
             onFileSelect(node);
         }
-    }, [onFileSelect]);
+    });
 
     useEffect(() => {
         treeRef.current = flattenTree(tree);
