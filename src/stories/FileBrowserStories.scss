@@ -12,4 +12,8 @@
 .viewerStoryWrapper > .file-browser{
     height: 300px;
     width: 200px;
+    overflow: auto;
+    scrollbar-gutter: stable;
+    scrollbar-color: #47474766 #252526;
+    scrollbar-width: thin;
 }

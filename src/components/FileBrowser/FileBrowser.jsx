@@ -79,7 +79,7 @@ const TreeNode = ({node, onRowClick}) => {
                 <span className="folder-icon">{getCollapsedIcon()}</span> :
                 <span className="file-icon">{getFileIcon()}</span>
             }
-            {node.name}
+            <span className="file-name">{node.name}</span>
         </div>
     )
 }
