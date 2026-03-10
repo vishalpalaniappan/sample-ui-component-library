@@ -1,0 +1,40 @@
+.file-browser{
+    width: 100%;
+    height:100%;
+    padding:5px;
+    color:white;
+}
+
+.file-node-row{
+    width:100%;
+    min-width: 200px;
+    display:flex;
+    padding: 5px 0;
+    font-size:13px;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    cursor: pointer;
+}
+
+.indent {
+    height:100%;
+}
+
+.center {
+    display:flex;
+    align-self: center;
+}
+
+
+.folder-icon {
+    display:flex;
+    margin-right: 5px;
+}
+
+.file-icon {
+    margin-right: 5px;
+    font-size:16px;
+}
+
+.file-name {
+    color: #CCC;
+}
