@@ -72,7 +72,7 @@ const TreeNode = ({node, onRowClick}) => {
     }
 
     return (
-        <div className="node-row" style={getRowStyle()} onClick={() => onRowClick(node)}>
+        <div className="file-node-row" style={getRowStyle()} onClick={() => onRowClick(node)}>
             <div className="indent" style={{ width: node.level * INDENT_WIDTH + "px"}} />
             {
                 node.type === "folder" ? 
