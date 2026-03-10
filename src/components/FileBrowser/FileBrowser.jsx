@@ -1,17 +1,22 @@
 import { useEffect, useState } from "react";
 import "./FileBrowser.scss";
 
-import { setDefaultCollapsed, collapseTree } from "./helper";
+import { setDefaultCollapsed, collapseTree, selectNode } from "./helper";
 
 import { FileCode, ChevronRight, ChevronDown } from "react-bootstrap-icons";
 import PropTypes from 'prop-types';
 
-
 const INDENT_WIDTH = 20;
+const SELECTED_FILE_COLOR = "#00426b";
 
-
+/**
+ * Renders a single node in the file tree.
+ */
 const TreeNode = ({node, onRowClick}) => {
-
+    /**
+     * Gets the appropriate icon for the node based on its type and collapsed state.
+     * @returns <JSX>
+     */
     const getCollapsedIcon = () => {
         if (node.collapsed) {
             return <ChevronRight />;
@@ -19,8 +24,18 @@ const TreeNode = ({node, onRowClick}) => {
             return <ChevronDown />;
         }
     }
+
+    /**
+     * Sets the background color of the row if the node is selected.
+     */
+    const getRowStyle = () => {
+        if (node.selected) {
+            return {"backgroundColor": SELECTED_FILE_COLOR};
+        }
+    }
+
     return (
-        <div className="node-row" onClick={() => onRowClick(node)}>
+        <div className="node-row" style={getRowStyle()} onClick={() => onRowClick(node)}>
             <div className="indent" style={{ width: node.level * INDENT_WIDTH + "px"}} />
             {
                 node.type === "folder" ? 
@@ -37,30 +52,21 @@ const TreeNode = ({node, onRowClick}) => {
  * 
  * @return {JSX}
  */
-export const FileBrowser = ({onFileSelect}) => {
+export const FileBrowser = ({tree, onFileSelect}) => {
 
     const [nodes, setNodes] = useState([]);
 
+    /**
+     * Callback function for when file is clicked.
+     */
     function handleFileClick(node) {
-        console.log("Selected file:", node.name, node.collapsible);
-        node.collapsed = !node.collapsed;
+        selectNode(tree, node);
+        drawTree();
+        console.log("Selected file:", node.name);
         if (onFileSelect) {
             onFileSelect(node);
         }
-        drawTree();
     }
-
-    const tree = [
-        {"id": 1, "level": 0, "name": "root", "type": "folder"},
-        {"id": 2, "level": 1, "name": "folder1", "type": "folder"},
-        {"id": 3, "level": 2, "name": "file1.txt", "type": "file"},
-        {"id": 4, "level": 2, "name": "file2.txt", "type": "file"},
-        {"id": 5, "level": 1, "name": "folder2", "type": "folder"},
-        {"id": 6, "level": 2, "name": "file3.txt", "type": "file"},
-        {"id": 7, "level": 0, "name": "file4.txt", "type": "file"},
-        {"id": 8, "level": 0, "name": "folder3", "type": "folder"},
-        {"id": 9, "level": 1, "name": "file5.txt", "type": "file"},
-    ];
 
     /**
      * Draws the tree given the nodes and the collapsed state of each node.

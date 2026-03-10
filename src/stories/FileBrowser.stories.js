@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { FileBrowser } from "../components/FileBrowser";
 import { useArgs } from "@storybook/preview-api";
 
-import fileTrees from "./data/filetree.json";
+import FileTree1 from "./data/FileBrowser/Tree1.json"
 
 import "./FileBrowserStories.scss"
 
@@ -12,11 +12,17 @@ export default {
     argTypes: {}
 };
 
+
 const Template = (args) => {
     const [, updateArgs] = useArgs();
 
+    const onFileSelect = (selectedFile) => {
+        console.log("Selected sdffile: ", selectedFile);
+        action('Selected File:')(selectedFile);
+    }
+
     useEffect(() => {
-        updateArgs({});
+        updateArgs({onFileSelect : onFileSelect});
     }, []);
 
     return (
@@ -31,5 +37,5 @@ const Template = (args) => {
 export const Default = Template.bind({});
 
 Default.args = {
-    systemTree: fileTrees.fileTrees
+    tree: FileTree1.tree
 }

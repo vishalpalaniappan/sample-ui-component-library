@@ -33,3 +33,14 @@ export const collapseTree = (tree) => {
     }
     return rows;
 }
+
+/**
+ * Selects the given node and deselects all other nodes in the tree.
+ */
+export const selectNode = (tree, node) => {
+    tree.forEach((n) => {
+        n.selected = false;
+    });
+    node.selected = true;
+    node.collapsed = !node.collapsed;
+}
