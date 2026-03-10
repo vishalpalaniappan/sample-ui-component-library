@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
 import "./FileBrowser.scss";
+
+import { setDefaultCollapsed, collapseTree } from "./helper";
+
+import { FileCode, ChevronRight, ChevronDown } from "react-bootstrap-icons";
 import PropTypes from 'prop-types';
 
 
@@ -7,9 +11,22 @@ const INDENT_WIDTH = 20;
 
 
 const TreeNode = ({node, onRowClick}) => {
+
+    const getCollapsedIcon = () => {
+        if (node.collapsed) {
+            return <ChevronRight />;
+        } else {
+            return <ChevronDown />;
+        }
+    }
     return (
         <div className="node-row" onClick={() => onRowClick(node)}>
             <div className="indent" style={{ width: node.level * INDENT_WIDTH + "px"}} />
+            {
+                node.type === "folder" ? 
+                <span className="folder-icon">{getCollapsedIcon()}</span> :
+                <span className="file-icon"><FileCode /></span>
+            }
             {node.name}
         </div>
     )
@@ -25,10 +42,12 @@ export const FileBrowser = ({onFileSelect}) => {
     const [nodes, setNodes] = useState([]);
 
     function handleFileClick(node) {
-        console.log("Selected file:", node.name);
+        console.log("Selected file:", node.name, node.collapsible);
+        node.collapsed = !node.collapsed;
         if (onFileSelect) {
             onFileSelect(node);
         }
+        drawTree();
     }
 
     const tree = [
@@ -43,12 +62,21 @@ export const FileBrowser = ({onFileSelect}) => {
         {"id": 9, "level": 1, "name": "file5.txt", "type": "file"},
     ];
 
-    useEffect(() => {
+    /**
+     * Draws the tree given the nodes and the collapsed state of each node.
+     */
+    const drawTree = () => {
+        const nodes = collapseTree(tree);
         const rows = [];
-        tree.forEach((node) => {
-            rows.push(<TreeNode node={node} onRowClick={handleFileClick}/>);
+        nodes.forEach((node) => {
+            rows.push(<TreeNode key={node.id} node={node} onRowClick={handleFileClick}/>);
         });
         setNodes(rows);
+    }
+
+    useEffect(() => {
+        setDefaultCollapsed(tree);
+        drawTree();
     }, []);
 
     return (
