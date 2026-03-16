@@ -1,0 +1,22 @@
+.tabs {
+    display: flex;
+    flex-direction: row;
+    background-color: #1e1e1e;
+    height: 100%;
+    width: 100%;
+}
+
+.tab {
+    padding: 0px 20px;
+    background-color: #2d2d2d;
+    color: #fff;
+    cursor: pointer;
+    height: 40px;
+    display:flex;
+    align-items: center;
+}
+
+.gutter {
+    height: 40px;
+    width: 1px;
+}

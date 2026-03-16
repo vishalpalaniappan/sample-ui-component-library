@@ -1,0 +1,16 @@
+.editorContainer {
+    width:100%;
+    height:100%;
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+}
+
+.tabContainer{
+    width:100%;
+    height: 40px;
+}
+
+.monacoContainer{
+    flex-grow: 1;
+}
