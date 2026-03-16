@@ -15,10 +15,11 @@ import {
  * @param {String} label 
  * @returns 
  */
-function Tab({id, label}) {
+function Tab({id, label, onSelectTab}) {
     const { attributes, listeners, setNodeRef, transform } = useDraggable({id});
+    
     return (
-        <div ref={setNodeRef} className="tab" {...listeners} {...attributes}>
+        <div ref={setNodeRef} id={id} onClick={onSelectTab} className="tab" {...listeners} {...attributes}>
             {label}
         </div>
     );
@@ -46,7 +47,7 @@ function Gutter({id}) {
  * @param {Array} tabs 
  * @returns 
  */
-export const EditorTabs = ({activeTab, tabs}) => {
+export const EditorTabs = ({activeTab, tabs, selectTab}) => {
 
     const [tabsList, setTabsList] = useState();
 
@@ -57,7 +58,7 @@ export const EditorTabs = ({activeTab, tabs}) => {
                 list.push(
                     <>
                         <Gutter id={tab.id} />
-                        <Tab key={tab.id} {...tab} />
+                        <Tab onSelectTab={selectTab} key={tab.id} {...tab} />
                     </>
                 );
             })
