@@ -1,6 +1,6 @@
 {
   "name": "sample-ui-component-library",
-  "version": "0.0.0-dev",
+  "version": "0.0.4-dev",
   "description": "A library which contains sample UI elements that can be used for populating layouts.",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -58,12 +58,12 @@
     "style-loader": "^4.0.0"
   },
   "peerDependencies": {
+    "@dnd-kit/core": "^6.3.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
   "dependencies": {
     "@dagrejs/dagre": "^1.1.4",
-    "@dnd-kit/core": "^6.3.1",
     "@monaco-editor/react": "^4.7.0",
     "@xyflow/react": "^12.6.0",
     "bootstrap": "^5.3.4",
