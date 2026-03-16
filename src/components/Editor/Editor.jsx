@@ -14,7 +14,7 @@ export const Editor = ({systemTree, onFileSelect}) => {
 
     const [editorContent, setEditorContent] = useState("asdf");
     
-    const [activeTab, setActiveTab] = useState(1);
+    const [activeTab, setActiveTab] = useState();
     const [tabs, setTabs] = useState([
         { id: "tab1", label: "Tab 1" },
         { id: "tab2", label: "Tab 2" },
@@ -26,6 +26,15 @@ export const Editor = ({systemTree, onFileSelect}) => {
             setEditorContent(tabs[activeTab - 1].label);
         }
     }, [activeTab]);
+
+    
+    useEffect(() => {
+        if (tabs) {
+            if ((activeTab && activeTab > tabs.length) || activeTab == null) {
+                setActiveTab(tabs.length);
+            }
+        }
+    }, [tabs]);
 
     const onTabClick = (event) => {
         const tabIndex = tabs.findIndex(obj => obj.id === event.target.id);
