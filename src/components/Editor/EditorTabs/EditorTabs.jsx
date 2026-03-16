@@ -35,7 +35,7 @@ function Tab({id, label, onSelectTab, parentId, activeTab}) {
     }, [activeTab]);
     
     return (
-        <div ref={setNodeRef} style={tabStyle} id={id} onClick={onSelectTab} className="tab" {...listeners} {...attributes}>
+        <div ref={setNodeRef} style={tabStyle} id={id} onMouseDown={onSelectTab} className="tab" {...listeners} {...attributes}>
             <FileEarmark className="icon" style={{ pointerEvents: "none" }}/>{label}
         </div>
     );
