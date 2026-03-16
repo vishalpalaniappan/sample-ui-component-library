@@ -14,8 +14,17 @@ import {
  * @param {String} label 
  * @returns 
  */
-function Tab({id, label, onSelectTab, activeTab}) {
-    const { attributes, listeners, setNodeRef, transform } = useDraggable({id});
+function Tab({id, label, onSelectTab, parentId, activeTab}) {
+    const { attributes, listeners, setNodeRef, transform } = useDraggable(
+        {
+            id,
+            data: {
+                type: "tab-draggable",
+                parentId: parentId,
+                index: id
+            }
+        }
+    );
 
     const [tabStyle, setTabStyle] = useState();
 
@@ -37,8 +46,17 @@ function Tab({id, label, onSelectTab, activeTab}) {
  * @param {String} id 
  * @returns 
  */
-function Gutter({id}) {
-    const { setNodeRef, isOver } = useDroppable({id});
+function Gutter({id, parentId}) {
+    const { setNodeRef, isOver } = useDroppable(
+        {
+            id,
+            data: {
+                type: "tab-gutter",
+                parentId: parentId,
+                index: id
+            }
+        }
+    );
     return (
         <div
             className="gutter"
@@ -54,15 +72,15 @@ function Gutter({id}) {
  * @param {Array} tabs 
  * @returns 
  */
-export const EditorTabs = ({activeTab, tabs, selectTab}) => {
+export const EditorTabs = ({activeTab, tabsInfo, selectTab}) => {
 
     const [tabsList, setTabsList] = useState();
 
     useEffect(() => {
-        if (tabs) {
+        if (tabsInfo) {
             drawTabs();
         }
-    }, [tabs]);
+    }, [tabsInfo]);
 
     useEffect(() => {
         if (activeTab) {
@@ -70,18 +88,21 @@ export const EditorTabs = ({activeTab, tabs, selectTab}) => {
         }
     }, [activeTab]);
 
-
     const drawTabs = () => {
         const list = [];
-        tabs.forEach((tab, index) => {
-            list.push(<Gutter id={"position-" + index} />);
+        tabsInfo.tabs.forEach((tab, index) => {
+            list.push(<Gutter id={index} parentId={tabsInfo.id} />);
             list.push(
-                <Tab activeTab={activeTab} onSelectTab={selectTab} key={tab.id} {...tab} />
+                <Tab activeTab={activeTab} 
+                    parentId={tabsInfo.id} 
+                    onSelectTab={selectTab} 
+                    key={tab.id} 
+                    {...tab} />
             );
         })
-        list.push(<Gutter id={"position-" + tabs.length} />);
+        list.push(<Gutter id={tabsInfo.tabs.length} />);
         setTabsList(list);
-    }
+    }   
 
     return (
         <div style={{ display: "flex", background: "#222425" }}>

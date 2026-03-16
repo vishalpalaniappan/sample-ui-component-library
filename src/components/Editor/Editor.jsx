@@ -10,16 +10,11 @@ import { useEffect, useState } from "react";
  * 
  * @return {JSX}
  */
-export const Editor = ({systemTree, onFileSelect}) => {
+export const Editor = ({tabsInfo}) => {
 
     const [editorContent, setEditorContent] = useState("asdf");
     
     const [activeTab, setActiveTab] = useState();
-    const [tabs, setTabs] = useState([
-        { id: "tab1", label: "Tab 1" },
-        { id: "tab2", label: "Tab 2" },
-        { id: "tab3", label: "Tab 3" },
-    ]);
 
     useEffect(() => {
         if (activeTab) {
@@ -29,22 +24,22 @@ export const Editor = ({systemTree, onFileSelect}) => {
 
     
     useEffect(() => {
-        if (tabs) {
-            if ((activeTab && activeTab > tabs.length) || activeTab == null) {
-                setActiveTab(tabs[tabs.length - 1]);
+        if (tabsInfo) {
+            if ((activeTab && activeTab > tabsInfo.tabs.length) || activeTab == null) {
+                setActiveTab(tabsInfo.tabs[tabsInfo.tabs.length - 1]);
             }
         }
-    }, [tabs]);
+    }, [tabsInfo]);
 
     const onTabClick = (event) => {
-        const tab = tabs.find(obj => obj.id === event.target.id);
+        const tab = tabsInfo.tabs.find(obj => obj.id === event.target.id);
         setActiveTab(tab);
     }
     
     return (
         <div className="editorContainer">
             <div className="tabContainer">
-                <EditorTabs activeTab={activeTab} tabs={tabs} selectTab={onTabClick} />
+                <EditorTabs activeTab={activeTab} tabsInfo={tabsInfo} selectTab={onTabClick} />
             </div>
             <div className="monacoContainer">
                 <MonacoInstance editorContent={editorContent}/>

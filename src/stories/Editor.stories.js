@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Editor } from "../components/Editor";
 import { useArgs } from "@storybook/preview-api";
 import { action } from "@storybook/addon-actions";
@@ -56,28 +56,48 @@ const offsetOverlay = ({ transform }) => {
 
 const Template = (args) => {
     const [, updateArgs] = useArgs();
+    
+    const [tabs, setTabs] = useState(
+        {
+            "id": "tab-group-1",
+            "tabs": [
+                { id: "tab1", label: "Tab 1" },
+                { id: "tab2", label: "Tab 2" },
+                { id: "tab3", label: "Tab 3" },
+            ]
+        }
+    );
 
-    const onFileSelect = (selectedFile) => {
-        action('Selected Stack Position:')(selectedFile);
-    }
-
+    // Storybook specific effect
     useEffect(() => {
-        updateArgs({onFileSelect : onFileSelect});
-    }, []);
+        updateArgs({tabsInfo : tabs});
+    }, [tabs]);
+
+    
+    const moveTab = (tabId, newIndex) => {
+        setTabs(prev => {
+            const oldIndex = prev.tabs.findIndex(t => t.id === tabId);
+            if (oldIndex === -1) return prev;
+            const newTabs = [...prev.tabs];
+            const [tab] = newTabs.splice(oldIndex, 1);
+            newTabs.splice(newIndex, 0, tab);
+            return {...prev,tabs: newTabs};
+        });
+    }
 
     /**
      * Callback for when drag ends.
      */
     const handleDragEnd = (event) =>{
         const { active, over } = event;
-        console.log("Drag Ended");
-        const rect = event.activatorEvent;
 
-        console.log(over );
+        if (active.data.current.type === "tab-draggable" && over.data.current.type === "tab-gutter") {
+            moveTab(active.id, over.data.current.index);
+        }
 
         if (over) {
-            console.log("Dragged item:", active.id);
-            console.log("Dropped on:", over.id);
+            console.log("Dragged item:", active);
+            console.log("Dropped on:", over);
         } else {
             console.log("Dropped outside any droppable");
         }
