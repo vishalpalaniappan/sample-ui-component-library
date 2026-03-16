@@ -2,9 +2,8 @@ import "./EditorTabs.scss";
 import PropTypes from "prop-types";
 
 import { useEffect, useState } from "react";
+import { FileEarmark } from "react-bootstrap-icons";
 import {
-    DndContext,
-    DragOverlay,
     useDraggable,
     useDroppable,
 } from "@dnd-kit/core";
@@ -15,12 +14,20 @@ import {
  * @param {String} label 
  * @returns 
  */
-function Tab({id, label, onSelectTab}) {
+function Tab({id, label, onSelectTab, activeTab}) {
     const { attributes, listeners, setNodeRef, transform } = useDraggable({id});
+
+    const [tabStyle, setTabStyle] = useState();
+
+    useEffect(() => {
+        const bc = (activeTab && activeTab.id === id) ? "#1e1e1e": "#2d2d2d";
+        const fc = (activeTab && activeTab.id === id) ? "#FFFFFF": "#969690";
+        setTabStyle( {"backgroundColor": bc, "color": fc})
+    }, [activeTab]);
     
     return (
-        <div ref={setNodeRef} id={id} onClick={onSelectTab} className="tab" {...listeners} {...attributes}>
-            {label}
+        <div ref={setNodeRef} style={tabStyle} id={id} onClick={onSelectTab} className="tab" {...listeners} {...attributes}>
+            <FileEarmark className="icon" style={{ pointerEvents: "none" }}/>{label}
         </div>
     );
 }
@@ -36,7 +43,7 @@ function Gutter({id}) {
         <div
             className="gutter"
             ref={setNodeRef}
-            style={{background: isOver ? "white" : "#4da3ff33"}}
+            style={{background: isOver ? "white" : "#222425"}}
         ></div>
     );
 }
@@ -53,18 +60,28 @@ export const EditorTabs = ({activeTab, tabs, selectTab}) => {
 
     useEffect(() => {
         if (tabs) {
-            const list = [];
-            tabs.forEach((tab, index) => {
-                list.push(
-                    <>
-                        <Gutter id={tab.id} />
-                        <Tab onSelectTab={selectTab} key={tab.id} {...tab} />
-                    </>
-                );
-            })
-            setTabsList(list);
+            drawTabs();
         }
     }, [tabs]);
+
+    useEffect(() => {
+        if (activeTab) {
+            drawTabs();
+        }
+    }, [activeTab]);
+
+
+    const drawTabs = () => {
+        const list = [];
+        tabs.forEach((tab, index) => {
+            list.push(<Gutter id={"position-" + index} />);
+            list.push(
+                <Tab activeTab={activeTab} onSelectTab={selectTab} key={tab.id} {...tab} />
+            );
+        })
+        list.push(<Gutter id={"position-" + tabs.length} />);
+        setTabsList(list);
+    }
 
     return (
         <div style={{ display: "flex", background: "#222425" }}>

@@ -51,9 +51,11 @@ const TreeNode = ({id, node, onRowClick}) => {
      * Sets the background color of the row if the node is selected.
      */
     const getRowStyle = () => {
+        const style = {};
         if (node.selected) {
-            return {"backgroundColor": SELECTED_FILE_COLOR};
+            style["backgroundColor"] = SELECTED_FILE_COLOR;
         }
+        return style;
     }
 
 

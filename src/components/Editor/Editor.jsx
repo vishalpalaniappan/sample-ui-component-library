@@ -23,7 +23,7 @@ export const Editor = ({systemTree, onFileSelect}) => {
 
     useEffect(() => {
         if (activeTab) {
-            setEditorContent(tabs[activeTab - 1].label);
+            setEditorContent(activeTab.label);
         }
     }, [activeTab]);
 
@@ -31,20 +31,20 @@ export const Editor = ({systemTree, onFileSelect}) => {
     useEffect(() => {
         if (tabs) {
             if ((activeTab && activeTab > tabs.length) || activeTab == null) {
-                setActiveTab(tabs.length);
+                setActiveTab(tabs[tabs.length - 1]);
             }
         }
     }, [tabs]);
 
     const onTabClick = (event) => {
-        const tabIndex = tabs.findIndex(obj => obj.id === event.target.id);
-        setActiveTab(tabIndex + 1);
+        const tab = tabs.find(obj => obj.id === event.target.id);
+        setActiveTab(tab);
     }
     
     return (
         <div className="editorContainer">
             <div className="tabContainer">
-                <EditorTabs activeTab={1} tabs={tabs} selectTab={onTabClick} />
+                <EditorTabs activeTab={activeTab} tabs={tabs} selectTab={onTabClick} />
             </div>
             <div className="monacoContainer">
                 <MonacoInstance editorContent={editorContent}/>

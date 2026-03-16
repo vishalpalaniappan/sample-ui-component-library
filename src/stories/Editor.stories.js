@@ -7,6 +7,9 @@ import {
     DragOverlay,
     useDraggable,
     useDroppable,
+    PointerSensor,
+    useSensor,
+    useSensors
 } from "@dnd-kit/core";
 
 import fileTrees from "./data/filetree.json";
@@ -87,8 +90,16 @@ const Template = (args) => {
         console.log("Drag Started");
     }
 
+    const sensors = useSensors(
+        useSensor(PointerSensor, {
+            activationConstraint: {
+                distance: 8
+            }
+        })
+    );
+
     return (
-        <DndContext onDragStart={onDragStart} onDragEnd={handleDragEnd}>
+        <DndContext sensors={sensors} onDragStart={onDragStart} onDragEnd={handleDragEnd}>
             <div className="editorStoryWrapper">
                 <Editor {...args} />
             </div>

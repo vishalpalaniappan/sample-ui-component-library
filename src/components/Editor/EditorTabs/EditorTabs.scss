@@ -1,22 +1,33 @@
 .tabs {
+    position:relative;
     display: flex;
     flex-direction: row;
     background-color: #1e1e1e;
-    height: 100%;
+    height: 40px;
     width: 100%;
 }
 
 .tab {
     padding: 0px 20px;
     background-color: #2d2d2d;
-    color: #fff;
+    color: #969690;
     cursor: pointer;
     height: 40px;
+    display:flex;
+    align-items: center;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size:14px;
+}
+
+.tab > .icon {
+    padding-right: 7px;
     display:flex;
     align-items: center;
 }
 
 .gutter {
+    display:flex;
+    background-color: #2d2d2d;
     height: 40px;
-    width: 1px;
+    width: 2px;
 }
