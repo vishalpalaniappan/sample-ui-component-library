@@ -2,6 +2,15 @@ import { useEffect } from "react";
 import { FileBrowser } from "../components/FileBrowser";
 import { useArgs } from "@storybook/preview-api";
 import { action } from "@storybook/addon-actions";
+import {
+    DndContext,
+    DragOverlay,
+    useDraggable,
+    useDroppable,
+    PointerSensor,
+    useSensor,
+    useSensors
+} from "@dnd-kit/core";
 
 import FileTree1 from "./data/FileBrowser/Tree1.json"
 import FileTree2 from "./data/FileBrowser/Tree2.json"
@@ -12,6 +21,38 @@ export default {
     title: 'FileBrowser', 
     component: FileBrowser,
     argTypes: {}
+};
+
+/**
+ * Preview for the div being dragged.
+ * @returns 
+ */
+function DragPreview({ label }) {
+    return (
+        <div
+        style={{
+            padding: "6px 12px",
+            background: "#2d2d2d",
+            color: "white",
+            boxShadow: "0 4px 12px rgba(0,0,0,0.3)",
+            opacity:0.3
+        }}
+        >
+        {label}
+        </div>
+    );
+}
+
+/**
+ * Offset for the drag overlay.
+ * @returns 
+ */
+const offsetOverlay = ({ transform }) => {
+  return {
+    ...transform,
+    x: transform.x + 20,
+    y: transform.y + 20
+  };
 };
 
 
@@ -26,12 +67,50 @@ const Template = (args) => {
         updateArgs({onNodeSelect : onNodeSelect});
     }, []);
 
+    /**
+     * Callback for when drag ends.
+     */
+    const handleDragEnd = (event) =>{
+        const { active, over } = event;
+        console.log("Drag Ended");
+        const rect = event.activatorEvent;
+
+        console.log(over );
+
+        if (over) {
+            console.log("Dragged item:", active.id);
+            console.log("Dropped on:", over.id);
+        } else {
+            console.log("Dropped outside any droppable");
+        }
+    }
+
+    /**
+     * Callback for when drag is started.
+     */
+    const onDragStart = (event) => {
+        console.log("Drag Started");
+    }
+
+    const sensors = useSensors(
+        useSensor(PointerSensor, {
+            activationConstraint: {
+                distance: 8
+            }
+        })
+    );
+
     return (
-        <div className="viewerStoryWrapper">
-            <div className="file-browser">
-                <FileBrowser {...args} />
+        <DndContext sensors={sensors} onDragStart={onDragStart} onDragEnd={handleDragEnd}>
+            <div className="viewerStoryWrapper">
+                <div className="file-browser">
+                    <FileBrowser {...args} />
+                </div>
             </div>
-        </div>
+            <DragOverlay modifiers={[offsetOverlay]} dropAnimation={null}>
+                <DragPreview label={"preview"}/>
+            </DragOverlay>
+        </DndContext>
     )
 }
 
