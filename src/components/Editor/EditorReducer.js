@@ -1,0 +1,90 @@
+export const initialState = {
+  tabs: [],
+  activeTab: null,
+  parentTabGroupId: null
+};
+
+export const editorReducer = (state, action) => {
+    let id;
+    switch (action.type) {
+
+        case "ADD_TAB": {
+            // TODO: Add some validation for the payload here.
+            return {
+                ...state,
+                tabs: [...state.tabs, action.payload],
+                activeTab: action.payload
+            };
+        }
+
+        case "SET_PARENT_TAB_GROUP_ID": {
+            return {
+                ...state,
+                parentTabGroupId: action.payload
+            };
+        }
+
+
+        case "SELECT_TAB": {
+            const tab = state.tabs.find(obj => obj.id === action.payload);
+            if (!tab) {
+                console.error(`Tab with id ${action.payload} not found.`);
+                return state;
+            }
+            return {
+                ...state,
+                activeTab: tab
+            };
+        }
+
+        case "CLOSE_TAB": {
+            const ind = state.tabs.findIndex(obj => obj.id === action.payload);
+            if (ind === -1) {
+                console.warn(`Tab with id ${action.payload} not found.`);
+                return state;
+            }
+            const newTabs = [...state.tabs];
+            newTabs.splice(ind, 1);
+
+            // If active tab is closed, select the next tab if it exists, otherwise select the previous tab.
+            let activeTab = state.activeTab;
+            const isActiveTabClosed = state.activeTab && state.activeTab.id === action.payload;
+            if (isActiveTabClosed && ind < newTabs.length) {
+                activeTab = newTabs[Math.max(0, ind)];
+            } else if (isActiveTabClosed && ind >= newTabs.length) {
+                activeTab = newTabs.length > 0 ? newTabs[newTabs.length - 1] : null;
+            }
+
+            return {
+                ...state,
+                tabs: newTabs,
+                activeTab: activeTab
+            };
+        }
+
+        case "MOVE_TAB": {
+            const prevTabs = [...state.tabs];
+            const { tabId, newIndex } = action.payload;
+            const oldIndex = prevTabs.findIndex(t => t.id === tabId);
+            if (oldIndex === -1) {
+                console.warn(`Tab with id ${tabId} not found.`);
+                return state;
+            }
+            if (newIndex - 1 === oldIndex || newIndex === oldIndex) return state;
+
+            // Remove the tab from its old position and insert it into the new position.
+            const [tabToMove] = prevTabs.splice(oldIndex, 1);
+            const adjustedNewIndex = (oldIndex < newIndex) ? newIndex - 1 : newIndex;
+            prevTabs.splice(adjustedNewIndex, 0, tabToMove);
+
+            return {
+                ...state,
+                tabs: prevTabs
+            };
+        }
+
+        default: {
+            return state;
+        }
+    }
+}

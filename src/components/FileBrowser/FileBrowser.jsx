@@ -5,6 +5,12 @@ import { setDefaultCollapsed, collapseTree, selectNode, flattenTree } from "./he
 
 import { FileCode, ChevronRight, ChevronDown, Braces, FiletypeScss, FiletypeJs, FiletypePy} from "react-bootstrap-icons";
 import PropTypes from 'prop-types';
+import {
+    DndContext,
+    DragOverlay,
+    useDraggable,
+    useDroppable,
+} from "@dnd-kit/core";
 
 const INDENT_WIDTH = 20;
 const SELECTED_FILE_COLOR = "#00426b";
@@ -27,7 +33,8 @@ function useEvent(fn) {
 /**
  * Renders a single node in the file tree.
  */
-const TreeNode = ({node, onRowClick}) => {
+const TreeNode = ({id, node, onRowClick}) => {
+    const { attributes, listeners, setNodeRef, transform } = useDraggable({id});
     /**
      * Gets the appropriate icon for the node based on its type and collapsed state.
      * @returns <JSX>
@@ -44,9 +51,11 @@ const TreeNode = ({node, onRowClick}) => {
      * Sets the background color of the row if the node is selected.
      */
     const getRowStyle = () => {
+        const style = {};
         if (node.selected) {
-            return {"backgroundColor": SELECTED_FILE_COLOR};
+            style["backgroundColor"] = SELECTED_FILE_COLOR;
         }
+        return style;
     }
 
 
@@ -72,7 +81,7 @@ const TreeNode = ({node, onRowClick}) => {
     }
 
     return (
-        <div className="file-node-row" style={getRowStyle()} onClick={() => onRowClick(node)}>
+        <div className="file-node-row" ref={setNodeRef} {...listeners} {...attributes} style={getRowStyle()} onClick={() => onRowClick(node)}>
             <div className="indent" style={{ width: node.level * INDENT_WIDTH + "px"}} />
             {
                 node.type === "folder" ? 
@@ -115,7 +124,7 @@ export const FileBrowser = ({tree, onNodeSelect}) => {
         const nodes = collapseTree(treeRef.current);
         const rows = [];
         nodes.forEach((node) => {
-            rows.push(<TreeNode key={node.id} node={node} onRowClick={handleFileClick}/>);
+            rows.push(<TreeNode key={node.id} node={node} id={node.name} onRowClick={handleFileClick}/>);
         });
         setNodes(rows);
     }
