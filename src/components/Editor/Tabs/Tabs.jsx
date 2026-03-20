@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState } from "react";
 
 import { Gutter } from "./Gutter/Gutter";
 import { Tab } from "./Tab/Tab";
