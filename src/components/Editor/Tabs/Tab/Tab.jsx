@@ -3,7 +3,7 @@ import { FileEarmark, XLg } from "react-bootstrap-icons";
 import { useDraggable } from "@dnd-kit/core";
 import PropTypes from "prop-types";
 
-import { EditorContext } from "../../EditorContext";
+import { useEditor } from "../../Editor";
 
 import "./Tab.scss";
 
@@ -21,7 +21,8 @@ const INACTIVE_TAB_FG_COLOR = "#969690";
  */
 export const Tab = ({ id, parentId, info }) => {
     const [tabStyle, setTabStyle] = useState();
-    const { selectTab, closeTab, activeTab } = useContext(EditorContext);
+
+    const { selectTab, closeTab, state } = useEditor();
 
     // Saves ID of tab and parent tab group for drag and drop context in dnd kit.
     const { attributes, listeners, setNodeRef, transform } = useDraggable({
@@ -34,8 +35,8 @@ export const Tab = ({ id, parentId, info }) => {
     });
 
     useEffect(() => {
-        renderTab(activeTab && activeTab.id === id);
-    }, [activeTab]);
+        renderTab(state.activeTab && state.activeTab.id === id);
+    }, [state.activeTab]);
 
     const renderTab = (isActive) => {
         const bgColor = isActive ? ACTIVE_TAB_BG_COLOR : INACTIVE_TAB_BG_COLOR;
