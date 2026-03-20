@@ -22,11 +22,11 @@ const INACTIVE_TAB_FG_COLOR = "#969690";
 export const Tab = ({ id, parentId, info }) => {
     const [tabStyle, setTabStyle] = useState();
 
-    const dndId = parentId + "-tab-" + id;
+    const { selectTab, closeTab, state } = useEditor();
 
     // Saves ID of tab and parent tab group for drag and drop context in dnd kit.
     const { attributes, listeners, setNodeRef, transform } = useDraggable({
-        dndId,
+        id,
         data: {
             type: "tab-draggable",
             parentId: parentId,

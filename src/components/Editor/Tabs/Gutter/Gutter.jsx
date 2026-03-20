@@ -8,12 +8,10 @@ const GUTTER_ACTIVE_COLOR = "#FFFFFF";
 const GUTTER_INACTIVE_COLOR = "#222425";
 
 export const Gutter = ({ id, index, parentId }) => {
-
-    const dndId = parentId + "-gutter-" + id;
     
     // Droppable area used by dnd kit.
     const { setNodeRef, isOver } = useDroppable({
-        dndId,
+        id,
         data: {
             type: "tab-gutter",
             parentId: parentId,
