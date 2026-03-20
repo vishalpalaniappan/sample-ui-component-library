@@ -7,11 +7,14 @@ import "./MonacoInstance.scss"
 
 import { useEditor } from "../Editor";
 
-export const MonacoInstance = ({}) => {
-    const {state} = useEditor();
+export const MonacoInstance = ({ }) => {
+    const { state } = useEditor();
     const [editorContent, setEditorContent] = useState("Loading content...");
     const [showEditor, setShowEditor] = useState(false);
-    
+
+    const editorRef = useRef(null);
+    const content = useRef();
+
     useEffect(() => {
         if (state.activeTab) {
             setEditorContent(state.activeTab.content);
@@ -21,17 +24,6 @@ export const MonacoInstance = ({}) => {
         }
     }, [state.activeTab]);
 
-    const editorRef = useRef(null);
-
-    const content = useRef();
-
-    const handleEditorDidMount = (editor, monaco) => {
-        editorRef.current = editor;
-        if(content?.current) {
-            editorRef.current.setValue(content.current);
-        }
-    }
-
     useEffect(() => {
         content.current = editorContent;
         if (editorRef?.current && content.current) {
@@ -39,31 +31,54 @@ export const MonacoInstance = ({}) => {
         }
     }, [editorContent]);
 
+    /**
+     * Callback for when the Monaco Editor is mounted. 
+     * @param {Object} editor 
+     * @param {Object} monaco 
+     */
+    const handleEditorDidMount = (editor, monaco) => {
+        editorRef.current = editor;
+        if (content?.current) {
+            editorRef.current.setValue(content.current);
+        }
+    }
+
+    // Editor options for Monaco Editor.
+    const editorOptions = {
+        scrollBeyondLastLine: false,
+        fontSize: "13px",
+        minimap: {
+            enabled: false
+        },
+        padding: {
+            top: 20,
+            bottom: 10
+        }
+    }
+
+    /**
+     * Render the editor if there is an active tab, otherwise render a placeholder message.
+     * @returns JSX
+     */
     const renderEditor = () => {
-        return (
-            <Editor
-                defaultLanguage="python"
-                defaultValue={editorContent}
-                onMount={handleEditorDidMount}
-                theme="vs-dark"
-                options={{
-                    scrollBeyondLastLine:false,
-                    fontSize:"13px",
-                    minimap: {
-                        enabled: false  
-                    },
-                    padding: {
-                        top: 20,
-                        bottom: 10
-                    }
-                }}
-            />
-        );
+        if (showEditor) {
+            return (
+                <Editor
+                    defaultLanguage="python"
+                    defaultValue={editorContent}
+                    onMount={handleEditorDidMount}
+                    theme="vs-dark"
+                    options={editorOptions}
+                />
+            );
+        } else {
+            return <div className="no-tab">Select file or drag and drop to view.</div>;
+        }
     }
 
     return (
         <>
-            {showEditor ? renderEditor() : <div className="no-tab">Select file or drag and drop to view.</div>}
+            {renderEditor()}
         </>
     )
 }
