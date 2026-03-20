@@ -17,8 +17,6 @@ import src_editorscss from '!!raw-loader!./EditorStories.scss';
 import src_viewer_stories from '!!raw-loader!./ViewerStories.scss';
 import src_flow_stories from '!!raw-loader!./FlowDiagram.stories.js';
 
-import fileTrees from "./data/filetree.json";
-
 import "./EditorStories.scss"
 
 export default {
@@ -125,5 +123,4 @@ const Template = (args) => {
 export const Default = Template.bind({});
 
 Default.args = {
-    systemTree: fileTrees.fileTrees
 }
