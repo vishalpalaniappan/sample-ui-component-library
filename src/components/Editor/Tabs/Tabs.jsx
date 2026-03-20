@@ -2,7 +2,8 @@ import { useEffect, useState, useContext } from "react";
 
 import { Gutter } from "./Gutter/Gutter";
 import { Tab } from "./Tab/Tab";
-import { EditorContext } from "../EditorContext";
+
+import { useEditor } from "../Editor";
 
 import "./Tabs.scss";
 
@@ -14,14 +15,14 @@ const TABS_CONTAINER_BG_COLOR = "#222425";
  * @returns
  */
 export const Tabs = () => {
-    const { tabs, tabGroupId } = useContext(EditorContext);
+    const { state} = useEditor();
     const [tabsList, setTabsList] = useState();
 
     useEffect(() => {
-        if (tabs?.length >= 0 && tabGroupId) {
-            drawTabs(tabs);
+        if (state.tabs?.length >= 0 && state.parentTabGroupId) {
+            drawTabs(state.tabs, state.parentTabGroupId);
         }
-    }, [tabs, tabGroupId]);
+    }, [state.tabs, state.parentTabGroupId]);
 
     /**
      * Draw the tabs provided in the tabs info. This includes the gutters
@@ -29,7 +30,7 @@ export const Tabs = () => {
      * @param {Object} tabs 
      * @returns 
      */
-    const drawTabs = (tabs) => {
+    const drawTabs = (tabs, tabGroupId) => {
         const list = [];
         tabs.forEach((tab, index) => {
             list.push(<Gutter key={tab.id + "-gutter"} id={index} index={index} parentId={tabGroupId} />);
