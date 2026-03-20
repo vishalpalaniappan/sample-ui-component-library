@@ -24,9 +24,11 @@ export const Tab = ({ id, parentId, info }) => {
 
     const { selectTab, closeTab, state } = useEditor();
 
+    const dndId = parentId + "-" + id;
+
     // Saves ID of tab and parent tab group for drag and drop context in dnd kit.
     const { attributes, listeners, setNodeRef, transform } = useDraggable({
-        id,
+        dndId,
         data: {
             type: "tab-draggable",
             parentId: parentId,
