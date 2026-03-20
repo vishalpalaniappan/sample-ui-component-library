@@ -29,6 +29,6 @@ export const Gutter = ({ id, index, parentId }) => {
 }
 
 Gutter.propTypes = {
-    id: PropTypes.number.isRequired,
+    id: PropTypes.string.isRequired,
     parentId: PropTypes.string.isRequired,
 }
