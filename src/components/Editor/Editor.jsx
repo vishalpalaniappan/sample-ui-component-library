@@ -23,7 +23,6 @@ import { editorReducer, initialState } from "./EditorReducer";
  * @return {JSX}
  */
 export const Editor = forwardRef(({ }, ref) => {
-    // TODO: Use reducer to improve state management.
     const [state, dispatch] = useReducer(editorReducer, initialState);
 
     const selectTab = useCallback((id) => {
@@ -79,11 +78,6 @@ export const Editor = forwardRef(({ }, ref) => {
         </EditorContext.Provider>
     );
 });
-
-Editor.propTypes = {
-    systemTree: PropTypes.object,
-    onFileSelect: PropTypes.func
-}
 
 export function useEditor() {
   const ctx = useContext(EditorContext);
