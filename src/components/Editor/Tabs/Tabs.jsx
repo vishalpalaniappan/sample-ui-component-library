@@ -15,7 +15,7 @@ const TABS_CONTAINER_BG_COLOR = "#222425";
  * @returns
  */
 export const Tabs = () => {
-    const { state} = useEditor();
+    const { state } = useEditor();
     const [tabsList, setTabsList] = useState();
 
     useEffect(() => {
@@ -33,10 +33,10 @@ export const Tabs = () => {
     const drawTabs = (tabs, tabGroupId) => {
         const list = [];
         tabs.forEach((tab, index) => {
-            list.push(<Gutter key={tab.id + "-gutter"} id={index} index={index} parentId={tabGroupId} />);
+            list.push(<Gutter key={tab.id + "-gutter"} id={tabGroupId + "-" + index} index={index} parentId={tabGroupId} />);
             list.push(<Tab key={tab.id} id={tab.id} parentId={tabGroupId} info={tab} />);
         });
-        list.push(<Gutter key="last-gutter" id={tabs.length} index={tabs.length} parentId={tabGroupId} />);
+        list.push(<Gutter key="last-gutter" id={tabGroupId + "-" + tabs.length} index={tabs.length} parentId={tabGroupId} />);
         setTabsList(list);
     };
 
