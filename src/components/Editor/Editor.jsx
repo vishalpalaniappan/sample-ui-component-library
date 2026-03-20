@@ -21,6 +21,7 @@ import { EditorContext } from "./EditorContext";
  * @return {JSX}
  */
 export const Editor = forwardRef(({ }, ref) => {
+    // TODO: Use reducer to improve state management.
     const [activeTab, setActiveTab] = useState();
     const [tabGroupId, setTabGroupId] = useState();
     const [tabs, setTabs] = useState([]);
