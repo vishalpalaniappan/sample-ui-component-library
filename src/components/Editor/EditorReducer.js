@@ -9,12 +9,11 @@ export const editorReducer = (state, action) => {
     switch (action.type) {
 
         case "ADD_TAB":
-            if (state.tabs.length > 0 && !state.activeTab) {
-                state.activeTab = action.payload.id;
-            }
+            // TODO: Add some validation for the payload here.
             return {
                 ...state,
-                tabs: [...state.tabs, action.payload]
+                tabs: [...state.tabs, action.payload],
+                activeTab: action.payload
             };
 
         case "SET_PARENT_TAB_GROUP_ID":
