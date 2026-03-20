@@ -45,6 +45,7 @@ export const Tab = ({ id, parentId, info }) => {
     }
     
     const clickTab = (e) => {
+        e.stopPropagation();
         selectTab(id);
     }
     
@@ -65,7 +66,7 @@ export const Tab = ({ id, parentId, info }) => {
         >
             <FileEarmark className="icon" style={{ pointerEvents: "none" }} />
             <span className="tab-name">{info.label}</span>
-            <XLg onPointerDown={clickClose} className="close-icon"/>
+            <XLg onMouseDown={clickClose} className="close-icon"/>
         </div>
     );
 }
