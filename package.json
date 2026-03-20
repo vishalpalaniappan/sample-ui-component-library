@@ -1,6 +1,6 @@
 {
   "name": "sample-ui-component-library",
-  "version": "0.0.4-dev",
+  "version": "0.0.7-dev",
   "description": "A library which contains sample UI elements that can be used for populating layouts.",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -47,6 +47,7 @@
     "css-loader": "^7.1.2",
     "gh-pages": "^6.3.0",
     "prop-types": "^15.8.1",
+    "raw-loader": "^4.0.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "rollup": "^4.37.0",
