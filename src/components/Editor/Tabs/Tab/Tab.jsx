@@ -64,7 +64,7 @@ export const Tab = ({ id, parentId, info }) => {
             {...attributes}
         >
             <FileEarmark className="icon" style={{ pointerEvents: "none" }} />
-            {info.label}
+            <span className="tab-name">{info.label}</span>
             <XLg onMouseDown={clickClose} className="close-icon"/>
         </div>
     );
