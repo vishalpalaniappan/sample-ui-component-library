@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef, useLayoutEffect } from "react";
 import { Editor } from "../components/Editor";
 import { useArgs } from "@storybook/preview-api";
 import { action } from "@storybook/addon-actions";
@@ -56,58 +56,45 @@ const offsetOverlay = ({ transform }) => {
 
 const Template = (args) => {
     const [, updateArgs] = useArgs();
-    
-    const [tabs, setTabs] = useState(
-        {
-            "id": "tab-group-1",
-            "tabs": [
-                { id: "tab1", label: "Tab 1" },
-                { id: "tab2", label: "Tab 2" },
-                { id: "tab3", label: "Tab 3" },
-            ]
-        }
-    );
 
-    // Storybook specific effect
-    useEffect(() => {
-        updateArgs({tabsInfo : tabs});
-    }, [tabs]);
+    const [dragPreviewLabel, setDragPreviewLabel] = useState(<></>);
 
-    
-    const moveTab = (tabId, newIndex) => {
-        setTabs(prev => {
-            const oldIndex = prev.tabs.findIndex(t => t.id === tabId);
-            if (oldIndex === -1) return prev;
-            const newTabs = [...prev.tabs];
-            const [tab] = newTabs.splice(oldIndex, 1);
-            newTabs.splice(newIndex, 0, tab);
-            return {...prev,tabs: newTabs};
-        });
+    const editorRef = useRef();
+
+    useLayoutEffect(() => {
+        editorRef.current.setTabGroupId("tab-group-1");
+        editorRef.current.addTab({ id: "tab1", label: "Tab 1", content: "Content for Tab 1" });
+        editorRef.current.addTab({ id: "tab2", label: "Tab 2", content: "Content for Tab 2" });
+        editorRef.current.addTab({ id: "tab3", label: "Tab 3", content: "Content for Tab 3" });
+        editorRef.current.addTab({ id: "tab4", label: "Tab 4", content: "Content for Tab 4" });
+        editorRef.current.addTab({ id: "tab5", label: "Tab 5", content: "Content for Tab 5" });
+        editorRef.current.addTab({ id: "tab6", label: "Tab 6", content: "Content for Tab 6" });
+        setTimeout(() => {
+            editorRef.current.selectTab("tab1");
+        }, 100);
+    }, []);
+
+    const onDragStart = (event) => {
+        console.log("");
+        console.log("Drag Started");
+        const dragPreview = editorRef.current.getPreviewElement(event.active.data.current.tabId);
+        setDragPreviewLabel(dragPreview);
     }
 
-    /**
-     * Callback for when drag ends.
-     */
     const handleDragEnd = (event) =>{
         const { active, over } = event;
-
-        if (active.data.current.type === "tab-draggable" && over.data.current.type === "tab-gutter") {
-            moveTab(active.id, over.data.current.index);
-        }
 
         if (over) {
             console.log("Dragged item:", active);
             console.log("Dropped on:", over);
         } else {
             console.log("Dropped outside any droppable");
+            return;
         }
-    }
 
-    /**
-     * Callback for when drag is started.
-     */
-    const onDragStart = (event) => {
-        console.log("Drag Started");
+        if (active.data.current.type === "tab-draggable" && over.data.current.type === "tab-gutter") {
+            editorRef.current.moveTab(active.data.current.tabId, over.data.current.index);
+        }
     }
 
     const sensors = useSensors(
@@ -121,10 +108,10 @@ const Template = (args) => {
     return (
         <DndContext sensors={sensors} onDragStart={onDragStart} onDragEnd={handleDragEnd}>
             <div className="editorStoryWrapper">
-                <Editor {...args} />
+                <Editor ref={editorRef}{...args} />
             </div>
             <DragOverlay modifiers={[offsetOverlay]} dropAnimation={null}>
-                <DragPreview label={"preview"}/>
+                {dragPreviewLabel}
             </DragOverlay>
         </DndContext>
     )
