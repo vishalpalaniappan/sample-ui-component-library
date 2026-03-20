@@ -5,17 +5,21 @@ import Editor from '@monaco-editor/react';
 
 import "./MonacoInstance.scss"
 
-import { EditorContext } from "../EditorContext";
+import { useEditor } from "../Editor";
 
 export const MonacoInstance = ({}) => {
-    const {activeTab, tabsInfo} = useContext(EditorContext);
+    const {state} = useEditor();
     const [editorContent, setEditorContent] = useState("Loading content...");
+    const [showEditor, setShowEditor] = useState(false);
     
     useEffect(() => {
-        if (activeTab) {
-            setEditorContent(activeTab.content);
-        } 
-    }, [activeTab, tabsInfo]);
+        if (state.activeTab) {
+            setEditorContent(state.activeTab.content);
+            setShowEditor(true);
+        } else {
+            setShowEditor(false);
+        }
+    }, [state.activeTab]);
 
     const editorRef = useRef(null);
 
@@ -35,21 +39,33 @@ export const MonacoInstance = ({}) => {
         }
     }, [editorContent]);
 
+    const renderEditor = () => {
+        return (
+            <Editor
+                defaultLanguage="python"
+                defaultValue={editorContent}
+                onMount={handleEditorDidMount}
+                theme="vs-dark"
+                options={{
+                    scrollBeyondLastLine:false,
+                    fontSize:"13px",
+                    minimap: {
+                        enabled: false  
+                    },
+                    padding: {
+                        top: 20,
+                        bottom: 10
+                    }
+                }}
+            />
+        );
+    }
+
     return (
-        <Editor
-            defaultLanguage="python"
-            defaultValue=""
-            onMount={handleEditorDidMount}
-            theme="vs-dark"
-            options={{
-                scrollBeyondLastLine:false,
-                fontSize:"13px",
-                minimap: {
-                    enabled: false  
-                }
-            }}
-        />
-    );
+        <>
+            {showEditor ? renderEditor() : <div className="no-tab">Select file or drag and drop to view.</div>}
+        </>
+    )
 }
 
 MonacoInstance.propTypes = {
