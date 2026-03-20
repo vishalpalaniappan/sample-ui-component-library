@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useLayoutEffect, useRef } from "react";
 import { FileBrowser } from "../components/FileBrowser";
 import { useArgs } from "@storybook/preview-api";
 import { action } from "@storybook/addon-actions";
@@ -59,6 +59,7 @@ const offsetOverlay = ({ transform }) => {
 
 const Template = (args) => {
     const [, updateArgs] = useArgs();
+    const fileBrowserRef = useRef();
 
     const onNodeSelect = (selectedFile) => {
         action('Selected Node:')(selectedFile);
@@ -66,6 +67,11 @@ const Template = (args) => {
 
     useEffect(() => {
         updateArgs({onNodeSelect : onNodeSelect});
+    }, []);
+
+
+    useLayoutEffect(() => {
+        fileBrowserRef.current.addFileTree(WorkspaceSampleTree);
     }, []);
 
     /**
@@ -105,7 +111,7 @@ const Template = (args) => {
         <DndContext sensors={sensors} onDragStart={onDragStart} onDragEnd={handleDragEnd}>
             <div className="viewerStoryWrapper">
                 <div className="file-browser">
-                    <FileBrowser {...args} />
+                    <FileBrowser ref={fileBrowserRef} {...args} />
                 </div>
             </div>
             <DragOverlay modifiers={[offsetOverlay]} dropAnimation={null}>

@@ -10,24 +10,19 @@ export const fileBrowserReducer = (state, action) => {
 
         case "ADD_FILE_TREE": {
             return {
-                ...state,
-                tree: tree,
-                flattenedTree: flattenedTree,
-                collapsedTree: collapsedTree
+                ...state
             }
         }
 
         case "SELECT_NODE": {
             return {
-                ...state,
-                collapsedTree: collapsedTree
+                ...state
             }
         }
 
         case "COLLAPSE_TREE": {
             return {
-                ...state,
-                collapsedTree: collapsedTree
+                ...state
             }
         }
     }
