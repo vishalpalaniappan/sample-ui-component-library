@@ -41,7 +41,7 @@ export const Tabs = () => {
     };
 
     return (
-        <div style={{ display: "flex", background: TABS_CONTAINER_BG_COLOR }}>{tabsList}</div>
+        <div className="tabs" style={{background: TABS_CONTAINER_BG_COLOR }}>{tabsList}</div>
     );
 };
 

@@ -1,7 +1,15 @@
 .tabs {
-    position:relative;
     display: flex;
     flex-direction: row;
     height: 40px;
     width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    flex-wrap: nowrap;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.tabs-container::-webkit-scrollbar {
+  display: none;
 }
