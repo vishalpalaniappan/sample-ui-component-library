@@ -1,31 +1,22 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 
 import Editor from '@monaco-editor/react';
 
 import "./MonacoInstance.scss"
 
-function Gutter({ id }) {
-    const { setNodeRef, isOver } = useDroppable({
-        id,
-    });
+import { EditorContext } from "../EditorContext";
 
-    return (
-        <div
-            ref={setNodeRef}
-            style={{
-                height: 40,
-                width: 1,
-                background: isOver ? "white" : "#4da3ff33",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center"
-            }}
-        ></div>
-    );
-}
+export const MonacoInstance = ({}) => {
+    const {activeTab, tabsInfo} = useContext(EditorContext);
+    const [editorContent, setEditorContent] = useState("Loading content...");
+    
+    useEffect(() => {
+        if (activeTab) {
+            setEditorContent(activeTab.content);
+        } 
+    }, [activeTab, tabsInfo]);
 
-export const MonacoInstance = ({editorContent}) => {
     const editorRef = useRef(null);
 
     const content = useRef();
@@ -52,7 +43,7 @@ export const MonacoInstance = ({editorContent}) => {
             theme="vs-dark"
             options={{
                 scrollBeyondLastLine:false,
-                fontSize:"12px",
+                fontSize:"13px",
                 minimap: {
                     enabled: false  
                 }
