@@ -5,8 +5,6 @@ import { action } from "@storybook/addon-actions";
 import {
     DndContext,
     DragOverlay,
-    useDraggable,
-    useDroppable,
     PointerSensor,
     useSensor,
     useSensors
@@ -70,7 +68,7 @@ const Template = (args) => {
         editorRef.current.addTab({ id: "tab5", label: "Tab 5", content: "Content for Tab 5" });
         editorRef.current.addTab({ id: "tab6", label: "Tab 6", content: "Content for Tab 6" });
         setTimeout(() => {
-            editorRef.current.selectTab("tab1");
+            editorRef.current.selectTab("tab5");
         }, 100);
     }, []);
 
