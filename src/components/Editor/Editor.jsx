@@ -83,6 +83,8 @@ export const Editor = forwardRef(({ }, ref) => {
     );
 });
 
+Editor.displayName = "Editor";
+
 export function useEditor() {
   const ctx = useContext(EditorContext);
   if (!ctx) {
