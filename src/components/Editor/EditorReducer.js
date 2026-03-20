@@ -8,22 +8,24 @@ export const editorReducer = (state, action) => {
     let id;
     switch (action.type) {
 
-        case "ADD_TAB":
+        case "ADD_TAB": {
             // TODO: Add some validation for the payload here.
             return {
                 ...state,
                 tabs: [...state.tabs, action.payload],
                 activeTab: action.payload
             };
+        }
 
-        case "SET_PARENT_TAB_GROUP_ID":
+        case "SET_PARENT_TAB_GROUP_ID": {
             return {
                 ...state,
                 parentTabGroupId: action.payload
             };
+        }
 
 
-        case "SELECT_TAB":
+        case "SELECT_TAB": {
             const tab = state.tabs.find(obj => obj.id === action.payload);
             if (!tab) {
                 console.error(`Tab with id ${action.payload} not found.`);
@@ -33,8 +35,9 @@ export const editorReducer = (state, action) => {
                 ...state,
                 activeTab: tab
             };
+        }
 
-        case "CLOSE_TAB":
+        case "CLOSE_TAB": {
             const ind = state.tabs.findIndex(obj => obj.id === action.payload);
             if (ind === -1) {
                 console.warn(`Tab with id ${action.payload} not found.`);
@@ -57,8 +60,9 @@ export const editorReducer = (state, action) => {
                 tabs: newTabs,
                 activeTab: activeTab
             };
+        }
 
-        case "MOVE_TAB":
+        case "MOVE_TAB": {
             const prevTabs = [...state.tabs];
             const { tabId, newIndex } = action.payload;
             const oldIndex = prevTabs.findIndex(t => t.id === tabId);
@@ -77,8 +81,10 @@ export const editorReducer = (state, action) => {
                 ...state,
                 tabs: prevTabs
             };
+        }
 
-        default:
+        default: {
             return state;
+        }
     }
 }
