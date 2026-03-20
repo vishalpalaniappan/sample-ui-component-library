@@ -10,6 +10,13 @@ import {
     useSensors
 } from "@dnd-kit/core";
 
+import src_editorstories from '!!raw-loader!./Editor.stories.js';
+import src_filebrowser from '!!raw-loader!./FileBrowser.stories.js';
+import src_stacklist_stories from '!!raw-loader!./StackList.stories.js';
+import src_editorscss from '!!raw-loader!./EditorStories.scss';
+import src_viewer_stories from '!!raw-loader!./ViewerStories.scss';
+import src_flow_stories from '!!raw-loader!./FlowDiagram.stories.js';
+
 import fileTrees from "./data/filetree.json";
 
 import "./EditorStories.scss"
@@ -61,12 +68,12 @@ const Template = (args) => {
 
     useLayoutEffect(() => {
         editorRef.current.setTabGroupId("tab-group-1");
-        editorRef.current.addTab({ id: "tab1", label: "Tab 1", content: "Content for Tab 1" });
-        editorRef.current.addTab({ id: "tab2", label: "Tab 2", content: "Content for Tab 2" });
-        editorRef.current.addTab({ id: "tab3", label: "Tab 3", content: "Content for Tab 3" });
-        editorRef.current.addTab({ id: "tab4", label: "Tab 4", content: "Content for Tab 4" });
-        editorRef.current.addTab({ id: "tab5", label: "Tab 5", content: "Content for Tab 5" });
-        editorRef.current.addTab({ id: "tab6", label: "Tab 6", content: "Content for Tab 6" });
+        editorRef.current.addTab({ id: "tab1", label: "Viewer.stories.jsx", content: src_viewer_stories });
+        editorRef.current.addTab({ id: "tab2", label: "FileBrowser.jsx", content: src_filebrowser });
+        editorRef.current.addTab({ id: "tab3", label: "Editor.stories.js", content: src_editorstories });
+        editorRef.current.addTab({ id: "tab5", label: "Editor.scss", content: src_editorscss });
+        editorRef.current.addTab({ id: "tab6", label: "StackList.stories.js", content: src_stacklist_stories });
+        editorRef.current.addTab({ id: "tab7", label: "FlowDiagram.stories.js", content: src_flow_stories });
         setTimeout(() => {
             editorRef.current.selectTab("tab5");
         }, 100);
