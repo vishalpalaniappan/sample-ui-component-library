@@ -52,7 +52,7 @@ export const editorReducer = (state, action) => {
             if (isActiveTabClosed && ind < newTabs.length) {
                 activeTab = newTabs[Math.max(0, ind)];
             } else if (isActiveTabClosed && ind >= newTabs.length) {
-                activeTab = newTabs[newTabs.length - 1];
+                activeTab = newTabs.length > 0 ? newTabs[newTabs.length - 1] : null;
             }
 
             return {
