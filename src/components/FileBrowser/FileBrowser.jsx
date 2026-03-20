@@ -3,6 +3,8 @@ import "./FileBrowser.scss";
 
 import { TreeNode } from "./TreeNode/TreeNode";
 
+import { FileBrowserContext } from "./FileBrowserContext";
+
 import { setDefaultCollapsed, collapseTree, selectNode, flattenTree } from "./helper";
 
 /**
@@ -55,9 +57,25 @@ export const FileBrowser = ({tree, onNodeSelect}) => {
         });
         setNodes(rows);
     }
+
+    const addFileTree = useCallback((tree) => {
+        dispatch({ type: "ADD_FILE_TREE", payload: tree });
+    }, []);
+
+    const api = useMemo(() => {
+        return {
+            state,
+            addFileTree
+        };
+    }, [state, addFileTree]);
+
+    useImperativeHandle(ref, () => api, [api]);
+
     return (
-        <div className="file-browser">
-            {nodes}
-        </div>
+        <FileBrowserContext.Provider value={api}>
+            <div className="file-browser">
+                {nodes}
+            </div>
+        </FileBrowserContext.Provider>
     )
 }
