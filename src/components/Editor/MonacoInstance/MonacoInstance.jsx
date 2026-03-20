@@ -26,7 +26,7 @@ export const MonacoInstance = ({ }) => {
 
     useEffect(() => {
         content.current = editorContent;
-        if (editorRef?.current && content.current) {
+        if (editorRef?.current && content.current !== undefined && content.current !== null) {  
             editorRef.current.setValue(content.current);
         }
     }, [editorContent]);
