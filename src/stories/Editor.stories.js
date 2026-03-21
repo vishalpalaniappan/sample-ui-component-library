@@ -71,7 +71,7 @@ const Template = (args) => {
             return;
         }
 
-        if (active.data.current.type === "tab-draggable" && over.data.current.type === "tab-gutter") {
+        if (active.data.current.type === "EditorTab" && over.data.current.type === "EditorTabGutter") {
             editorRef.current.moveTab(active.data.current.node.uid, over.data.current.index);
         }
     }

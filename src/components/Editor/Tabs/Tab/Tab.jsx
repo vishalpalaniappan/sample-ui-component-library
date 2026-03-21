@@ -28,7 +28,7 @@ export const Tab = ({ id, parentId, node }) => {
     const { attributes, listeners, setNodeRef, transform } = useDraggable({
         id,
         data: {
-            type: "tab-draggable",
+            type: "EditorTab",
             parentId: parentId,
             node: node
         },

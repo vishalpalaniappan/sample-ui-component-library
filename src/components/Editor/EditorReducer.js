@@ -9,6 +9,15 @@ export const editorReducer = (state, action) => {
 
         case "ADD_TAB": {
             // TODO: Add some validation for the payload here.
+            const tab = state.tabs.find(obj => obj.uid === action.payload.uid);
+            if (tab) {
+                console.warn(`Tab with id ${action.payload.uid} already exists`);
+                return {
+                    ...state,
+                    activeTab: tab
+                };
+            }
+            
             return {
                 ...state,
                 tabs: [...state.tabs, action.payload],

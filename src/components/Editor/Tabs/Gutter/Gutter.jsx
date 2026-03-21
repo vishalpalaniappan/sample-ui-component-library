@@ -13,7 +13,7 @@ export const Gutter = ({ id, index, parentId }) => {
     const { setNodeRef, isOver } = useDroppable({
         id,
         data: {
-            type: "tab-gutter",
+            type: "EditorTabGutter",
             parentId: parentId,
             index: index,
         },

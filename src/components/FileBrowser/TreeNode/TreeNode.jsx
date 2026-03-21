@@ -22,6 +22,7 @@ export const TreeNode = ({ id, node }) => {
         { 
             id,
             data: {
+                type: "FileTreeNode",
                 node: node
             }
          }
