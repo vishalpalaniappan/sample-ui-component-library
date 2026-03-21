@@ -54,6 +54,9 @@ const Template = (args) => {
         }, 3000);
     }, []);
 
+
+    const [dragging, setDragging] = useState(false);
+  
     /**
      * Callback for when drag ends.
      */
@@ -62,7 +65,7 @@ const Template = (args) => {
         console.log("Drag Ended");
         const rect = event.activatorEvent;
 
-        console.log(over );
+        console.log(active, over);
 
         if (over) {
             console.log("Dragged item:", active.id);
@@ -70,6 +73,7 @@ const Template = (args) => {
         } else {
             console.log("Dropped outside any droppable");
         }
+        setDragging(false);
     }
 
     /**
@@ -77,9 +81,27 @@ const Template = (args) => {
      */
     const onDragStart = (event) => {
         console.log("Drag Started");
+        console.log(event.active.data);
         const dragPreview = fileBrowserRef.current.getPreviewElement(event.active.data.current.node.uid);
-        setDragPreviewLabel(dragPreview);
+        setDragPreviewLabel(event.active.data.current.preview);
+        setDragging(true);
     }
+
+    // Manually track the drag position.
+    const [pos, setPos] = useState({ x: 0, y: 0 });
+    useEffect(() => {
+        if (!dragging) return;
+
+        const handleMove = (e) => {
+            setPos({ x: e.clientX, y: e.clientY });
+        };
+
+        window.addEventListener("pointermove", handleMove);
+
+        return () => {
+            window.removeEventListener("pointermove", handleMove);
+        };
+    }, [dragging]);
 
     const sensors = useSensors(
         useSensor(PointerSensor, {
@@ -96,9 +118,18 @@ const Template = (args) => {
                     <FileBrowser ref={fileBrowserRef} {...args} />
                 </div>
             </div>
-            <DragOverlay modifiers={[offsetOverlay]} dropAnimation={null}>
-                {dragPreviewLabel}
-            </DragOverlay>
+            {dragging && (
+                <div
+                    style={{
+                        position: "fixed",
+                        left: pos.x,
+                        top: pos.y,
+                        pointerEvents: "none",
+                        zIndex: 9999,
+                    }}>
+                    {dragPreviewLabel}
+                </div>
+            )}  
         </DndContext>
     )
 }

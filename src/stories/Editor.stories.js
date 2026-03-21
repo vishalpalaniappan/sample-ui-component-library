@@ -63,28 +63,52 @@ const Template = (args) => {
         editorRef.current.addTab(node,2);
     }, []);
 
-    const onDragStart = (event) => {
-        console.log("");
-        console.log("Drag Started");
-        const dragPreview = editorRef.current.getPreviewElement(event.active.data.current.node.uid);
-        setDragPreviewLabel(dragPreview);
-    }
-
+const [dragging, setDragging] = useState(false);
+  
+    /**
+     * Callback for when drag ends.
+     */
     const handleDragEnd = (event) =>{
         const { active, over } = event;
+        console.log("Drag Ended");
+        const rect = event.activatorEvent;
+
+        console.log(active, over);
 
         if (over) {
-            console.log("Dragged item:", active);
-            console.log("Dropped on:", over);
+            console.log("Dragged item:", active.id);
+            console.log("Dropped on:", over.id);
         } else {
             console.log("Dropped outside any droppable");
-            return;
         }
-
-        if (active.data.current.type === "EditorTab" && over.data.current.type === "EditorTabGutter") {
-            editorRef.current.moveTab(active.data.current.node.uid, over.data.current.index);
-        }
+        setDragging(false);
     }
+
+    /**
+     * Callback for when drag is started.
+     */
+    const onDragStart = (event) => {
+        console.log("Drag Started");
+        console.log(event.active.data);
+        setDragPreviewLabel(event.active.data.current.preview);
+        setDragging(true);
+    }
+
+    // Manually track the drag position.
+    const [pos, setPos] = useState({ x: 0, y: 0 });
+    useEffect(() => {
+        if (!dragging) return;
+
+        const handleMove = (e) => {
+            setPos({ x: e.clientX, y: e.clientY });
+        };
+
+        window.addEventListener("pointermove", handleMove);
+
+        return () => {
+            window.removeEventListener("pointermove", handleMove);
+        };
+    }, [dragging]);
 
     const sensors = useSensors(
         useSensor(PointerSensor, {
@@ -99,9 +123,18 @@ const Template = (args) => {
             <div className="editorStoryWrapper">
                 <Editor ref={editorRef}{...args} />
             </div>
-            <DragOverlay modifiers={[offsetOverlay]} dropAnimation={null}>
-                {dragPreviewLabel}
-            </DragOverlay>
+            {dragging && (
+                <div
+                    style={{
+                        position: "fixed",
+                        left: pos.x,
+                        top: pos.y,
+                        pointerEvents: "none",
+                        zIndex: 9999,
+                    }}>
+                    {dragPreviewLabel}
+                </div>
+            )}  
         </DndContext>
     )
 }
