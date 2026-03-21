@@ -24,7 +24,7 @@ export const TreeNode = ({ id, node }) => {
             data: {
                 type: "FileTreeNode",
                 node: node,
-                preview: <TreeNodePreview node={node}/ >
+                preview: <TreeNodePreview node={node} />
             }
          }
     );
