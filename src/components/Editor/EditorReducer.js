@@ -24,7 +24,6 @@ export const editorReducer = (state, action) => {
             };
         }
 
-
         case "SELECT_TAB": {
             const tab = state.tabs.find(obj => obj.uid === action.payload);
             if (!tab) {
