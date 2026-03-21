@@ -37,25 +37,14 @@ export const FileBrowser = forwardRef(({onSelectFile}, ref) => {
     const selectNode = useCallback((node) => {
         dispatch({ type: "SELECT_NODE", payload: node });
     }, []);
-    
-    const getPreviewElement = useCallback((tabId) => {
-        // Get the preview element for a tab by its id for use in drag-and-drop operations.
-        const tab = state.flattenedTree.find(t => t.uid === tabId);
-        if (!tab) {
-            console.error(`getPreviewElement: tab with id ${tabId} not found.`);
-            return null;
-        }
-        return <TreeNodePreview node={tab} />;
-    }, [state]);
 
     const api = useMemo(() => {
         return {
             state,
             addFileTree,
-            selectNode,
-            getPreviewElement
+            selectNode
         };
-    }, [state, addFileTree, selectNode, getPreviewElement]);
+    }, [state, addFileTree, selectNode]);
 
     useImperativeHandle(ref, () => api, [api]);
 
