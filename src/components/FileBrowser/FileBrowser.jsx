@@ -1,13 +1,10 @@
 import {
     forwardRef,
-    useEffect,
     useReducer,
-    useState,
-    useRef,
-    useLayoutEffect,
     useMemo,
     useCallback,
-    useImperativeHandle
+    useContext,
+    useImperativeHandle,
 } from "react";
 import "./FileBrowser.scss";
 
@@ -16,13 +13,6 @@ import { Tree } from "./Tree/Tree";
 import { FileBrowserContext } from "./FileBrowserContext";
 
 import { fileBrowserReducer, initialState } from "./FileBrowserReducer";
-
-import {
-    setDefaultCollapsed,
-    collapseTree,
-    selectNode,
-    flattenTree,
-} from "./helper";
 
 /**
  * Renders a file browser.
@@ -37,12 +27,18 @@ export const FileBrowser = forwardRef(({ }, ref) => {
         dispatch({ type: "ADD_FILE_TREE", payload: tree });
     }, []);
 
+
+    const selectNode = useCallback((node) => {
+        dispatch({ type: "SELECT_NODE", payload: node });
+    }, []);
+
     const api = useMemo(() => {
         return {
             state,
             addFileTree,
+            selectNode
         };
-    }, [state, addFileTree]);
+    }, [state, addFileTree, selectNode]);
 
     useImperativeHandle(ref, () => api, [api]);
 
@@ -54,3 +50,13 @@ export const FileBrowser = forwardRef(({ }, ref) => {
         </FileBrowserContext.Provider>
     );
 });
+
+FileBrowser.displayName = "FileBrowser";
+
+export function useFileBrowser() {
+    const ctx = useContext(FileBrowserContext);
+    if (!ctx) {
+        throw new Error("useFileBrowser must be used inside <FileBrowser>");
+    }
+    return ctx;
+}

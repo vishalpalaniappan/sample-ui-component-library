@@ -5,6 +5,7 @@ export const setDefaultCollapsed = (tree) => {
     tree.forEach((node) => {
         node.collapsed = false;
     });
+    return tree;
 }
 
 
@@ -22,6 +23,7 @@ export const flattenTree = (tree, level) => {
     let rows = [];
     for (let i = 0; i < tree.length; i++) {
         const node = tree[i];
+        console.log(node);
         node.level = level;
         rows.push(node);
         if (node?.children) {

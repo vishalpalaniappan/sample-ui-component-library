@@ -1,4 +1,4 @@
-import { FileCode, ChevronRight, ChevronDown, Braces, FiletypeScss, FiletypeJs, FiletypePy} from "react-bootstrap-icons";
+import { FileCode, ChevronRight, ChevronDown, Braces, FiletypeScss, FiletypeJs, FiletypePy } from "react-bootstrap-icons";
 import PropTypes from 'prop-types';
 import {
     DndContext,
@@ -6,6 +6,8 @@ import {
     useDraggable,
     useDroppable,
 } from "@dnd-kit/core";
+
+import { useFileBrowser } from "../FileBrowser";
 
 const INDENT_WIDTH = 20;
 const SELECTED_FILE_COLOR = "#00426b";
@@ -15,8 +17,10 @@ import "./TreeNode.scss";
 /**
  * Renders a single node in the file tree.
  */
-export const TreeNode = ({id, node, onRowClick}) => {
-    const { attributes, listeners, setNodeRef, transform } = useDraggable({id});
+export const TreeNode = ({ id, node }) => {
+    const { attributes, listeners, setNodeRef, transform } = useDraggable({ id });
+    const { selectNode } = useFileBrowser();
+
     /**
      * Gets the appropriate icon for the node based on its type and collapsed state.
      * @returns <JSX>
@@ -62,13 +66,19 @@ export const TreeNode = ({id, node, onRowClick}) => {
         }
     }
 
+
+    const onSelectRow = () => {
+        selectNode(node);
+    }
+
     return (
-        <div className="file-node-row" ref={setNodeRef} {...listeners} {...attributes} style={getRowStyle()} onClick={() => onRowClick(node)}>
-            <div className="indent" style={{ width: node.level * INDENT_WIDTH + "px"}} />
+        <div className="file-node-row" ref={setNodeRef} {...listeners} {...attributes} 
+            style={getRowStyle()} onClick={() => onSelectRow()}>
+            <div className="indent" style={{ width: node.level * INDENT_WIDTH + "px" }} />
             {
-                node.type === "folder" ? 
-                <span className="center folder-icon">{getCollapsedIcon()}</span> :
-                <span className="center file-icon">{getFileIcon()}</span>
+                node.type === "folder" ?
+                    <span className="center folder-icon">{getCollapsedIcon()}</span> :
+                    <span className="center file-icon">{getFileIcon()}</span>
             }
             <span className="center file-name">{node.name}</span>
         </div>
