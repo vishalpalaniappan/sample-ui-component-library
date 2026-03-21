@@ -1,19 +1,11 @@
 import {
     useEffect,
-    useState,
-    useRef
+    useState
 } from "react";
 
 import { TreeNode } from "../TreeNode/TreeNode";
 
 import { useFileBrowser } from "../FileBrowser";
-
-import {
-    setDefaultCollapsed,
-    collapseTree,
-    selectNode,
-    flattenTree,
-} from "../helper";
 
 import "./Tree.scss";
 
@@ -40,7 +32,7 @@ export const Tree = ({}) => {
                 <TreeNode
                     key={node.uid}
                     node={node}
-                    id={node.uid}
+                    id={"tree-node-" + node.uid}
                 />,
             );
         });

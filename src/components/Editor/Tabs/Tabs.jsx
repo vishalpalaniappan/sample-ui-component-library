@@ -34,7 +34,7 @@ export const Tabs = () => {
         const list = [];
         tabs.forEach((tab, index) => {
             list.push(<Gutter key={tab.uid + "-gutter"} id={tabGroupId + "-" + index} index={index} parentId={tabGroupId} />);
-            list.push(<Tab key={tab.uid} id={tab.uid} parentId={tabGroupId} node={tab} />);
+            list.push(<Tab key={tab.uid} id={"tab-" + tabGroupId + "-" + tab.uid} parentId={tabGroupId} node={tab} />);
         });
         list.push(<Gutter key="last-gutter" id={tabGroupId + "-" + tabs.length} index={tabs.length} parentId={tabGroupId} />);
         setTabsList(list);
