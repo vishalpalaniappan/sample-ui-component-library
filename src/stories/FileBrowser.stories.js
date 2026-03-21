@@ -71,7 +71,7 @@ const Template = (args) => {
 
 
     useLayoutEffect(() => {
-        fileBrowserRef.current.addFileTree(WorkspaceSampleTree);
+        fileBrowserRef.current.addFileTree(WorkspaceSampleTree.tree);
     }, []);
 
     /**
