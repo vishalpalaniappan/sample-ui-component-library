@@ -29,7 +29,7 @@ export const fileBrowserReducer = (state, action) => {
         case "SELECT_NODE": {
             const tree = [...state.flattenedTree];
             tree.forEach((n) => {
-                if (n === action.payload) {
+                if (n.uid === action.payload) {
                     n.selected = true;
                     n.collapsed = !n.collapsed;
                 } else {

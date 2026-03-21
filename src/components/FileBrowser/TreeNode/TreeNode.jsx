@@ -68,7 +68,7 @@ export const TreeNode = ({ id, node }) => {
 
 
     const onSelectRow = () => {
-        selectNode(node);
+        selectNode(node.uid);
     }
 
     return (
