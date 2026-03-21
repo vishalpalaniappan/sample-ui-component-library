@@ -23,7 +23,6 @@ export const FileBrowser = forwardRef(({ }, ref) => {
     const [state, dispatch] = useReducer(fileBrowserReducer, initialState);
 
     const addFileTree = useCallback((tree) => {
-        console.log("Adding file tree");
         dispatch({ type: "ADD_FILE_TREE", payload: tree });
     }, []);
 
