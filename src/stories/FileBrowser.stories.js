@@ -12,8 +12,6 @@ import {
     useSensors
 } from "@dnd-kit/core";
 
-import FileTree1 from "./data/FileBrowser/Tree1.json"
-import FileTree2 from "./data/FileBrowser/Tree2.json"
 import WorkspaceSampleTree from "./data/FileBrowser/workspace_sample.json"
 
 import "./FileBrowserStories.scss"
@@ -72,6 +70,10 @@ const Template = (args) => {
 
     useLayoutEffect(() => {
         fileBrowserRef.current.addFileTree(args.tree);
+
+        setTimeout(() => {
+
+        }, 3000);
     }, []);
 
     /**
@@ -119,18 +121,6 @@ const Template = (args) => {
             </DragOverlay>
         </DndContext>
     )
-}
-
-export const Default = Template.bind({});
-
-Default.args = {
-    tree: FileTree1.tree
-}
-
-export const Tree2 = Template.bind({});
-
-Tree2.args = {
-    tree: FileTree2.tree
 }
 
 export const SampleTree = Template.bind({});
