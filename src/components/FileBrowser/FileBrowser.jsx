@@ -10,7 +10,6 @@ import {
 import "./FileBrowser.scss";
 
 import { Tree } from "./Tree/Tree";
-import { TreeNodePreview } from "./TreeNode/TreeNode";
 
 import { FileBrowserContext } from "./FileBrowserContext";
 
