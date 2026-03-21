@@ -19,7 +19,7 @@ const INACTIVE_TAB_FG_COLOR = "#969690";
  * @param {String} label
  * @returns
  */
-export const Tab = ({ id, parentId, info }) => {
+export const Tab = ({ id, parentId, node }) => {
     const [tabStyle, setTabStyle] = useState();
 
     const { selectTab, closeTab, state } = useEditor();
@@ -30,12 +30,12 @@ export const Tab = ({ id, parentId, info }) => {
         data: {
             type: "tab-draggable",
             parentId: parentId,
-            tabId: id,
+            node: node
         },
     });
 
     useEffect(() => {
-        renderTab(state.activeTab && state.activeTab.id === id);
+        renderTab(state.activeTab && state.activeTab.uid === id);
     }, [state.activeTab]);
 
     const renderTab = (isActive) => {
@@ -65,7 +65,7 @@ export const Tab = ({ id, parentId, info }) => {
             {...attributes}
         >
             <FileEarmark className="icon" style={{ pointerEvents: "none" }} />
-            <span className="tab-name">{info.label}</span>
+            <span className="tab-name">{node.name}</span>
             <XLg onMouseDown={clickClose} className="close-icon"/>
         </div>
     );
@@ -74,8 +74,8 @@ export const Tab = ({ id, parentId, info }) => {
 Tab.propTypes = {
     id: PropTypes.string.isRequired,
     parentId: PropTypes.string.isRequired,
-    info: PropTypes.shape({
-        label: PropTypes.string.isRequired,
+    node: PropTypes.shape({
+        name: PropTypes.string.isRequired,
     }).isRequired
 }
 

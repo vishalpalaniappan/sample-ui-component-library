@@ -33,8 +33,8 @@ export const Tabs = () => {
     const drawTabs = (tabs, tabGroupId) => {
         const list = [];
         tabs.forEach((tab, index) => {
-            list.push(<Gutter key={tab.id + "-gutter"} id={tabGroupId + "-" + index} index={index} parentId={tabGroupId} />);
-            list.push(<Tab key={tab.id} id={tab.id} parentId={tabGroupId} info={tab} />);
+            list.push(<Gutter key={tab.uid + "-gutter"} id={tabGroupId + "-" + index} index={index} parentId={tabGroupId} />);
+            list.push(<Tab key={tab.uid} id={tab.uid} parentId={tabGroupId} node={tab} />);
         });
         list.push(<Gutter key="last-gutter" id={tabGroupId + "-" + tabs.length} index={tabs.length} parentId={tabGroupId} />);
         setTabsList(list);

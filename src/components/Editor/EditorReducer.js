@@ -26,7 +26,7 @@ export const editorReducer = (state, action) => {
 
 
         case "SELECT_TAB": {
-            const tab = state.tabs.find(obj => obj.id === action.payload);
+            const tab = state.tabs.find(obj => obj.uid === action.payload);
             if (!tab) {
                 console.error(`Tab with id ${action.payload} not found.`);
                 return state;
@@ -38,7 +38,7 @@ export const editorReducer = (state, action) => {
         }
 
         case "CLOSE_TAB": {
-            const ind = state.tabs.findIndex(obj => obj.id === action.payload);
+            const ind = state.tabs.findIndex(obj => obj.uid === action.payload);
             if (ind === -1) {
                 console.warn(`Tab with id ${action.payload} not found.`);
                 return state;
@@ -48,7 +48,7 @@ export const editorReducer = (state, action) => {
 
             // If active tab is closed, select the next tab if it exists, otherwise select the previous tab.
             let activeTab = state.activeTab;
-            const isActiveTabClosed = state.activeTab && state.activeTab.id === action.payload;
+            const isActiveTabClosed = state.activeTab && state.activeTab.uid === action.payload;
             if (isActiveTabClosed && ind < newTabs.length) {
                 activeTab = newTabs[Math.max(0, ind)];
             } else if (isActiveTabClosed && ind >= newTabs.length) {
@@ -65,7 +65,7 @@ export const editorReducer = (state, action) => {
         case "MOVE_TAB": {
             const prevTabs = [...state.tabs];
             const { tabId, newIndex } = action.payload;
-            const oldIndex = prevTabs.findIndex(t => t.id === tabId);
+            const oldIndex = prevTabs.findIndex(t => t.uid === tabId);
             if (oldIndex === -1) {
                 console.warn(`Tab with id ${tabId} not found.`);
                 return state;

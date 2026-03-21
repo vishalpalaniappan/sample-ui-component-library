@@ -47,12 +47,12 @@ export const Editor = forwardRef(({ }, ref) => {
 
     const getPreviewElement = useCallback((tabId) => {
         // Get the preview element for a tab by its id for use in drag-and-drop operations.
-        const tab = state.tabs.find(t => t.id === tabId);
+        const tab = state.tabs.find(t => t.uid === tabId);
         if (!tab) {
             console.error(`getPreviewElement: tab with id ${tabId} not found.`);
             return null;
         }
-        return <TabPreview info={{ label: tab.label }} />;
+        return <TabPreview info={{ label: tab.name }} />;
     }, [state]);
 
     const api = useMemo(() => {

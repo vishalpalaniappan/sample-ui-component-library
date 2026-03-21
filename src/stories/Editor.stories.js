@@ -10,12 +10,7 @@ import {
     useSensors
 } from "@dnd-kit/core";
 
-import src_editor_stories from '!!raw-loader!./Editor.stories.js';
-import src_filebrowser from '!!raw-loader!./FileBrowser.stories.js';
-import src_stacklist_stories from '!!raw-loader!./StackList.stories.js';
-import src_editorscss from '!!raw-loader!./EditorStories.scss';
-import src_viewer_stories from '!!raw-loader!./ViewerStories.scss';
-import src_flow_stories from '!!raw-loader!./FlowDiagram.stories.js';
+import WorkspaceSampleTree from "./data/FileBrowser/workspace_sample.json"
 
 import "./EditorStories.scss"
 
@@ -57,6 +52,12 @@ const offsetOverlay = ({ transform }) => {
   };
 };
 
+export const flattenTree = (tree, level = 0) =>
+  tree.flatMap(node => [
+    { ...node, level },
+    ...(node.children ? flattenTree(node.children, level + 1) : [])
+  ]);
+
 const Template = (args) => {
     const [, updateArgs] = useArgs();
 
@@ -66,21 +67,22 @@ const Template = (args) => {
 
     useLayoutEffect(() => {
         editorRef.current.setTabGroupId("tab-group-1");
-        editorRef.current.addTab({ id: "tab1", label: "Viewer.stories.jsx", content: src_viewer_stories });
-        editorRef.current.addTab({ id: "tab2", label: "FileBrowser.jsx", content: src_filebrowser });
-        editorRef.current.addTab({ id: "tab3", label: "Editor.stories.js", content: src_editor_stories });
-        editorRef.current.addTab({ id: "tab5", label: "Editor.scss", content: src_editorscss });
-        editorRef.current.addTab({ id: "tab6", label: "StackList.stories.js", content: src_stacklist_stories });
-        editorRef.current.addTab({ id: "tab7", label: "FlowDiagram.stories.js", content: src_flow_stories });
+        const flat = flattenTree(WorkspaceSampleTree.tree);
+
+        flat.forEach((node, index) => {
+            if (node.type === "file") {
+                editorRef.current.addTab(node);
+            }
+        });
         setTimeout(() => {
-            editorRef.current.selectTab("tab3");
+            // editorRef.current.selectTab("tab3");
         }, 100);
     }, []);
 
     const onDragStart = (event) => {
         console.log("");
         console.log("Drag Started");
-        const dragPreview = editorRef.current.getPreviewElement(event.active.data.current.tabId);
+        const dragPreview = editorRef.current.getPreviewElement(event.active.data.current.node.uid);
         setDragPreviewLabel(dragPreview);
     }
 
@@ -96,7 +98,7 @@ const Template = (args) => {
         }
 
         if (active.data.current.type === "tab-draggable" && over.data.current.type === "tab-gutter") {
-            editorRef.current.moveTab(active.data.current.tabId, over.data.current.index);
+            editorRef.current.moveTab(active.data.current.node.uid, over.data.current.index);
         }
     }
 
