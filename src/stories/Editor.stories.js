@@ -51,6 +51,16 @@ const Template = (args) => {
                 editorRef.current.addTab(node);
             }
         });
+
+
+        const node = {
+            "name": "SAMPLE",
+            "type": "file",
+            "uid": "dissr-f6459410-1634-4dbc-8d76-35896822158d",
+            "content": "1234"
+        }
+
+        editorRef.current.addTab(node,2);
     }, []);
 
     const onDragStart = (event) => {

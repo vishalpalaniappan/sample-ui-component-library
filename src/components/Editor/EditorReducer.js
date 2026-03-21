@@ -8,20 +8,29 @@ export const editorReducer = (state, action) => {
     switch (action.type) {
 
         case "ADD_TAB": {
-            // TODO: Add some validation for the payload here.
-            const tab = state.tabs.find(obj => obj.uid === action.payload.uid);
-            if (tab) {
-                console.warn(`Tab with id ${action.payload.uid} already exists`);
+            const { tab, index } = action.payload;
+
+            const tabInfo = state.tabs.find(obj => obj.uid === tab.uid);
+            if (tabInfo) {
+                console.warn(`Tab with id ${tabInfo.uid} already exists`);
                 return {
                     ...state,
-                    activeTab: tab
+                    activeTab: tabInfo
                 };
             }
             
+            // Insert tab at specific location if it was provided.
+            let tabs =  [...state.tabs];
+            if (index !== undefined && index < state.tabs.length) {
+                tabs.splice(index, 0, tab);
+            } else {
+                tabs.push(tab);
+            }
+
             return {
                 ...state,
-                tabs: [...state.tabs, action.payload],
-                activeTab: action.payload
+                tabs: tabs,
+                activeTab: tab
             };
         }
 

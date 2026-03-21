@@ -37,8 +37,8 @@ export const Editor = forwardRef(({ }, ref) => {
         dispatch({ type: "MOVE_TAB", payload: { tabId, newIndex } });
     }, []);
 
-    const addTab = useCallback((tab) => {
-        dispatch({ type: "ADD_TAB", payload: tab });
+    const addTab = useCallback((tab, index) => {
+        dispatch({ type: "ADD_TAB", payload: { tab, index } });
     }, []);
 
     const setTabGroupId = useCallback((id) => {
