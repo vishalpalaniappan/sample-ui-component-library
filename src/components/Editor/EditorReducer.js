@@ -5,7 +5,6 @@ export const initialState = {
 };
 
 export const editorReducer = (state, action) => {
-    let id;
     switch (action.type) {
 
         case "ADD_TAB": {
