@@ -5,6 +5,7 @@ import {
     useCallback,
     useContext,
     useImperativeHandle,
+    useEffect,
 } from "react";
 import "./FileBrowser.scss";
 
@@ -20,13 +21,18 @@ import { fileBrowserReducer, initialState } from "./FileBrowserReducer";
  *
  * @return {JSX}
  */
-export const FileBrowser = forwardRef(({ }, ref) => {
+export const FileBrowser = forwardRef(({onSelectFile}, ref) => {
     const [state, dispatch] = useReducer(fileBrowserReducer, initialState);
 
     const addFileTree = useCallback((tree) => {
         dispatch({ type: "ADD_FILE_TREE", payload: tree });
     }, []);
 
+    useEffect(() => {
+        if (state.selectedNode && state.selectedNode.type === "file") {
+            onSelectFile(state.selectedNode);
+        }
+    }, [state.selectedNode]);
 
     const selectNode = useCallback((node) => {
         dispatch({ type: "SELECT_NODE", payload: node });

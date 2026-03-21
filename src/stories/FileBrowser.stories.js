@@ -39,18 +39,16 @@ const Template = (args) => {
     
     const [dragPreviewLabel, setDragPreviewLabel] = useState(<></>);
 
-    const onNodeSelect = (selectedFile) => {
+    const onSelectFile = (selectedFile) => {
         action('Selected Node:')(selectedFile);
     }
 
     useEffect(() => {
-        updateArgs({onNodeSelect : onNodeSelect});
+        updateArgs({onSelectFile : onSelectFile});
     }, []);
-
 
     useLayoutEffect(() => {
         fileBrowserRef.current.addFileTree(args.tree);
-
         setTimeout(() => {
             fileBrowserRef.current.selectNode("dir-f6459410-1634-4dbc-8d76-35896822158d");
         }, 3000);

@@ -1,13 +1,13 @@
 import {
     setDefaultCollapsed,
     collapseTree,
-    selectNode,
     flattenTree,
 } from "./helper";
 
 export const initialState = {
     tree: {},
     flattenedTree: {},
+    selectedNode: null,
     collapsedTree: [],
 };
 
@@ -28,8 +28,10 @@ export const fileBrowserReducer = (state, action) => {
 
         case "SELECT_NODE": {
             const tree = [...state.flattenedTree];
+            let selectedNode;
             tree.forEach((n) => {
                 if (n.uid === action.payload) {
+                    selectedNode = n;
                     n.selected = true;
                     n.collapsed = !n.collapsed;
                 } else {
@@ -40,7 +42,8 @@ export const fileBrowserReducer = (state, action) => {
             return {
                 ...state,
                 flattenedTree: tree,
-                collapsedTree: collapsedTree
+                collapsedTree: collapsedTree,
+                selectedNode: selectedNode
             }
         }
     }
