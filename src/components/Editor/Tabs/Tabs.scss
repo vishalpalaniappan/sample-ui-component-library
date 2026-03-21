@@ -1,15 +1,25 @@
-.tabs {
+.tabs-container {
     display: flex;
     flex-direction: row;
     height: 40px;
     width: 100%;
+    position: relative;
     overflow-x: auto;
     overflow-y: hidden;
-    flex-wrap: nowrap;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
+    white-space: nowrap;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255,255,255,0.2) transparent;
 }
 
-.tabs::-webkit-scrollbar {
-  display: none;
+.tabs-container::-webkit-scrollbar {
+    height: 4px;
+}
+
+.tabs-container::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.tabs-container::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
 }

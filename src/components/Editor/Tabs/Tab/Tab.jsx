@@ -65,9 +65,18 @@ export const Tab = ({ id, parentId, node }) => {
             {...listeners}
             {...attributes}
         >
-            <FileEarmark className="icon" style={{ pointerEvents: "none" }} />
-            <span className="tab-name">{node.name}</span>
-            <XLg onMouseDown={clickClose} className="close-icon"/>
+            <div className="tab-content">
+                <div className="icon">
+                    <FileEarmark size={14} style={{ pointerEvents: "none" }} />
+                </div>
+                <div className="tab-name">
+                    <span>{node.name}</span>
+                </div>
+                <div className="close-icon">
+                    <XLg size={18} onMouseDown={clickClose}/>
+                </div>
+                
+            </div>
         </div>
     );
 }
@@ -86,7 +95,7 @@ export const TabPreview = ({node}) => {
         <div className="tab" style={{ backgroundColor: ACTIVE_TAB_BG_COLOR, color: ACTIVE_TAB_FG_COLOR, opacity:0.5 }}>
             <FileEarmark className="icon" />
             <span className="tab-name">{node.name}</span>
-            <XLg className="close-icon"/>
+            <X className="close-icon"/>
         </div>
     );
 }

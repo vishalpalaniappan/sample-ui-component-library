@@ -3,26 +3,35 @@
     cursor: pointer;
     height: 40px;
     width: auto;
-    display:flex;
-    align-items: center;
 }
 
-.tab > .icon {
-    padding-right: 7px;
+.tab-content {
+    width:auto;
+    height:36px;
     display:flex;
-    align-self: center;
+    align-items: center;
+    vertical-align: middle;
+}
+
+.tab > .tab-content > .icon {
+    padding-right: 3px;
+    display:flex;
+    align-items: center;
     width:20px;
 }
 
-.tab > .tab-name {
+.tab > .tab-content> .tab-name {
+    display:flex;
+    align-items: center;
     width: auto;
     font-size:13px;
 }
 
-.tab > .close-icon {
-    margin-left:7px;
-    margin-right:7px;
+.tab > .tab-content> .close-icon {
     display:flex;
-    align-self: center;
+    margin-left:7px;
+    padding-top:3px;
+    align-items: center;
+    vertical-align: middle;
     width:10px;
 }
