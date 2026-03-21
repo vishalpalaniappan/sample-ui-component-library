@@ -40,7 +40,7 @@ export const Tree = ({}) => {
                 <TreeNode
                     key={node.uid}
                     node={node}
-                    id={node.name}
+                    id={node.uid}
                 />,
             );
         });
