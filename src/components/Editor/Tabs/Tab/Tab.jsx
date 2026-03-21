@@ -36,7 +36,7 @@ export const Tab = ({ id, parentId, node }) => {
     });
 
     useEffect(() => {
-        renderTab(state.activeTab && state.activeTab.uid === id);
+        renderTab(state.activeTab && state.activeTab.uid === node.uid);
     }, [state.activeTab]);
 
     const renderTab = (isActive) => {
@@ -47,12 +47,12 @@ export const Tab = ({ id, parentId, node }) => {
     
     const clickTab = (e) => {
         e.stopPropagation();
-        selectTab(id);
+        selectTab(node.uid);
     }
     
     const clickClose = (e) => {
         e.stopPropagation();
-        closeTab(id);
+        closeTab(node.uid);
     }
 
     return (
