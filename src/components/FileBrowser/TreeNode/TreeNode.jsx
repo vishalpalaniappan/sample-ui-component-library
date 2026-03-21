@@ -18,7 +18,14 @@ import "./TreeNode.scss";
  * Renders a single node in the file tree.
  */
 export const TreeNode = ({ id, node }) => {
-    const { attributes, listeners, setNodeRef, transform } = useDraggable({ id });
+    const { attributes, listeners, setNodeRef, transform } = useDraggable(
+        { 
+            id,
+            data: {
+                node: node
+            }
+         }
+    );
     const { selectNode } = useFileBrowser();
 
     /**
