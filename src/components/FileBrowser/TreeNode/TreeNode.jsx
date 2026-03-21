@@ -1,10 +1,7 @@
 import { FileCode, ChevronRight, ChevronDown, Braces, FiletypeScss, FiletypeJs, FiletypePy } from "react-bootstrap-icons";
 import PropTypes from 'prop-types';
 import {
-    DndContext,
-    DragOverlay,
-    useDraggable,
-    useDroppable,
+    useDraggable
 } from "@dnd-kit/core";
 
 import { useFileBrowser } from "../FileBrowser";
