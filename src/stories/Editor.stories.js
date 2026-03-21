@@ -19,27 +19,6 @@ export default {
     component: Editor,
     argTypes: {}
 };
-
-/**
- * Preview for the div being dragged.
- * @returns 
- */
-function DragPreview({ label }) {
-    return (
-        <div
-        style={{
-            padding: "6px 12px",
-            background: "#2d2d2d",
-            color: "white",
-            boxShadow: "0 4px 12px rgba(0,0,0,0.3)",
-            opacity:0.3
-        }}
-        >
-        {label}
-        </div>
-    );
-}
-
 /**
  * Offset for the drag overlay.
  * @returns 
@@ -52,7 +31,7 @@ const offsetOverlay = ({ transform }) => {
   };
 };
 
-export const flattenTree = (tree, level = 0) =>
+const flattenTree = (tree, level = 0) =>
   tree.flatMap(node => [
     { ...node, level },
     ...(node.children ? flattenTree(node.children, level + 1) : [])
@@ -67,16 +46,11 @@ const Template = (args) => {
 
     useLayoutEffect(() => {
         editorRef.current.setTabGroupId("tab-group-1");
-        const flat = flattenTree(WorkspaceSampleTree.tree);
-
-        flat.forEach((node, index) => {
+        flattenTree(WorkspaceSampleTree.tree).forEach((node, index) => {
             if (node.type === "file") {
                 editorRef.current.addTab(node);
             }
         });
-        setTimeout(() => {
-            // editorRef.current.selectTab("tab3");
-        }, 100);
     }, []);
 
     const onDragStart = (event) => {
@@ -124,5 +98,4 @@ const Template = (args) => {
 
 export const Default = Template.bind({});
 
-Default.args = {
-}
+Default.args = {}

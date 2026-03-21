@@ -9,6 +9,7 @@ import {
 import "./FileBrowser.scss";
 
 import { Tree } from "./Tree/Tree";
+import { TreeNodePreview } from "./TreeNode/TreeNode";
 
 import { FileBrowserContext } from "./FileBrowserContext";
 
@@ -30,14 +31,25 @@ export const FileBrowser = forwardRef(({ }, ref) => {
     const selectNode = useCallback((node) => {
         dispatch({ type: "SELECT_NODE", payload: node });
     }, []);
+    
+    const getPreviewElement = useCallback((tabId) => {
+        // Get the preview element for a tab by its id for use in drag-and-drop operations.
+        const tab = state.flattenedTree.find(t => t.uid === tabId);
+        if (!tab) {
+            console.error(`getPreviewElement: tab with id ${tabId} not found.`);
+            return null;
+        }
+        return <TreeNodePreview node={tab} />;
+    }, [state]);
 
     const api = useMemo(() => {
         return {
             state,
             addFileTree,
-            selectNode
+            selectNode,
+            getPreviewElement
         };
-    }, [state, addFileTree, selectNode]);
+    }, [state, addFileTree, selectNode, getPreviewElement]);
 
     useImperativeHandle(ref, () => api, [api]);
 

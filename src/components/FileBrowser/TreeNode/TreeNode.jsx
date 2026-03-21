@@ -84,10 +84,18 @@ export const TreeNode = ({ id, node }) => {
             <div className="indent" style={{ width: node.level * INDENT_WIDTH + "px" }} />
             {
                 node.type === "folder" ?
-                    <span className="center folder-icon">{getCollapsedIcon()}</span> :
-                    <span className="center file-icon">{getFileIcon()}</span>
+                    <span className="folder-icon">{getCollapsedIcon()}</span> :
+                    <span className="file-icon">{getFileIcon()}</span>
             }
-            <span className="center file-name">{node.name}</span>
+            <span className="file-name">{node.name}</span>
         </div>
     )
+}
+
+export const TreeNodePreview = ({node}) => {
+    return (
+         <div className="file-node-row">
+            <span className="file-name">{node.name}</span>
+         </div>
+    );
 }

@@ -1,12 +1,10 @@
-import { useEffect, useLayoutEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { FileBrowser } from "../components/FileBrowser";
 import { useArgs } from "@storybook/preview-api";
 import { action } from "@storybook/addon-actions";
 import {
     DndContext,
     DragOverlay,
-    useDraggable,
-    useDroppable,
     PointerSensor,
     useSensor,
     useSensors
@@ -21,26 +19,6 @@ export default {
     component: FileBrowser,
     argTypes: {}
 };
-
-/**
- * Preview for the div being dragged.
- * @returns 
- */
-function DragPreview({ label }) {
-    return (
-        <div
-        style={{
-            padding: "6px 12px",
-            background: "#2d2d2d",
-            color: "white",
-            boxShadow: "0 4px 12px rgba(0,0,0,0.3)",
-            opacity:0.3
-        }}
-        >
-        {label}
-        </div>
-    );
-}
 
 /**
  * Offset for the drag overlay.
@@ -58,6 +36,8 @@ const offsetOverlay = ({ transform }) => {
 const Template = (args) => {
     const [, updateArgs] = useArgs();
     const fileBrowserRef = useRef();
+    
+    const [dragPreviewLabel, setDragPreviewLabel] = useState(<></>);
 
     const onNodeSelect = (selectedFile) => {
         action('Selected Node:')(selectedFile);
@@ -99,6 +79,8 @@ const Template = (args) => {
      */
     const onDragStart = (event) => {
         console.log("Drag Started");
+        const dragPreview = fileBrowserRef.current.getPreviewElement(event.active.data.current.node.uid);
+        setDragPreviewLabel(dragPreview);
     }
 
     const sensors = useSensors(
@@ -117,7 +99,7 @@ const Template = (args) => {
                 </div>
             </div>
             <DragOverlay modifiers={[offsetOverlay]} dropAnimation={null}>
-                <DragPreview label={"preview"}/>
+                {dragPreviewLabel}
             </DragOverlay>
         </DndContext>
     )
