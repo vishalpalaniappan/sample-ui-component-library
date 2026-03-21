@@ -30,7 +30,8 @@ export const Tab = ({ id, parentId, node }) => {
         data: {
             type: "EditorTab",
             parentId: parentId,
-            node: node
+            node: node,
+            preview: <TabPreview node={node} />
         },
     });
 
@@ -80,10 +81,12 @@ Tab.propTypes = {
 }
 
 
-export const TabPreview = ({info}) => {
+export const TabPreview = ({node}) => {
     return (
         <div className="tab" style={{ backgroundColor: ACTIVE_TAB_BG_COLOR, color: ACTIVE_TAB_FG_COLOR, opacity:0.5 }}>
-            <FileEarmark className="icon" />{info.label}<XLg className="close-icon"/>
+            <FileEarmark className="icon" />
+            <span className="tab-name">{node.name}</span>
+            <XLg className="close-icon"/>
         </div>
     );
 }
