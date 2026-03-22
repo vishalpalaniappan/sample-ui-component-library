@@ -48,12 +48,15 @@ export const MonacoInstance = ({ }) => {
         scrollBeyondLastLine: false,
         fontSize: "13px",
         minimap: {
-            enabled: false
+            enabled: true
         },
         padding: {
-            top: 20,
-            bottom: 10
-        }
+            top: 10
+        },
+        renderWhitespace: "none",
+        wordWrap: "on",
+        scrollBeyondLastLine: false,
+        readOnly: true,
     }
 
     /**
@@ -77,9 +80,9 @@ export const MonacoInstance = ({ }) => {
     }
 
     return (
-        <>
+        <div className="editor-container">
             {renderEditor()}
-        </>
+        </div>
     )
 }
 
