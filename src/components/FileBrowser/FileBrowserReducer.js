@@ -49,5 +49,9 @@ export const fileBrowserReducer = (state, action) => {
                 selectedNode: selectedNode
             }
         }
+
+        case "RESET_STATE": {
+            return initialState;
+        }
     }
 }

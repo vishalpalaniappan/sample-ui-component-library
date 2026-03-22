@@ -98,6 +98,10 @@ export const editorReducer = (state, action) => {
                 tabs: prevTabs
             };
         }
+        
+        case "RESET_STATE": {
+            return initialState;
+        }
 
         default: {
             return state;

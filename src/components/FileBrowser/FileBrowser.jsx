@@ -24,6 +24,7 @@ export const FileBrowser = forwardRef(({onSelectFile}, ref) => {
     const [state, dispatch] = useReducer(fileBrowserReducer, initialState);
 
     const addFileTree = useCallback((tree) => {
+        dispatch({ type: "RESET_STATE"});
         dispatch({ type: "ADD_FILE_TREE", payload: tree });
     }, []);
 
