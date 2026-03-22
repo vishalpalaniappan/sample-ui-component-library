@@ -50,7 +50,6 @@ export const TreeNode = ({ id, node }) => {
         return style;
     }
 
-
     /**
      * Get the file icon based on the extension.
      * 
@@ -72,14 +71,13 @@ export const TreeNode = ({ id, node }) => {
         }
     }
 
-
     const onSelectRow = () => {
         selectNode(node.uid);
     }
 
     return (
         <div className="file-node-row" ref={setNodeRef} {...listeners} {...attributes} 
-            style={getRowStyle()} onClick={() => onSelectRow()}>
+            style={getRowStyle()} onClick={onSelectRow}>
             <div className="indent" style={{ width: node.level * INDENT_WIDTH + "px" }} />
             {
                 node.type === "folder" ?
