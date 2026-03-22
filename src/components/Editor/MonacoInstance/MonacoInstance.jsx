@@ -14,6 +14,8 @@ export const MonacoInstance = ({ }) => {
 
     const editorRef = useRef(null);
     const content = useRef();
+    const containerRef = useRef(null);
+    const frameRef = useRef(0);
 
     useEffect(() => {
         if (state.activeTab) {
@@ -41,6 +43,7 @@ export const MonacoInstance = ({ }) => {
         if (content?.current) {
             editorRef.current.setValue(content.current);
         }
+        editorRef.current.layout();
     }
 
     // Editor options for Monaco Editor.
@@ -56,8 +59,28 @@ export const MonacoInstance = ({ }) => {
         renderWhitespace: "none",
         wordWrap: "on",
         scrollBeyondLastLine: false,
-        readOnly: true
+        readOnly: true,
+        automaticLayout: false
     }
+
+    // Disable automatic layout and Manually layout the editor to avoid resize observer loops
+    useEffect(() => {
+        if (!containerRef.current) return;
+
+        const ro = new ResizeObserver(() => {
+            cancelAnimationFrame(frameRef.current);
+            frameRef.current = requestAnimationFrame(() => {
+                editorRef.current?.layout();
+            });
+        });
+
+        ro.observe(containerRef.current);
+
+        return () => {
+            cancelAnimationFrame(frameRef.current);
+            ro.disconnect();
+        };
+    }, []);
 
     /**
      * Render the editor if there is an active tab, otherwise render a placeholder message.
@@ -80,7 +103,7 @@ export const MonacoInstance = ({ }) => {
     }
 
     return (
-        <div className="editor-container">
+        <div className="editor-container" ref={containerRef}>
             {renderEditor()}
         </div>
     )
