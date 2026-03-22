@@ -10,6 +10,7 @@ const INDENT_WIDTH = 20;
 const SELECTED_FILE_COLOR = "#00426b";
 
 import "./TreeNode.scss";
+import { useCallback } from "react";
 
 /**
  * Renders a single node in the file tree.
@@ -71,9 +72,9 @@ export const TreeNode = ({ id, node }) => {
         }
     }
 
-    const onSelectRow = () => {
-        selectNode(node.uid);
-    }
+    const onSelectRow = useCallback(() => {
+        selectNode(node);
+    }, [selectNode]);
 
     return (
         <div className="file-node-row" ref={setNodeRef} {...listeners} {...attributes} 
