@@ -1,6 +1,6 @@
 .tab {
     padding: 0px 18px;
-    cursor: pointer;
+    cursor: default !important;
     height: 40px;
     width: auto;
 }
@@ -11,6 +11,7 @@
     display:flex;
     align-items: center;
     vertical-align: middle;
+    overflow-y: hidden;
 }
 
 .tab > .tab-content > .icon {
@@ -34,4 +35,5 @@
     align-items: center;
     vertical-align: middle;
     width:10px;
+    cursor: pointer;
 }
