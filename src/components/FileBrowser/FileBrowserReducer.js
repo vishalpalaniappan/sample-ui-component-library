@@ -1,8 +1,4 @@
-import {
-    setDefaultCollapsed,
-    collapseTree,
-    flattenTree,
-} from "./helper";
+import { setDefaultCollapsed, collapseTree, flattenTree } from "./helper";
 
 //TODO: I should set a unique id for each reducer state and use it
 // for all the ids of the components to make them unique. I could
@@ -15,9 +11,7 @@ export const initialState = {
 };
 
 export const fileBrowserReducer = (state, action) => {
-
     switch (action.type) {
-
         case "ADD_FILE_TREE": {
             let flattenedTree = setDefaultCollapsed(flattenTree(action.payload));
             const collapsedTree = collapseTree(flattenedTree);
@@ -25,33 +19,34 @@ export const fileBrowserReducer = (state, action) => {
                 ...state,
                 tree: action.payload,
                 flattenedTree: flattenedTree,
-                collapsedTree: collapsedTree
-            }
+                collapsedTree: collapsedTree,
+            };
         }
 
         case "SELECT_NODE": {
-            const tree = [...state.flattenedTree];
-            let selectedNode;
-            tree.forEach((n) => {
-                if (n.uid === action.payload) {
-                    selectedNode = n;
-                    n.selected = true;
-                    n.collapsed = !n.collapsed;
-                } else {
-                    n.selected = false;
+            const tree = state.flattenedTree.map((n) => {
+                if (n.uid === action.payload.uid) {
+                    return {
+                        ...n,
+                        selected: true,
+                        collapsed: !n.collapsed,
+                    };
                 }
+                return {
+                    ...n,
+                    selected: false,
+                };
             });
-            const collapsedTree = collapseTree(tree);
             return {
                 ...state,
                 flattenedTree: tree,
-                collapsedTree: collapsedTree,
-                selectedNode: selectedNode
-            }
+                collapsedTree: collapseTree(tree),
+                selectedNode: action.payload,
+            };
         }
 
         case "RESET_STATE": {
             return initialState;
         }
     }
-}
+};
