@@ -56,8 +56,7 @@ export const MonacoInstance = ({ }) => {
         renderWhitespace: "none",
         wordWrap: "on",
         scrollBeyondLastLine: false,
-        readOnly: true,
-        automaticLayout: false
+        readOnly: true
     }
 
     /**
