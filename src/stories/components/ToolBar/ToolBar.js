@@ -1,8 +1,7 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 
 import {
   Cursor,
-  HandThumbsUp,
   Square,
   NodePlus,
   Trash
@@ -31,12 +30,6 @@ export function ToolBar({ onSelectTool }) {
           onClick={(e) => selectTool("select")}
           style={{color: selectedTool === "select" ? "white": "grey"}}
           title="Select"
-          className="icon"
-        />
-        <HandThumbsUp
-          onClick={(e) => selectTool("pan")}
-          style={{color: selectedTool === "pan" ? "white": "grey"}}
-          title="Pan Tool"
           className="icon"
         />
         <Square

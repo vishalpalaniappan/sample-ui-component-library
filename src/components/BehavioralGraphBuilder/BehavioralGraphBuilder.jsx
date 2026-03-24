@@ -142,7 +142,6 @@ const Flow = ({ activeTool }) => {
             onEdgesChange={onEdgesChange}
             nodesConnectable={activeTool === "connect"}
             elementsSelectable={activeTool === "select"}
-            panOnDrag={activeTool === "pan"}
             onNodeClick={onNodeClick}
             onEdgeClick={onEdgeClick}
             colorMode={"dark"}
