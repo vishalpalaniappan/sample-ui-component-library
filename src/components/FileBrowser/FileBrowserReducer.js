@@ -46,5 +46,9 @@ export const fileBrowserReducer = (state, action) => {
         case "RESET_STATE": {
             return initialState;
         }
+
+        default:{
+            break;
+        }
     }
 };
