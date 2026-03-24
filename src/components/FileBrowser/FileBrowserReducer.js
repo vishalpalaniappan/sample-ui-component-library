@@ -11,7 +11,7 @@ export const initialState = {
 export const fileBrowserReducer = (state, action) => {
     switch (action.type) {
         case "ADD_FILE_TREE": {
-            let flattenedTree = setDefaultCollapsed(flattenTree(action.payload));
+            let flattenedTree = setDefaultCollapsed(flattenTree([...action.payload]));
             const collapsedTree = collapseTree(flattenedTree);
             return {
                 ...state,
