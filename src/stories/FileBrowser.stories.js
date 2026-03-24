@@ -82,7 +82,6 @@ const Template = (args) => {
     const onDragStart = (event) => {
         console.log("Drag Started");
         console.log(event.active.data);
-        const dragPreview = fileBrowserRef.current.getPreviewElement(event.active.data.current.node.uid);
         setDragPreviewLabel(event.active.data.current.preview);
         setDragging(true);
     }
