@@ -30,7 +30,7 @@ export const Tree = ({}) => {
         collapsedTree.forEach((node) => {
             rows.push(
                 <TreeNode
-                    key={node.uid}
+                    key={parentId + "-" + node.uid}
                     parentId={parentId}
                     node={node}
                     id={"tree-node-" + node.uid}
