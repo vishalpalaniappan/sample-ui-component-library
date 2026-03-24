@@ -1,9 +1,7 @@
 import { setDefaultCollapsed, collapseTree, flattenTree } from "./helper";
 
-//TODO: I should set a unique id for each reducer state and use it
-// for all the ids of the components to make them unique. I could
-// also manually set the ID like I do in the editor reducer.
 export const initialState = {
+    uid: crypto.randomUUID(),
     tree: {},
     flattenedTree: {},
     selectedNode: null,

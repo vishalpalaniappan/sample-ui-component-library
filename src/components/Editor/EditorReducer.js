@@ -1,7 +1,8 @@
 export const initialState = {
-  tabs: [],
-  activeTab: null,
-  parentTabGroupId: null
+    uid: crypto.randomUUID(),
+    tabs: [],
+    activeTab: null,
+    parentTabGroupId: null
 };
 
 export const editorReducer = (state, action) => {
