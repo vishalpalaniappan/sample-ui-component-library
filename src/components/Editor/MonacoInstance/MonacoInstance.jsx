@@ -48,10 +48,9 @@ export const MonacoInstance = ({ }) => {
 
     // Editor options for Monaco Editor.
     const editorOptions = {
-        scrollBeyondLastLine: false,
         fontSize: "13px",
         minimap: {
-            enabled: true
+            enabled: false
         },
         padding: {
             top: 10
