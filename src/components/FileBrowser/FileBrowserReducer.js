@@ -48,7 +48,7 @@ export const fileBrowserReducer = (state, action) => {
         }
 
         default:{
-            break;
+            return state;
         }
     }
 };
