@@ -17,9 +17,7 @@ export const Tree = ({}) => {
     const {state} = useFileBrowser();
 
     useEffect(() => {
-        if(state.collapsedTree && state.collapsedTree.length > 0) {
-            drawTree(state.collapsedTree, state.uid);
-        }
+        drawTree(state.collapsedTree ?? []);
     }, [state.collapsedTree]);
 
     /**
