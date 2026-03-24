@@ -47,7 +47,11 @@ export const Tab = ({ id, parentId, node }) => {
     
     const clickTab = (e) => {
         e.stopPropagation();
-        selectTab(node.uid);
+        if (e.button === 1) {
+            closeTab(node.uid);
+        } else {
+            selectTab(node.uid);
+        }
     }
     
     const clickClose = (e) => {
