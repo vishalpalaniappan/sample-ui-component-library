@@ -3,7 +3,7 @@ import { setDefaultCollapsed, collapseTree, flattenTree } from "./helper";
 export const initialState = {
     uid: crypto.randomUUID(),
     tree: {},
-    flattenedTree: {},
+    flattenedTree: [],
     selectedNode: null,
     collapsedTree: [],
 };
