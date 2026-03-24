@@ -1,28 +1,39 @@
 .tab {
-    padding: 0px 15px;
-    cursor: pointer;
-    height: 40px;
+    padding: 0px 18px;
+    cursor: default !important;
+    height: 35px;
     width: auto;
-    display:flex;
-    align-items: center;
 }
 
-.tab > .icon {
-    padding-right: 7px;
+.tab-content {
+    width:auto;
+    height:31px;
     display:flex;
-    align-self: center;
+    align-items: center;
+    vertical-align: middle;
+    overflow-y: hidden;
+}
+
+.tab > .tab-content > .icon {
+    padding-right: 2px;
+    display:flex;
+    align-items: center;
     width:20px;
 }
 
-.tab > .tab-name {
+.tab > .tab-content> .tab-name {
+    display:flex;
+    align-items: center;
     width: auto;
     font-size:13px;
 }
 
-.tab > .close-icon {
-    margin-left:7px;
-    margin-right:7px;
+.tab > .tab-content> .close-icon {
     display:flex;
-    align-self: center;
+    margin-left:7px;
+    padding-top:3px;
+    align-items: center;
+    vertical-align: middle;
     width:10px;
+    cursor: pointer;
 }

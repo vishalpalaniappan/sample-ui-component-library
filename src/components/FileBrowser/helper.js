@@ -5,8 +5,8 @@ export const setDefaultCollapsed = (tree) => {
     tree.forEach((node) => {
         node.collapsed = false;
     });
+    return tree;
 }
-
 
 /**
  * Given a file tree, it flattens the tree into a list of nodes with the level of each node in the tree.
@@ -56,15 +56,4 @@ export const collapseTree = (tree) => {
         rows.push(tree[i]);
     }
     return rows;
-}
-
-/**
- * Selects the given node and deselects all other nodes in the tree.
- */
-export const selectNode = (tree, node) => {
-    tree.forEach((n) => {
-        n.selected = false;
-    });
-    node.selected = true;
-    node.collapsed = !node.collapsed;
 }

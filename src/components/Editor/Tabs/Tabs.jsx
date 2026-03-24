@@ -19,10 +19,10 @@ export const Tabs = () => {
     const [tabsList, setTabsList] = useState();
 
     useEffect(() => {
-        if (state.tabs?.length >= 0 && state.parentTabGroupId != null) {
-            drawTabs(state.tabs, state.parentTabGroupId);
+        if (state.tabs?.length >= 0) {
+            drawTabs(state.tabs, state.uid);
         }
-    }, [state.tabs, state.parentTabGroupId]);
+    }, [state.tabs, state.uid]);
 
     /**
      * Draw the tabs provided in the tabs info. This includes the gutters
@@ -33,15 +33,15 @@ export const Tabs = () => {
     const drawTabs = (tabs, tabGroupId) => {
         const list = [];
         tabs.forEach((tab, index) => {
-            list.push(<Gutter key={tab.id + "-gutter"} id={tabGroupId + "-" + index} index={index} parentId={tabGroupId} />);
-            list.push(<Tab key={tab.id} id={tab.id} parentId={tabGroupId} info={tab} />);
+            list.push(<Gutter key={tab.uid + "-gutter"} id={tabGroupId + "-" + index} index={index} parentId={tabGroupId} />);
+            list.push(<Tab key={tab.uid} id={tabGroupId + "-" + tab.uid} parentId={tabGroupId} node={tab} />);
         });
         list.push(<Gutter key="last-gutter" id={tabGroupId + "-" + tabs.length} index={tabs.length} parentId={tabGroupId} />);
         setTabsList(list);
     };
 
     return (
-        <div className="tabs" style={{background: TABS_CONTAINER_BG_COLOR }}>{tabsList}</div>
+        <div className="tabs-container" style={{background: TABS_CONTAINER_BG_COLOR }}>{tabsList}</div>
     );
 };
 

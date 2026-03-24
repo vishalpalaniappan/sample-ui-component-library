@@ -19,7 +19,7 @@ const INACTIVE_TAB_FG_COLOR = "#969690";
  * @param {String} label
  * @returns
  */
-export const Tab = ({ id, parentId, info }) => {
+export const Tab = ({ id, parentId, node }) => {
     const [tabStyle, setTabStyle] = useState();
 
     const { selectTab, closeTab, state } = useEditor();
@@ -28,14 +28,15 @@ export const Tab = ({ id, parentId, info }) => {
     const { attributes, listeners, setNodeRef, transform } = useDraggable({
         id,
         data: {
-            type: "tab-draggable",
+            type: "EditorTab",
             parentId: parentId,
-            tabId: id,
+            node: node,
+            preview: <TabPreview node={node} />
         },
     });
 
     useEffect(() => {
-        renderTab(state.activeTab && state.activeTab.id === id);
+        renderTab(state.activeTab && state.activeTab.uid === node.uid);
     }, [state.activeTab]);
 
     const renderTab = (isActive) => {
@@ -46,12 +47,16 @@ export const Tab = ({ id, parentId, info }) => {
     
     const clickTab = (e) => {
         e.stopPropagation();
-        selectTab(id);
+        if (e.button === 1) {
+            closeTab(node.uid);
+        } else {
+            selectTab(node.uid);
+        }
     }
     
     const clickClose = (e) => {
         e.stopPropagation();
-        closeTab(id);
+        closeTab(node.uid);
     }
 
     return (
@@ -64,9 +69,18 @@ export const Tab = ({ id, parentId, info }) => {
             {...listeners}
             {...attributes}
         >
-            <FileEarmark className="icon" style={{ pointerEvents: "none" }} />
-            <span className="tab-name">{info.label}</span>
-            <XLg onMouseDown={clickClose} className="close-icon"/>
+            <div className="tab-content">
+                <div className="icon">
+                    <FileEarmark size={14} style={{ pointerEvents: "none" }} />
+                </div>
+                <div className="tab-name">
+                    <span>{node.name}</span>
+                </div>
+                <div className="close-icon" onMouseDown={clickClose}>
+                    <XLg size={18} />
+                </div>
+                
+            </div>
         </div>
     );
 }
@@ -74,16 +88,26 @@ export const Tab = ({ id, parentId, info }) => {
 Tab.propTypes = {
     id: PropTypes.string.isRequired,
     parentId: PropTypes.string.isRequired,
-    info: PropTypes.shape({
-        label: PropTypes.string.isRequired,
+    node: PropTypes.shape({
+        name: PropTypes.string.isRequired,
     }).isRequired
 }
 
 
-export const TabPreview = ({info}) => {
+export const TabPreview = ({node}) => {
     return (
         <div className="tab" style={{ backgroundColor: ACTIVE_TAB_BG_COLOR, color: ACTIVE_TAB_FG_COLOR, opacity:0.5 }}>
-            <FileEarmark className="icon" />{info.label}<XLg className="close-icon"/>
+            <div className="tab-content">
+                <div className="icon">
+                    <FileEarmark size={14} style={{ pointerEvents: "none" }} />
+                </div>
+                <div className="tab-name">
+                    <span>{node.name}</span>
+                </div>
+                <div className="close-icon">
+                    <XLg size={18} />
+                </div>
+            </div>
         </div>
     );
 }

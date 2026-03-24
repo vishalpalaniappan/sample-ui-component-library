@@ -1,19 +1,16 @@
-import { useEffect } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { FileBrowser } from "../components/FileBrowser";
 import { useArgs } from "@storybook/preview-api";
 import { action } from "@storybook/addon-actions";
 import {
     DndContext,
     DragOverlay,
-    useDraggable,
-    useDroppable,
     PointerSensor,
     useSensor,
     useSensors
 } from "@dnd-kit/core";
 
-import FileTree1 from "./data/FileBrowser/Tree1.json"
-import FileTree2 from "./data/FileBrowser/Tree2.json"
+import WorkspaceSampleTree from "./data/FileBrowser/workspace_sample.json"
 
 import "./FileBrowserStories.scss"
 
@@ -22,26 +19,6 @@ export default {
     component: FileBrowser,
     argTypes: {}
 };
-
-/**
- * Preview for the div being dragged.
- * @returns 
- */
-function DragPreview({ label }) {
-    return (
-        <div
-        style={{
-            padding: "6px 12px",
-            background: "#2d2d2d",
-            color: "white",
-            boxShadow: "0 4px 12px rgba(0,0,0,0.3)",
-            opacity:0.3
-        }}
-        >
-        {label}
-        </div>
-    );
-}
 
 /**
  * Offset for the drag overlay.
@@ -58,15 +35,25 @@ const offsetOverlay = ({ transform }) => {
 
 const Template = (args) => {
     const [, updateArgs] = useArgs();
+    const fileBrowserRef = useRef();
+    
+    const [dragPreviewLabel, setDragPreviewLabel] = useState(<></>);
 
-    const onNodeSelect = (selectedFile) => {
+    const onSelectFile = (selectedFile) => {
         action('Selected Node:')(selectedFile);
     }
 
     useEffect(() => {
-        updateArgs({onNodeSelect : onNodeSelect});
+        updateArgs({onSelectFile : onSelectFile});
     }, []);
 
+    useLayoutEffect(() => {
+        fileBrowserRef.current.addFileTree(args.tree);
+    }, []);
+
+
+    const [dragging, setDragging] = useState(false);
+  
     /**
      * Callback for when drag ends.
      */
@@ -75,7 +62,7 @@ const Template = (args) => {
         console.log("Drag Ended");
         const rect = event.activatorEvent;
 
-        console.log(over );
+        console.log(active, over);
 
         if (over) {
             console.log("Dragged item:", active.id);
@@ -83,6 +70,7 @@ const Template = (args) => {
         } else {
             console.log("Dropped outside any droppable");
         }
+        setDragging(false);
     }
 
     /**
@@ -90,7 +78,26 @@ const Template = (args) => {
      */
     const onDragStart = (event) => {
         console.log("Drag Started");
+        console.log(event.active.data);
+        setDragPreviewLabel(event.active.data.current.preview);
+        setDragging(true);
     }
+
+    // Manually track the drag position.
+    const [pos, setPos] = useState({ x: 0, y: 0 });
+    useEffect(() => {
+        if (!dragging) return;
+
+        const handleMove = (e) => {
+            setPos({ x: e.clientX, y: e.clientY });
+        };
+
+        window.addEventListener("pointermove", handleMove);
+
+        return () => {
+            window.removeEventListener("pointermove", handleMove);
+        };
+    }, [dragging]);
 
     const sensors = useSensors(
         useSensor(PointerSensor, {
@@ -104,24 +111,27 @@ const Template = (args) => {
         <DndContext sensors={sensors} onDragStart={onDragStart} onDragEnd={handleDragEnd}>
             <div className="viewerStoryWrapper">
                 <div className="file-browser">
-                    <FileBrowser {...args} />
+                    <FileBrowser ref={fileBrowserRef} {...args} />
                 </div>
             </div>
-            <DragOverlay modifiers={[offsetOverlay]} dropAnimation={null}>
-                <DragPreview label={"preview"}/>
-            </DragOverlay>
+            {dragging && (
+                <div
+                    style={{
+                        position: "fixed",
+                        left: pos.x,
+                        top: pos.y,
+                        pointerEvents: "none",
+                        zIndex: 9999,
+                    }}>
+                    {dragPreviewLabel}
+                </div>
+            )}  
         </DndContext>
     )
 }
 
-export const Default = Template.bind({});
+export const SampleTree = Template.bind({});
 
-Default.args = {
-    tree: FileTree1.tree
-}
-
-export const Tree2 = Template.bind({});
-
-Tree2.args = {
-    tree: FileTree2.tree
+SampleTree.args = {
+    tree: WorkspaceSampleTree.tree
 }

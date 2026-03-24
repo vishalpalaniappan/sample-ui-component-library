@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { MonacoInstance } from "./MonacoInstance/MonacoInstance";
 import { Tabs } from "./Tabs/Tabs";
-import { TabPreview } from "./Tabs/Tab/Tab";
+
 import React, {
     forwardRef,
     useCallback,
@@ -37,23 +37,14 @@ export const Editor = forwardRef(({ }, ref) => {
         dispatch({ type: "MOVE_TAB", payload: { tabId, newIndex } });
     }, []);
 
-    const addTab = useCallback((tab) => {
-        dispatch({ type: "ADD_TAB", payload: tab });
+    const addTab = useCallback((tab, index) => {
+        dispatch({ type: "ADD_TAB", payload: { tab, index } });
     }, []);
 
     const setTabGroupId = useCallback((id) => {
+        dispatch({ type: "RESET_STATE"});
         dispatch({ type: "SET_PARENT_TAB_GROUP_ID", payload: id });
     }, []);
-
-    const getPreviewElement = useCallback((tabId) => {
-        // Get the preview element for a tab by its id for use in drag-and-drop operations.
-        const tab = state.tabs.find(t => t.id === tabId);
-        if (!tab) {
-            console.error(`getPreviewElement: tab with id ${tabId} not found.`);
-            return null;
-        }
-        return <TabPreview info={{ label: tab.label }} />;
-    }, [state]);
 
     const api = useMemo(() => {
         return {
@@ -62,10 +53,9 @@ export const Editor = forwardRef(({ }, ref) => {
             setTabGroupId,
             selectTab,
             closeTab,
-            moveTab,
-            getPreviewElement
+            moveTab
         };
-    }, [state, addTab, selectTab, closeTab, moveTab, getPreviewElement, setTabGroupId]);
+    }, [state, addTab, selectTab, closeTab, moveTab, setTabGroupId]);
 
     useImperativeHandle(ref, () => api, [api]);
 

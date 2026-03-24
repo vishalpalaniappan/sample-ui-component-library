@@ -1,136 +1,68 @@
-import { useEffect, useState, useRef, useLayoutEffect, useCallback } from "react";
+import {
+    forwardRef,
+    useReducer,
+    useMemo,
+    useCallback,
+    useContext,
+    useImperativeHandle,
+    useEffect,
+} from "react";
 import "./FileBrowser.scss";
 
-import { setDefaultCollapsed, collapseTree, selectNode, flattenTree } from "./helper";
+import { Tree } from "./Tree/Tree";
 
-import { FileCode, ChevronRight, ChevronDown, Braces, FiletypeScss, FiletypeJs, FiletypePy} from "react-bootstrap-icons";
-import PropTypes from 'prop-types';
-import {
-    DndContext,
-    DragOverlay,
-    useDraggable,
-    useDroppable,
-} from "@dnd-kit/core";
+import { FileBrowserContext } from "./FileBrowserContext";
 
-const INDENT_WIDTH = 20;
-const SELECTED_FILE_COLOR = "#00426b";
-
-/**
- * Used for creating a stable callback function.
- */
-function useEvent(fn) {
-    const fnRef = useRef(fn);
-
-    useLayoutEffect(() => {
-        fnRef.current = fn;
-    });
-
-    return useCallback((...args) => {
-        return fnRef.current(...args);
-    }, []);
-}
-
-/**
- * Renders a single node in the file tree.
- */
-const TreeNode = ({id, node, onRowClick}) => {
-    const { attributes, listeners, setNodeRef, transform } = useDraggable({id});
-    /**
-     * Gets the appropriate icon for the node based on its type and collapsed state.
-     * @returns <JSX>
-     */
-    const getCollapsedIcon = () => {
-        if (node.collapsed) {
-            return <ChevronRight />;
-        } else {
-            return <ChevronDown />;
-        }
-    }
-
-    /**
-     * Sets the background color of the row if the node is selected.
-     */
-    const getRowStyle = () => {
-        const style = {};
-        if (node.selected) {
-            style["backgroundColor"] = SELECTED_FILE_COLOR;
-        }
-        return style;
-    }
-
-
-    /**
-     * Get the file icon based on the extension.
-     * 
-     * TODO: This can be improved by having a mapping of extensions to icons and color.
-     */
-    const getFileIcon = () => {
-        const extension = node.name.split('.').pop();
-        switch (extension) {
-            case "js":
-                return <FiletypeJs color="#f1e05a" />;
-            case "json":
-                return <Braces color="#fffb00" />;
-            case "scss":
-                return <FiletypeScss color="#f12727" />;
-            case "py":
-                return <FiletypePy color="#686affbd" />;
-            default:
-                return <FileCode color="#ffffff" />;
-        }
-    }
-
-    return (
-        <div className="file-node-row" ref={setNodeRef} {...listeners} {...attributes} style={getRowStyle()} onClick={() => onRowClick(node)}>
-            <div className="indent" style={{ width: node.level * INDENT_WIDTH + "px"}} />
-            {
-                node.type === "folder" ? 
-                <span className="center folder-icon">{getCollapsedIcon()}</span> :
-                <span className="center file-icon">{getFileIcon()}</span>
-            }
-            <span className="center file-name">{node.name}</span>
-        </div>
-    )
-}
+import { fileBrowserReducer, initialState } from "./FileBrowserReducer";
 
 /**
  * Renders a file browser.
- * 
+ *
  * @return {JSX}
  */
-export const FileBrowser = ({tree, onNodeSelect}) => {
+export const FileBrowser = forwardRef(({onSelectFile}, ref) => {
+    const [state, dispatch] = useReducer(fileBrowserReducer, initialState);
 
-    const [nodes, setNodes] = useState([]);
-    const treeRef = useRef();
-
-    const handleFileClick = useEvent((node) => {
-        selectNode(treeRef.current, node);
-        drawTree();
-        if (onNodeSelect) {
-            onNodeSelect(node);
-        }
-    });
-
-    useEffect(() => {
-        treeRef.current = flattenTree(tree);
-        setDefaultCollapsed(treeRef.current);
-        drawTree();
+    const addFileTree = useCallback((tree) => {
+        dispatch({ type: "RESET_STATE"});
+        dispatch({ type: "ADD_FILE_TREE", payload: tree });
     }, []);
 
-    /**
-     * Draws the tree given the nodes and the collapsed state of each node.
-     */
-    const drawTree = () => {
-        const nodes = collapseTree(treeRef.current);
-        const rows = [];
-        nodes.forEach((node) => {
-            rows.push(<TreeNode key={node.id} node={node} id={node.name} onRowClick={handleFileClick}/>);
-        });
-        setNodes(rows);
-    }
+    useEffect(() => {
+        if (state.selectedNode && state.selectedNode.type === "file") {
+            onSelectFile(state.selectedNode);
+        }
+    }, [state.selectedNode]);
+
+    const selectNode = useCallback((node) => {
+        dispatch({ type: "SELECT_NODE", payload: node });
+    }, []);
+
+    const api = useMemo(() => {
+        return {
+            state,
+            addFileTree,
+            selectNode
+        };
+    }, [state, addFileTree, selectNode]);
+
+    useImperativeHandle(ref, () => api, [api]);
+
     return (
-        <div className="file-browser">
-            {nodes}
-        </div>
-    )
+        <FileBrowserContext.Provider value={api}>
+            <div className="file-browser">
+                <Tree />
+            </div>
+        </FileBrowserContext.Provider>
+    );
+});
+
+FileBrowser.displayName = "FileBrowser";
+
+export function useFileBrowser() {
+    const ctx = useContext(FileBrowserContext);
+    if (!ctx) {
+        throw new Error("useFileBrowser must be used inside <FileBrowser>");
+    }
+    return ctx;
 }
