@@ -17,14 +17,14 @@ const initialNodes = [
     {
         id: "1",
         position: { x: 250, y: 150 },
-        data: { label: "Default Node" },
+        data: { label: "Behavior 1" },
         draggable: true,
         selectable: true,
     },
     {
         id: "2",
-        position: { x: 250, y: 450 },
-        data: { label: "Default Node2" },
+        position: { x: 250, y: 250 },
+        data: { label: "Behavior 2" },
         draggable: true,
         selectable: true,
     },
@@ -65,7 +65,7 @@ const Flow = ({ activeTool }) => {
                     x: pos.x - NODE_WIDTH / 2,
                     y: pos.y - NODE_HEIGHT / 2,
                 },
-                data: { label: "New node" },
+                data: { label: "Behavior" },
                 draggable: false,
                 selectable: false,
                 style: {
@@ -103,7 +103,6 @@ const Flow = ({ activeTool }) => {
     // Callback for node click to delete it (if tool is active)
     const onNodeClick = useCallback((event, node) => {
         if (activeTool === "delete") {
-            console.log("Deleting", node);
             setNodes((nds) => nds.filter((n) => n.id !== node.id));
             setEdges((eds) =>
                 eds.filter((e) => e.source !== node.id && e.target !== node.id)
@@ -140,8 +139,6 @@ const Flow = ({ activeTool }) => {
             onConnect={onConnect}
             onNodesChange={onNodesChange}
             onEdgesChange={onEdgesChange}
-            nodesConnectable={activeTool === "connect"}
-            elementsSelectable={activeTool === "select"}
             onNodeClick={onNodeClick}
             onEdgeClick={onEdgeClick}
             colorMode={"dark"}
