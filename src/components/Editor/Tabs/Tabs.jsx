@@ -19,10 +19,10 @@ export const Tabs = () => {
     const [tabsList, setTabsList] = useState();
 
     useEffect(() => {
-        if (state.tabs?.length >= 0 && state.parentTabGroupId != null) {
-            drawTabs(state.tabs, state.parentTabGroupId);
+        if (state.tabs?.length >= 0) {
+            drawTabs(state.tabs, state.uid);
         }
-    }, [state.tabs, state.parentTabGroupId]);
+    }, [state.tabs, state.uid]);
 
     /**
      * Draw the tabs provided in the tabs info. This includes the gutters

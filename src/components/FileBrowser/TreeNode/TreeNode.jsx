@@ -15,12 +15,13 @@ import { useCallback } from "react";
 /**
  * Renders a single node in the file tree.
  */
-export const TreeNode = ({ id, node }) => {
+export const TreeNode = ({ id, parentId, node }) => {
     const { attributes, listeners, setNodeRef, transform } = useDraggable(
         { 
             id,
             data: {
                 type: "FileTreeNode",
+                parentId: parentId,
                 node: node,
                 preview: <TreeNodePreview node={node} />
             }

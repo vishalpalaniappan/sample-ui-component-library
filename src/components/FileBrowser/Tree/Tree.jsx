@@ -18,19 +18,20 @@ export const Tree = ({}) => {
 
     useEffect(() => {
         if(state.collapsedTree && state.collapsedTree.length > 0) {
-            drawTree(state.collapsedTree);
+            drawTree(state.collapsedTree, state.uid);
         }
     }, [state.collapsedTree]);
 
     /**
      * Draws the tree given the nodes and the collapsed state of each node.
      */
-    const drawTree = (collapsedTree) => {
+    const drawTree = (collapsedTree, parentId) => {
         const rows = [];
         collapsedTree.forEach((node) => {
             rows.push(
                 <TreeNode
                     key={node.uid}
+                    parentId={parentId}
                     node={node}
                     id={"tree-node-" + node.uid}
                 />,
