@@ -22,7 +22,7 @@ export const Tabs = () => {
         if (state.tabs?.length >= 0) {
             drawTabs(state.tabs, state.parentTabGroupId);
         }
-    }, [state.tabs, state.uid]);
+    }, [state.tabs, state.parentTabGroupId]);
 
     /**
      * Draw the tabs provided in the tabs info. This includes the gutters
