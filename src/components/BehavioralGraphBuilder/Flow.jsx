@@ -13,6 +13,8 @@ import {
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 
+import { getLayoutedElements } from "./DagreLayout.js";
+
 const initialNodes = [
     {
         id: "1",
@@ -32,11 +34,23 @@ const initialNodes = [
 
 const NODE_WIDTH = 150;
 const NODE_HEIGHT = 40;
-export const Flow = ({ activeTool }) => {
+export const Flow = ({ activeTool, initialElements }) => {
     const { screenToFlowPosition } = useReactFlow();
-    const [nodes, setNodes] = useState(initialNodes);
+    const [nodes, setNodes] = useState([]);
     const [edges, setEdges] = useState([]);
     const [ghostNode, setGhostNode] = useState(null);
+
+    useEffect(() => {
+        if (!initialElements) return;
+        const layouted = getLayoutedElements(
+            initialElements.nodes,
+            initialElements.edges,
+            {direction:"TB"}
+        );
+
+        setNodes([...layouted.nodes]);
+        setEdges([...layouted.edges]);
+    }, [initialElements]);
 
     // Callbacks to apply node changes
     const onNodesChange = useCallback((changes) => {
