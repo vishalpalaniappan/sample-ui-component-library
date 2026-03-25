@@ -4,6 +4,8 @@ import "./BehavioralGraphBuilderStories.scss"
 import { ToolBar } from "./components/ToolBar/ToolBar";
 import { useArgs } from "@storybook/preview-api";
 
+import design from "./data/Designs/simple_design_temp.json";
+
 export default {
     title: 'BehavioralGraphBuilder', 
     component: BehavioralGraphBuilder,
@@ -21,7 +23,14 @@ const Template = (args) => {
     }, [activeTool, setActiveTool]);
     
     useEffect(() => {
-        updateArgs({activeTool : activeTool});
+
+        console.log(design);
+        updateArgs(
+            {
+                activeTool: activeTool,
+                design: design
+            }
+        );
     }, []);
 
     return (
@@ -39,4 +48,5 @@ const Template = (args) => {
 export const Default = Template.bind({})
 
 Default.args = {
+    design: design
 }
