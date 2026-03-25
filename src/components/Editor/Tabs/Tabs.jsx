@@ -20,7 +20,7 @@ export const Tabs = () => {
 
     useEffect(() => {
         if (state.tabs?.length >= 0) {
-            drawTabs(state.tabs, state.uid);
+            drawTabs(state.tabs, state.parentTabGroupId);
         }
     }, [state.tabs, state.uid]);
 
