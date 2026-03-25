@@ -1,3 +1,9 @@
+
+/**
+ * Converts a DAL design specification object into React Flow elements (nodes and edges).
+ * @param {Object} design 
+ * @returns {Object} An object containing nodes and edges for React Flow
+ */
 export const designToReactFlowElements = (design) => {
 
     let edges = [];
