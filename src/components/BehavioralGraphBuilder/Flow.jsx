@@ -20,23 +20,6 @@ const edgeTypes = {
   bezier: BezierEdge,
 };
 
-const initialNodes = [
-    {
-        id: "1",
-        position: { x: 250, y: 150 },
-        data: { label: "Behavior 1" },
-        draggable: true,
-        selectable: true,
-    },
-    {
-        id: "2",
-        position: { x: 250, y: 250 },
-        data: { label: "Behavior 2" },
-        draggable: true,
-        selectable: true,
-    },
-];
-
 const NODE_WIDTH = 150;
 const NODE_HEIGHT = 40;
 export const Flow = ({ activeTool, onBehaviorSelect, initialElements }) => {
@@ -129,7 +112,7 @@ export const Flow = ({ activeTool, onBehaviorSelect, initialElements }) => {
         } else {
             onBehaviorSelect(node);
         }
-    }, [activeTool]);
+    }, [activeTool, onBehaviorSelect]);
 
     // Callback for edge click to delete it (if tool is active)
     const onEdgeClick = useCallback((event, edge) => {

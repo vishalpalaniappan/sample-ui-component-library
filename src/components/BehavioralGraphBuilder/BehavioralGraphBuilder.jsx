@@ -3,7 +3,7 @@ import { ReactFlowProvider } from "@xyflow/react";
 import { useEffect, useState } from "react";
 import { designToReactFlowElements } from "./helper";
 
-export const BehavioralGraphBuilder = ({ activeTool, design }) => {
+export const BehavioralGraphBuilder = ({ activeTool, onBehaviorSelect, design }) => {
 
     const [initialElements, setInitialElements] = useState(null); 
 
@@ -16,7 +16,7 @@ export const BehavioralGraphBuilder = ({ activeTool, design }) => {
 
     return (
         <ReactFlowProvider>
-            <Flow initialElements={initialElements} activeTool={activeTool} />
+            <Flow initialElements={initialElements} activeTool={activeTool} onBehaviorSelect={onBehaviorSelect} />
         </ReactFlowProvider>
     );
 };

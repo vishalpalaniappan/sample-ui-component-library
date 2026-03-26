@@ -21,14 +21,17 @@ const Template = (args) => {
     const selectTool = useCallback((tool) => {
         updateArgs({activeTool : tool});
     }, [activeTool, setActiveTool]);
+
+    const onBehaviorSelect = useCallback((behavior) => {
+        console.log("Selected behavior:", behavior);
+    }, []);
     
     useEffect(() => {
-
-        console.log(design);
         updateArgs(
             {
                 activeTool: activeTool,
-                design: design
+                design: design,
+                onBehaviorSelect: onBehaviorSelect
             }
         );
     }, []);
