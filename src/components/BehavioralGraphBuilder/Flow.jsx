@@ -109,8 +109,6 @@ export const Flow = ({ activeTool, onBehaviorSelect, initialElements }) => {
             setEdges((eds) =>
                 eds.filter((e) => e.source !== node.id && e.target !== node.id)
             );
-        } else {
-            onBehaviorSelect(node);
         }
     }, [activeTool, onBehaviorSelect]);
 
@@ -120,6 +118,12 @@ export const Flow = ({ activeTool, onBehaviorSelect, initialElements }) => {
             setEdges((eds) => eds.filter((e) => e.id !== edge.id));
         }
     }, [activeTool]);
+
+    const onSelectionChange = useCallback((selection) => {
+        if (selection.nodes.length > 0) {
+            onBehaviorSelect(selection.nodes[0]);
+        }
+    }, [ onBehaviorSelect]);
 
     // Callback for when edge is connected, nodesConnectable={activeTool === "connect"}
     // is used to determine connectability
@@ -147,6 +151,7 @@ export const Flow = ({ activeTool, onBehaviorSelect, initialElements }) => {
             onEdgeClick={onEdgeClick}
             colorMode={"dark"}
             edgeTypes={edgeTypes}
+            onSelectionChange={onSelectionChange}
             fitView
         >
             <Background />
