@@ -1,10 +1,11 @@
 import { useCallback, useState, useEffect } from "react";
 import { BehavioralGraphBuilder } from "../components/BehavioralGraphBuilder";
-import "./BehavioralGraphBuilderStories.scss"
 import { ToolBar } from "./components/ToolBar/ToolBar";
 import { useArgs } from "@storybook/preview-api";
+import { action } from "@storybook/addon-actions";
 
 import design from "./data/Designs/simple_design_temp.json";
+import "./BehavioralGraphBuilderStories.scss"
 
 export default {
     title: 'BehavioralGraphBuilder', 
@@ -23,7 +24,7 @@ const Template = (args) => {
     }, [activeTool, setActiveTool]);
 
     const onBehaviorSelect = useCallback((behavior) => {
-        console.log("Selected behavior:", behavior);
+        action('Selected Behavior:')(behavior);
     }, []);
     
     useEffect(() => {
