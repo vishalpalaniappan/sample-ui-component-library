@@ -26,13 +26,23 @@ const Template = (args) => {
     const onBehaviorSelect = useCallback((behavior) => {
         action('Selected Behavior:')(behavior);
     }, []);
+
+    const onAddBehavior = useCallback((behavior) => {
+        action('Added Behavior:')(behavior);
+    }, []);
+
+    const onAddEdge = useCallback((edge) => {
+        action('Added Edge:')(edge);
+    }, []);
     
     useEffect(() => {
         updateArgs(
             {
                 activeTool: activeTool,
                 design: design,
-                onBehaviorSelect: onBehaviorSelect
+                onBehaviorSelect: onBehaviorSelect,
+                onAddBehavior: onAddBehavior,
+                onAddEdge: onAddEdge
             }
         );
     }, []);

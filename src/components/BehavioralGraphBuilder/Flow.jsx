@@ -22,7 +22,7 @@ const edgeTypes = {
 
 const NODE_WIDTH = 150;
 const NODE_HEIGHT = 40;
-export const Flow = ({ activeTool, onBehaviorSelect, initialElements }) => {
+export const Flow = ({ activeTool, onBehaviorSelect, onAddBehavior, onAddEdge, initialElements }) => {
     const { screenToFlowPosition } = useReactFlow();
     const [nodes, setNodes] = useState([]);
     const [edges, setEdges] = useState([]);
@@ -99,8 +99,10 @@ export const Flow = ({ activeTool, onBehaviorSelect, initialElements }) => {
                     style: {},
                 },
             ]);
+            onAddBehavior(ghostNode);
+            setGhostNode(null);
         }  
-    }, [ghostNode, activeTool]);
+    }, [ghostNode, activeTool, onAddBehavior]);
 
     // Callback for node click to delete it (if tool is active)
     const onNodeClick = useCallback((event, node) => {
@@ -135,7 +137,8 @@ export const Flow = ({ activeTool, onBehaviorSelect, initialElements }) => {
             animated: true,
         };
         setEdges((eds) => [...eds, edge]);
-    }, [activeTool]);
+        onAddEdge(edge);
+    }, [activeTool, onAddEdge]);
 
     return (
         <ReactFlow
