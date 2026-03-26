@@ -8,12 +8,17 @@ import {
     Controls,
     useReactFlow,
     addEdge,
+    BezierEdge ,
     applyNodeChanges,
     applyEdgeChanges 
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 
 import { getLayoutedElements } from "./DagreLayout.js";
+
+const edgeTypes = {
+  bezier: BezierEdge,
+};
 
 const initialNodes = [
     {
@@ -34,7 +39,7 @@ const initialNodes = [
 
 const NODE_WIDTH = 150;
 const NODE_HEIGHT = 40;
-export const Flow = ({ activeTool, initialElements }) => {
+export const Flow = ({ activeTool, onBehaviorSelect, initialElements }) => {
     const { screenToFlowPosition } = useReactFlow();
     const [nodes, setNodes] = useState([]);
     const [edges, setEdges] = useState([]);
@@ -121,6 +126,8 @@ export const Flow = ({ activeTool, initialElements }) => {
             setEdges((eds) =>
                 eds.filter((e) => e.source !== node.id && e.target !== node.id)
             );
+        } else {
+            onBehaviorSelect(node);
         }
     }, [activeTool]);
 
@@ -156,6 +163,7 @@ export const Flow = ({ activeTool, initialElements }) => {
             onNodeClick={onNodeClick}
             onEdgeClick={onEdgeClick}
             colorMode={"dark"}
+            edgeTypes={edgeTypes}
             fitView
         >
             <Background />
