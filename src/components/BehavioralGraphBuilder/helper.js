@@ -22,6 +22,7 @@ export const designToReactFlowElements = (design) => {
                 type: "bezier",
                 source: node.behavior.uid,
                 target: goTo.uid,
+                animated: true
             });
         });
     });
