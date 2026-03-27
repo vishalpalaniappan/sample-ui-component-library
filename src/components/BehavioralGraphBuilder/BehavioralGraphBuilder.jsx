@@ -7,11 +7,11 @@ import "./BehavioralGraphBuilder.scss";
 const nodes = [
     {
         id: '1',
-        text: '1'
+        text: 'AcceptBookFromUser'
     },
     {
         id: '2',
-        text: '2'
+        text: 'PlaceBookInBasket'
     }
 ];
 
@@ -20,6 +20,11 @@ const edges = [
         id: '1-2',
         from: '1',
         to: '2'
+    },
+    {
+        id: '2-1',
+        from: '2',
+        to: '1'
     }
 ];
 
