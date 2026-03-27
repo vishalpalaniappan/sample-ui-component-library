@@ -68,6 +68,7 @@
     "@dagrejs/dagre": "^1.1.4",
     "@monaco-editor/react": "^4.7.0",
     "@xyflow/react": "^12.6.0",
+    "dal-engine-core-js-lib-dev": "^0.0.1",
     "react-bootstrap-icons": "^1.11.5",
     "reaflow": "^5.4.1"
   }

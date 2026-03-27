@@ -4,7 +4,7 @@
  * @param {Object} design 
  * @returns {Object} An object containing nodes and edges for React Flow
  */
-export const designToReactFlowElements = (engine) => {
+export const designToNodes = (engine) => {
 
     let edges = [];
     let nodes = [];
