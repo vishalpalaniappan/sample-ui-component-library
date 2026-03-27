@@ -42,6 +42,13 @@ const Template = (args) => {
             const engine = new DALEngine({});
             engine.deserialize(JSON.stringify(design));
             editorRef.current.updateEngine(engine);
+            setTimeout(() => {
+                const b = engine.createBehavior({
+                    name: "testBehavior"
+                });
+                engine.graph.addNode(b);
+                editorRef.current.updateEngine(engine);
+            }, 4000);
         }
     }, [design, editorRef]);
 
