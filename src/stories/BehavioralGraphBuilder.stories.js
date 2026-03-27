@@ -11,9 +11,6 @@ export default {
     title: 'BehavioralGraphBuilder', 
     component: BehavioralGraphBuilder,
     argTypes: {
-        traces: {
-            type: 'array'
-        }
     }
 };
 
@@ -27,7 +24,7 @@ const Template = (args) => {
     }, [activeTool, setActiveTool]);
 
     useEffect(() => {
-        updateArgs({});
+        updateArgs({activeTool: activeTool});
     }, []);
 
     return (
@@ -36,7 +33,7 @@ const Template = (args) => {
                 <ToolBar onSelectTool={selectTool}/>
             </div>
             <div className="flow">
-                <BehavioralGraphBuilder activeTool={activeTool} {...args}/> 
+                <BehavioralGraphBuilder {...args}/> 
             </div>
         </div>
     )
