@@ -1,6 +1,6 @@
 {
   "name": "sample-ui-component-library",
-  "version": "0.0.18-dev",
+  "version": "0.0.40-dev",
   "description": "A library which contains sample UI elements that can be used for populating layouts.",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -68,6 +68,7 @@
     "@dagrejs/dagre": "^1.1.4",
     "@monaco-editor/react": "^4.7.0",
     "@xyflow/react": "^12.6.0",
-    "react-bootstrap-icons": "^1.11.5"
+    "react-bootstrap-icons": "^1.11.5",
+    "reaflow": "^5.4.1"
   }
 }
