@@ -2,9 +2,11 @@ import { useEffect, useState, useRef } from "react";
 import { Canvas } from 'reaflow';
 import PropTypes from 'prop-types';
 
+import { designToReactFlowElements } from "./helper";
+
 import "./BehavioralGraphBuilder.scss";
 
-const nodes = [
+const exampleNodes = [
     {
         id: '1',
         text: 'AcceptBookFromUser'
@@ -15,7 +17,7 @@ const nodes = [
     }
 ];
 
-const edges = [
+const exampleEdges = [
     {
         id: '1-2',
         from: '1',
@@ -33,15 +35,29 @@ const edges = [
  * 
  * @return {JSX}
  */
-export const BehavioralGraphBuilder = ({ activeTool }) => {
+export const BehavioralGraphBuilder = ({ activeTool , design}) => {
 
     const containerRef = useRef();
     const [size, setSize] = useState({ width: 0, height: 0 });
 
+    const [edges, setEdges] = useState([]);
+    const [nodes, setNodes] = useState([]);
+
+    useEffect(() => {
+        if (design) {
+            console.log(design);
+            const { nodes, edges } = designToReactFlowElements(design);
+            console.log("Converted nodes: ", nodes);
+            console.log("Converted edges: ", edges);
+            setNodes(nodes);
+            setEdges(edges);
+        }
+    }, [design]);
+
     useEffect(() => {
         const observer = new ResizeObserver(([entry]) => {
         const { width, height } = entry.contentRect;
-        setSize({ width, height });
+            setSize({ width, height });
         });
 
         if (containerRef.current) observer.observe(containerRef.current);
