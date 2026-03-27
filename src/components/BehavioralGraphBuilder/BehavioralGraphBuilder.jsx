@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, useImperativeHandle, useMemo, useCallback } from "react";
+import { useEffect, useState, useRef, useImperativeHandle, forwardRef, useMemo, useCallback } from "react";
 import { Canvas } from 'reaflow';
 import PropTypes from 'prop-types';
 
@@ -39,9 +39,9 @@ export const BehavioralGraphBuilder = forwardRef(({connectBehaviors, deleteBehav
         deleteBehavior(id);
     }
 
-    const setDesign = useCallback((design) => {
-        if (design) {
-            const { nodes, edges } = designToNodes(design);
+    const updateEngine = useCallback((engine) => {
+        if (engine) {
+            const { nodes, edges } = designToNodes(engine);
             setNodes(nodes);
             setEdges(edges);
         }
@@ -49,9 +49,9 @@ export const BehavioralGraphBuilder = forwardRef(({connectBehaviors, deleteBehav
 
     const api = useMemo(() => {
         return {
-            setDesign
+            updateEngine
         };
-    }, [setDesign]);
+    }, [updateEngine]);
     
     useImperativeHandle(ref, () => api, [api]);
 
@@ -62,7 +62,6 @@ export const BehavioralGraphBuilder = forwardRef(({connectBehaviors, deleteBehav
                 edges={edges}
                 width={size.width}
                 height={size.height}
-                onLayoutChange={onLayoutChange}
                 onNodeLink={onNodeLink}
                 onNodeRemove={onNodeRemove}
                 panType="drag"
