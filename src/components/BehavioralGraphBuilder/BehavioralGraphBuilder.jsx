@@ -47,6 +47,10 @@ export const BehavioralGraphBuilder = ({ activeTool }) => {
         console.log("Active tool changed: ", activeTool);
     }, [activeTool]);
 
+    const onLayoutChange = (layout) => {
+        console.log("Layout changed: ", layout);
+    }
+
     return (
         <div ref={containerRef}  className="canvas-wrapper">
             <Canvas 
@@ -54,6 +58,8 @@ export const BehavioralGraphBuilder = ({ activeTool }) => {
                 edges={edges}
                 width={size.width}
                 height={size.height}
+                onLayoutChange={onLayoutChange}
+                panType="drag"
                 fit
                 center
             />
