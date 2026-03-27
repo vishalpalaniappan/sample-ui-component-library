@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import "./BehavioralGraphBuilder.scss";
 import PropTypes from 'prop-types';
 
@@ -6,9 +7,12 @@ import PropTypes from 'prop-types';
  * 
  * @return {JSX}
  */
-export const BehavioralGraphBuilder = ({}) => {
+export const BehavioralGraphBuilder = ({activeTool}) => {
 
-
+    useEffect(() => {
+        console.log("Active tool changed: ", activeTool);
+    }, [activeTool]);
+    
     return (
         <div></div>
     )
