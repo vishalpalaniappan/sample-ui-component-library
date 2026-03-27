@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 
 import { designToReactFlowElements } from "./helper";
 
+import {DALEngine} from "dal-engine-core-js-lib-dev";
+
 import "./BehavioralGraphBuilder.scss";
 
 const exampleNodes = [
@@ -39,20 +41,40 @@ export const BehavioralGraphBuilder = ({ activeTool , design}) => {
 
     const containerRef = useRef();
     const [size, setSize] = useState({ width: 0, height: 0 });
+    const [engine, setEngine] = useState(null);
 
     const [edges, setEdges] = useState([]);
     const [nodes, setNodes] = useState([]);
 
     useEffect(() => {
         if (design) {
-            console.log(design);
-            const { nodes, edges } = designToReactFlowElements(design);
-            console.log("Converted nodes: ", nodes);
-            console.log("Converted edges: ", edges);
+            const e = new DALEngine({});
+            let behavior1 = e.createBehavior({name: "Behavior1"});
+            const node1 = e.graph.addNode(behavior1);
+            
+            let behavior2 = e.createBehavior({name: "Behavior2"});
+            const node2 = e.graph.addNode(behavior2);
+
+            node1.goToBehaviors = [behavior2];
+            
+            let behavior3 = e.createBehavior({name: "Behavior3"});
+            const node3 = e.graph.addNode(behavior3);
+            
+            node2.goToBehaviors = [behavior3];
+            node3.goToBehaviors = [behavior1];
+            
+            setEngine(e);
+        }
+    }, []);
+
+
+    useEffect(() => {
+        if (engine) {
+            const { nodes, edges } = designToReactFlowElements(engine);
             setNodes(nodes);
             setEdges(edges);
         }
-    }, [design]);
+    }, [engine]);
 
     useEffect(() => {
         const observer = new ResizeObserver(([entry]) => {
@@ -66,10 +88,31 @@ export const BehavioralGraphBuilder = ({ activeTool , design}) => {
 
     useEffect(() => {
         console.log("Active tool changed: ", activeTool);
-    }, [activeTool]);
+        if (engine) {
+            let Behavior5 = engine.createBehavior({name: "Behavior5"});
+            const node5 = engine.graph.addNode(Behavior5);
+            node5.goToBehaviors = [engine.graph.nodes[0].behavior];
+            const { nodes, edges } = designToReactFlowElements(engine);
+            setNodes(nodes);
+            setEdges(edges);
+        }
+    }, [activeTool, engine]);
 
     const onLayoutChange = (layout) => {
         console.log("Layout changed: ", layout);
+    }
+
+    const onNodeLink =(_event, from, to) => {
+        const id = `${from.id}-${to.id}`;
+
+        setEdges([
+            ...edges,
+            {
+                id,
+                from: from.id,
+                to: to.id
+            }
+        ]);
     }
 
     return (
@@ -80,6 +123,7 @@ export const BehavioralGraphBuilder = ({ activeTool , design}) => {
                 width={size.width}
                 height={size.height}
                 onLayoutChange={onLayoutChange}
+                onNodeLink={onNodeLink}
                 panType="drag"
                 fit
                 center

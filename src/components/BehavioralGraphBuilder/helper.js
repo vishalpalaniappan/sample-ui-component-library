@@ -4,33 +4,30 @@
  * @param {Object} design 
  * @returns {Object} An object containing nodes and edges for React Flow
  */
-export const designToReactFlowElements = (design) => {
+export const designToReactFlowElements = (engine) => {
 
     let edges = [];
     let nodes = [];
-    design.nodes.forEach((node) => {
-        const id = node.behavior.uid;
+
+    for (let i = 0; i < engine.graph.nodes.length; i++) {
+        const node = engine.graph.nodes[i];
         nodes.push({
-            id: id,
+            id: node.behavior.uid,
             text: node.behavior.name,
         });
 
-        node.goToBehaviors.forEach((goTo) => {
-            const exists = nodes.some(n => n.id === goTo.uid);
-            if (!exists) {
-                nodes.push({
-                    id: goTo.uid,
-                    text: goTo.name,
-                });
-            }
+        if (!node?.goToBehaviors) {
+            continue;
+        }
 
+        node.goToBehaviors.forEach((goTo) => {
             edges.push({
                 id: `${node.behavior.uid}->${goTo.uid}`,
                 from: node.behavior.uid,
                 to: goTo.uid,
             });
         });
-    });
+    }
 
     return {
         nodes: nodes,
