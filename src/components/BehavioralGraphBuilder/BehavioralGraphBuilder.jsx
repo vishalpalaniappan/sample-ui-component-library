@@ -12,6 +12,7 @@ import "./BehavioralGraphBuilder.scss";
  * @return {JSX}
  */
 export const BehavioralGraphBuilder = forwardRef(({connectBehaviors, deleteTransition, deleteBehavior}, ref) => {
+    const canvasRef = useRef();
 
     // Resizer to set canvas size to match container
     // TODO: Issues with zooming and resizing, need to explore.
@@ -36,10 +37,6 @@ export const BehavioralGraphBuilder = forwardRef(({connectBehaviors, deleteTrans
         connectBehaviors(from, to);
     }
 
-    const onNodeRemove = (id) => {
-        deleteBehavior(id);
-    }
-
     const updateEngine = useCallback((engine) => {
         if (engine) {
             const { nodes, edges } = designToNodes(engine);
@@ -56,24 +53,30 @@ export const BehavioralGraphBuilder = forwardRef(({connectBehaviors, deleteTrans
     
     useImperativeHandle(ref, () => api, [api]);
 
+    const handleWheel = useCallback((e) => {
+        if (e.deltaY < 0) {
+            canvasRef.current.zoomIn()
+        } else {
+            canvasRef.current.zoomOut();
+        }
+    }, [canvasRef]);
+
     return (
-        <div ref={containerRef}  className="canvas-wrapper">
+        <div onWheel={handleWheel} ref={containerRef}  className="canvas-wrapper">
             <Canvas 
+                ref={canvasRef}
                 nodes={nodes}
                 edges={edges}
                 width={size.width}
                 height={size.height}
                 onNodeLink={onNodeLink}
-                onNodeRemove={onNodeRemove}
                 panType="drag"
                 selections={selections}node={
                 <Node
                     onClick={(event, node) => {
-                        console.log('Selecting Node', event, node);
                         setSelections([node.id]);
                     }}
                     onRemove={(event, node) => {
-                        console.log('Removing Node', event, node);
                         deleteBehavior(node);
                         setSelections([]);
                     }}
@@ -82,20 +85,15 @@ export const BehavioralGraphBuilder = forwardRef(({connectBehaviors, deleteTrans
                 edge={
                 <Edge
                     onClick={(event, edge) => {
-                        console.log('Selecting Edge', event, edge);
                         setSelections([edge.id]);
                     }}
                     onRemove={(event, edge) => {
-                        console.log('Removing Edge', event, edge);
                         deleteTransition(edge);
                         setSelections([]);
                     }}
                 />
                 }
-                onCanvasClick={(event) => {
-                    console.log('Canvas Clicked', event);
-                    setSelections([]);
-                }}
+                onCanvasClick={(event) => {setSelections([]);}}
                 fit
                 center
             />

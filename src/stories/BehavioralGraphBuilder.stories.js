@@ -10,13 +10,14 @@ import { DALEngine } from "dal-engine-core-js-lib-dev";
 import design from "./data/Designs/simple_designs_temp.json";
 
 import "./BehavioralGraphBuilder.scss";
-import { node } from "prop-types";
 
 export default {
     title: "BehavioralGraphBuilder",
     component: BehavioralGraphBuilder,
     argTypes: {},
 };
+
+let count = 0;
 
 const Template = (args) => {
     const [, updateArgs] = useArgs();
@@ -30,8 +31,14 @@ const Template = (args) => {
     const selectTool = useCallback(
         (tool) => {
             updateArgs({ activeTool: tool });
+            setActiveTool(tool);
+
+            if (tool === "add-node") {
+                engine.addNode("node-" + count++, []);
+                editorRef.current.updateEngine(engine);
+            }
         },
-        [activeTool, setActiveTool],
+        [activeTool, setActiveTool, engine],
     );
 
     useEffect(() => {
@@ -44,9 +51,9 @@ const Template = (args) => {
     useEffect(() => {
         if (editorRef.current) {
             const engine = new DALEngine({ name: "testEngine" });
-            engine.deserialize(JSON.stringify(design));
-            editorRef.current.updateEngine(engine);
+            // engine.deserialize(JSON.stringify(design));
             setEngine(engine);
+            editorRef.current.updateEngine(engine);
             setTimeout(() => {
                 engine.addNode("testBehavior", []);
                 engine.addNode("testBehavior2", []);
@@ -83,7 +90,6 @@ const Template = (args) => {
         },
         [engine, editorRef],
     );
-
     return (
         <div className="graphBuilderRootContainer">
             <div className="toolbar">

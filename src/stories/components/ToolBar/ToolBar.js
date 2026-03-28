@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 
 import {
-  Cursor,
-  Square,
-  NodePlus,
-  Trash
+  PlusSquare,
+  Floppy
 } from "react-bootstrap-icons";
 
 import "./ToolBar.scss";
@@ -26,32 +24,18 @@ export function ToolBar({ onSelectTool }) {
   return (
     <div className="toolbarWrapper">
       <div className="toolbarContainer">
-        <Cursor
-          onClick={(e) => selectTool("select")}
-          style={{color: selectedTool === "select" ? "white": "grey"}}
-          title="Select"
-          className="icon"
-        />
-        <Square
-          onClick={(e) => selectTool("drop")}
-          style={{color: selectedTool === "drop" ? "white": "grey"}}
+        <PlusSquare
+          onClick={(e) => selectTool("add-node")}
           title="Add Node"
-          className="icon"
-        />
-        <NodePlus
-          onClick={(e) => selectTool("connect")}
-          style={{color: selectedTool === "connect" ? "white": "grey"}}
-          title="Connect Node"
-          className="icon"
-        />
-        <Trash
-          onClick={(e) => selectTool("delete")}
-          style={{color: selectedTool === "delete" ? "white": "grey"}}
-          title="Delete Node"
           className="icon"
         />
       </div>
       <div className="toolbarContainer bottom"></div>
+        <Floppy
+          onClick={(e) => selectTool("save")}
+          title="Save Design"
+          className="icon"
+        />
     </div>
   );
 }
