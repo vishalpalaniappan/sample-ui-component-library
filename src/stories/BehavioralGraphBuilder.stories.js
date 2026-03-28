@@ -90,6 +90,14 @@ const Template = (args) => {
         },
         [engine, editorRef],
     );
+
+    const selectBehavior = useCallback(
+        (nodeId) => {
+            action("Select Behavior")(nodeId);
+        },
+        [],
+    );
+
     return (
         <div className="graphBuilderRootContainer">
             <div className="toolbar">
@@ -102,6 +110,7 @@ const Template = (args) => {
                     connectBehaviors={connectBehaviors}
                     deleteTransition={deleteTransition}
                     deleteBehavior={deleteBehavior}
+                    selectBehavior={selectBehavior}
                 />
             </div>
         </div>
