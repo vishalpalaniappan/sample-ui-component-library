@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef, useImperativeHandle, forwardRef, useMemo, useCallback } from "react";
-import { Canvas, Node, Edge, removeAndUpsertNodes  } from 'reaflow';
+import { Canvas, Node, Edge } from 'reaflow';
 import PropTypes from 'prop-types';
 
 import { designToNodes } from "./helper";
@@ -28,15 +28,12 @@ export const BehavioralGraphBuilder = forwardRef(({connectBehaviors, deleteTrans
         return () => observer.disconnect();
     }, []);
 
-
+    // States
     const [edges, setEdges] = useState([]);
     const [nodes, setNodes] = useState([]);
     const [selections, setSelections] = useState([]);
-'1'
-    const onNodeLink =(_event, from, to) => {
-        connectBehaviors(from, to);
-    }
 
+    // API Methods and Imperative Handle
     const updateEngine = useCallback((engine) => {
         if (engine) {
             const { nodes, edges } = designToNodes(engine);
@@ -53,50 +50,57 @@ export const BehavioralGraphBuilder = forwardRef(({connectBehaviors, deleteTrans
     
     useImperativeHandle(ref, () => api, [api]);
 
+
+    // Callbacks
     const handleWheel = useCallback((e) => {
-        if (e.deltaY < 0) {
-            canvasRef.current.zoomIn()
-        } else {
-            canvasRef.current.zoomOut();
-        }
+        (e.deltaY < 0)?canvasRef.current.zoomIn():canvasRef.current.zoomOut();
     }, [canvasRef]);
+
+    const nodeClick = useCallback((e, node) => {
+        setSelections([node.id]);
+        selectBehavior(node.id);
+    }, [selectBehavior]);
+    
+    const nodeRemove = useCallback((e, node) => {
+        deleteBehavior(node);
+        setSelections([]);
+    }, [deleteBehavior]);
+
+    const edgeClick = useCallback((e, edge) => {
+        setSelections([edge.id]);
+    }, []);
+
+    const edgeRemove = useCallback((e, edge) => {
+        deleteTransition(edge);
+        setSelections([]);
+    }, [deleteTransition]);
+
+    const canvasClick = useCallback((e) => {
+        selectBehavior(null);
+        setSelections([]);
+    }, [selectBehavior]);
+
+    const nodeLink = useCallback((e, from, to) => {
+        if (!to) return;
+        connectBehaviors(from, to);
+    }, [connectBehaviors]);
 
     return (
         <div onWheel={handleWheel} ref={containerRef}  className="canvas-wrapper">
             <Canvas 
+                panType="drag"
+                fit
+                center
                 ref={canvasRef}
                 nodes={nodes}
                 edges={edges}
                 width={size.width}
                 height={size.height}
-                onNodeLink={onNodeLink}
-                panType="drag"
-                selections={selections}node={
-                <Node
-                    onClick={(event, node) => {
-                        setSelections([node.id]);
-                        selectBehavior(node.id);
-                    }}
-                    onRemove={(event, node) => {
-                        deleteBehavior(node);
-                        setSelections([]);
-                    }}
-                />
-                }
-                edge={
-                <Edge
-                    onClick={(event, edge) => {
-                        setSelections([edge.id]);
-                    }}
-                    onRemove={(event, edge) => {
-                        deleteTransition(edge);
-                        setSelections([]);
-                    }}
-                />
-                }
-                onCanvasClick={(event) => {setSelections([]);}}
-                fit
-                center
+                selections={selections}
+                onNodeLink={nodeLink}
+                node={ <Node onClick={nodeClick} onRemove={nodeRemove} /> }
+                edge={ <Edge onClick={edgeClick} onRemove={edgeRemove}/> }
+                onCanvasClick={canvasClick}
             />
         </div>
     )
@@ -104,5 +108,7 @@ export const BehavioralGraphBuilder = forwardRef(({connectBehaviors, deleteTrans
 
 BehavioralGraphBuilder.propTypes = {
     connectBehaviors: PropTypes.func.isRequired,
-    deleteBehavior: PropTypes.func.isRequired
+    deleteTransition: PropTypes.func.isRequired,
+    deleteBehavior: PropTypes.func.isRequired,
+    selectBehavior: PropTypes.func.isRequired,
 }
