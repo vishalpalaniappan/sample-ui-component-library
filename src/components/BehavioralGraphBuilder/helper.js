@@ -12,23 +12,23 @@ export const designToNodes = (engine) => {
     for (let i = 0; i < engine.graph.nodes.length; i++) {
         const node = engine.graph.nodes[i];
         nodes.push({
-            id: node.behavior.name,
-            text: node.behavior.name,
+            id: node.getBehavior().name,
+            text: node.getBehavior().name,
         });
     }
     
     for (let i = 0; i < engine.graph.nodes.length; i++) {
         const node = engine.graph.nodes[i];
-        if (!node?.goToBehaviorsIds) {
+        if (!node?.getGoToBehaviors()) {
             continue;
         }
 
         console.log(node);
 
-        node.goToBehaviorsIds.forEach((goTo) => {
+        node.getGoToBehaviors().forEach((goTo) => {
             edges.push({
-                id: `${node.behavior.name}->${goTo}`,
-                from: node.behavior.name,
+                id: `${node.getBehavior().name}->${goTo}`,
+                from: node.getBehavior().name,
                 to: goTo,
             });
         });

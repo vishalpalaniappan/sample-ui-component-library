@@ -57,13 +57,15 @@ const Template = (args) => {
     const connectBehaviors = useCallback((from, to) => {
         if (!to) return;
         action("Connect Behaviors")(from, to);
-        const node = engine.graph.findNode(from.id);
-        node.addGoToBehavior(to.id);
+        engine.getNode(from.id).addGoToBehavior(to.id);
         editorRef.current.updateEngine(engine);
     }, [editorRef, engine]);
 
     const deleteBehavior = useCallback((node) => {
         action("Delete Behavior")(node);
+        engine.removeNode(node.id);
+        editorRef.current.updateEngine(engine);
+
     }, [engine, editorRef]); 
 
     return (
