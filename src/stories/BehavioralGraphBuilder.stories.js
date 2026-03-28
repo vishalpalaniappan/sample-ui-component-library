@@ -2,21 +2,20 @@ import { useEffect, useState, useCallback, useRef } from "react";
 import { useArgs } from "@storybook/preview-api";
 import { action } from "@storybook/addon-actions";
 
-import {BehavioralGraphBuilder} from "../components/BehavioralGraphBuilder/BehavioralGraphBuilder";
+import { BehavioralGraphBuilder } from "../components/BehavioralGraphBuilder/BehavioralGraphBuilder";
 import { ToolBar } from "./components/ToolBar/ToolBar";
 
 import { DALEngine } from "dal-engine-core-js-lib-dev";
 
 import design from "./data/Designs/simple_designs_temp.json";
 
-import "./BehavioralGraphBuilder.scss"
+import "./BehavioralGraphBuilder.scss";
 import { node } from "prop-types";
 
 export default {
-    title: 'BehavioralGraphBuilder', 
+    title: "BehavioralGraphBuilder",
     component: BehavioralGraphBuilder,
-    argTypes: {
-    }
+    argTypes: {},
 };
 
 const Template = (args) => {
@@ -28,21 +27,23 @@ const Template = (args) => {
 
     const [activeTool, setActiveTool] = useState("select");
 
-    const selectTool = useCallback((tool) => {
-        updateArgs({activeTool : tool});
-    }, [activeTool, setActiveTool]);
+    const selectTool = useCallback(
+        (tool) => {
+            updateArgs({ activeTool: tool });
+        },
+        [activeTool, setActiveTool],
+    );
 
     useEffect(() => {
-        updateArgs(
-            {
-                activeTool: activeTool,
-                design: design
-            });
+        updateArgs({
+            activeTool: activeTool,
+            design: design,
+        });
     }, []);
 
     useEffect(() => {
         if (editorRef.current) {
-            const engine = new DALEngine({name:"testEngine"});
+            const engine = new DALEngine({ name: "testEngine" });
             engine.deserialize(JSON.stringify(design));
             editorRef.current.updateEngine(engine);
             setEngine(engine);
@@ -54,35 +55,55 @@ const Template = (args) => {
         }
     }, [design, editorRef]);
 
-    const connectBehaviors = useCallback((from, to) => {
-        if (!to) return;
-        action("Connect Behaviors")(from, to);
-        engine.getNode(from.id).addGoToBehavior(to.id);
-        editorRef.current.updateEngine(engine);
-    }, [editorRef, engine]);
+    const connectBehaviors = useCallback(
+        (from, to) => {
+            if (!to) return;
+            action("Connect Behaviors")(from, to);
+            engine.getNode(from.id).addGoToBehavior(to.id);
+            editorRef.current.updateEngine(engine);
+        },
+        [editorRef, engine],
+    );
 
-    const deleteBehavior = useCallback((node) => {
-        action("Delete Behavior")(node);
-        engine.removeNode(node.id);
-        editorRef.current.updateEngine(engine);
+    const deleteBehavior = useCallback(
+        (node) => {
+            action("Delete Behavior")(node);
+            engine.removeNode(node.id);
+            editorRef.current.updateEngine(engine);
+        },
+        [engine, editorRef],
+    );
 
-    }, [engine, editorRef]); 
+    const deleteTransition = useCallback(
+        (edge) => {
+            action("Delete Transition")(edge);
+            const fromNode = engine.getNode(edge.from);
+            fromNode.removeGoToBehavior(edge.to);
+            editorRef.current.updateEngine(engine);
+        },
+        [engine, editorRef],
+    );
 
     return (
         <div className="graphBuilderRootContainer">
             <div className="toolbar">
-                <ToolBar onSelectTool={selectTool}/>
+                <ToolBar onSelectTool={selectTool} />
             </div>
             <div className="flow">
-                <BehavioralGraphBuilder ref={editorRef} {...args} connectBehaviors={connectBehaviors} deleteBehavior={deleteBehavior}/> 
+                <BehavioralGraphBuilder
+                    ref={editorRef}
+                    {...args}
+                    connectBehaviors={connectBehaviors}
+                    deleteTransition={deleteTransition}
+                    deleteBehavior={deleteBehavior}
+                />
             </div>
         </div>
-    )
-}
+    );
+};
 
-
-export const Default = Template.bind({})
+export const Default = Template.bind({});
 
 Default.args = {
-    design: design
-}
+    design: design,
+};

@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef, useImperativeHandle, forwardRef, useMemo, useCallback } from "react";
-import { Canvas, Node, Edge } from 'reaflow';
+import { Canvas, Node, Edge, removeAndUpsertNodes  } from 'reaflow';
 import PropTypes from 'prop-types';
 
 import { designToNodes } from "./helper";
@@ -11,7 +11,7 @@ import "./BehavioralGraphBuilder.scss";
  * 
  * @return {JSX}
  */
-export const BehavioralGraphBuilder = forwardRef(({connectBehaviors, deleteBehavior}, ref) => {
+export const BehavioralGraphBuilder = forwardRef(({connectBehaviors, deleteTransition, deleteBehavior}, ref) => {
 
     // Resizer to set canvas size to match container
     // TODO: Issues with zooming and resizing, need to explore.
@@ -75,9 +75,6 @@ export const BehavioralGraphBuilder = forwardRef(({connectBehaviors, deleteBehav
                     onRemove={(event, node) => {
                         console.log('Removing Node', event, node);
                         deleteBehavior(node);
-                        const result = removeAndUpsertNodes(nodes, edges, node);
-                        setEdges(result.edges);
-                        setNodes(result.nodes);
                         setSelections([]);
                     }}
                 />
@@ -90,7 +87,7 @@ export const BehavioralGraphBuilder = forwardRef(({connectBehaviors, deleteBehav
                     }}
                     onRemove={(event, edge) => {
                         console.log('Removing Edge', event, edge);
-                        setEdges(edges.filter(e => e.id !== edge.id));
+                        deleteTransition(edge);
                         setSelections([]);
                     }}
                 />
