@@ -21,7 +21,7 @@ export default {
         },
     ],
     plugins: [
-        external(['react', 'react-dom', '@dnd-kit/core']),
+        external(['react', 'react-dom', '@dnd-kit/core',"reaflow"]),
         resolve({
             extensions: ['.js', '.jsx'],
         }),
