@@ -23,8 +23,6 @@ export const designToNodes = (engine) => {
             continue;
         }
 
-        console.log(node);
-
         node.getGoToBehaviors().forEach((goTo) => {
             edges.push({
                 id: `${node.getBehavior().name}->${goTo}`,
