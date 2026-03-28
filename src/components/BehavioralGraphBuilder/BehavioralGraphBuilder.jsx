@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef, useImperativeHandle, forwardRef, useMemo, useCallback } from "react";
-import { Canvas } from 'reaflow';
+import { Canvas, Node, Edge } from 'reaflow';
 import PropTypes from 'prop-types';
 
 import { designToNodes } from "./helper";
@@ -30,7 +30,8 @@ export const BehavioralGraphBuilder = forwardRef(({connectBehaviors, deleteBehav
 
     const [edges, setEdges] = useState([]);
     const [nodes, setNodes] = useState([]);
-
+    const [selections, setSelections] = useState([]);
+'1'
     const onNodeLink =(_event, from, to) => {
         connectBehaviors(from, to);
     }
@@ -65,6 +66,39 @@ export const BehavioralGraphBuilder = forwardRef(({connectBehaviors, deleteBehav
                 onNodeLink={onNodeLink}
                 onNodeRemove={onNodeRemove}
                 panType="drag"
+                selections={selections}node={
+                <Node
+                    onClick={(event, node) => {
+                        console.log('Selecting Node', event, node);
+                        setSelections([node.id]);
+                    }}
+                    onRemove={(event, node) => {
+                        console.log('Removing Node', event, node);
+                        deleteBehavior(node);
+                        const result = removeAndUpsertNodes(nodes, edges, node);
+                        setEdges(result.edges);
+                        setNodes(result.nodes);
+                        setSelections([]);
+                    }}
+                />
+                }
+                edge={
+                <Edge
+                    onClick={(event, edge) => {
+                        console.log('Selecting Edge', event, edge);
+                        setSelections([edge.id]);
+                    }}
+                    onRemove={(event, edge) => {
+                        console.log('Removing Edge', event, edge);
+                        setEdges(edges.filter(e => e.id !== edge.id));
+                        setSelections([]);
+                    }}
+                />
+                }
+                onCanvasClick={(event) => {
+                    console.log('Canvas Clicked', event);
+                    setSelections([]);
+                }}
                 fit
                 center
             />

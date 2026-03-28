@@ -12,19 +12,24 @@ export const designToNodes = (engine) => {
     for (let i = 0; i < engine.graph.nodes.length; i++) {
         const node = engine.graph.nodes[i];
         nodes.push({
-            id: node.behavior.uid,
+            id: node.behavior.name,
             text: node.behavior.name,
         });
-
-        if (!node?.goToBehaviors) {
+    }
+    
+    for (let i = 0; i < engine.graph.nodes.length; i++) {
+        const node = engine.graph.nodes[i];
+        if (!node?.goToBehaviorsIds) {
             continue;
         }
 
-        node.goToBehaviors.forEach((goTo) => {
+        console.log(node);
+
+        node.goToBehaviorsIds.forEach((goTo) => {
             edges.push({
-                id: `${node.behavior.uid}->${goTo.uid}`,
-                from: node.behavior.uid,
-                to: goTo.uid,
+                id: `${node.behavior.name}->${goTo}`,
+                from: node.behavior.name,
+                to: goTo,
             });
         });
     }
