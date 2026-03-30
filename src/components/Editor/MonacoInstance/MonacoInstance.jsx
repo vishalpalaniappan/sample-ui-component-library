@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import Editor from '@monaco-editor/react';
@@ -96,6 +96,16 @@ export const MonacoInstance = ({ }) => {
         };
     }, []);
 
+
+    const handleWheel = useCallback((e) => {
+        if (!editorRef.current) return;
+
+        const deltaY = e.deltaY;
+        const currentScrollTop = editorRef.current.getScrollTop();
+        editorRef.current.setScrollTop(currentScrollTop + deltaY);
+        addOverlay(10,13);
+    }, []);
+
     /**
      * Render the editor if there is an active tab, otherwise render a placeholder message.
      * @returns JSX
@@ -119,7 +129,7 @@ export const MonacoInstance = ({ }) => {
     return (
         <div className="editor-container" ref={containerRef}>
             {renderEditor()}
-            <div className="overlay-layer">
+            <div className="overlay-layer" onWheel={handleWheel}>
                 <div style={overlayStyle}  className="line-block-overlay"></div>
             </div>
         </div>
