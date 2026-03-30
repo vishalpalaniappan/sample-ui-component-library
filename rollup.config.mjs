@@ -1,13 +1,19 @@
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import terser from '@rollup/plugin-terser';
-import external from 'rollup-plugin-peer-deps-external';
+import peerDepsExternal  from 'rollup-plugin-peer-deps-external';
 import postcss from 'rollup-plugin-postcss';
 import json from '@rollup/plugin-json';
 import { babel } from '@rollup/plugin-babel';
 
 export default {
     input: 'src/index.js',
+    external: [
+        'react',
+        'react-dom',
+        '@dnd-kit/core',
+        "reaflow"
+    ],
     output: [
         {
             file: 'dist/cjs/index.js',
@@ -21,7 +27,7 @@ export default {
         },
     ],
     plugins: [
-        external(['react', 'react-dom', '@dnd-kit/core',"reaflow"]),
+        peerDepsExternal(),
         resolve({
             extensions: ['.js', '.jsx'],
         }),
