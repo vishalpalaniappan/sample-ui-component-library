@@ -12,3 +12,19 @@
     width:100%;
     height: 100%;
 }
+
+.overlay-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none; 
+}
+
+.line-block-overlay {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top:100px;
+    bottom:200px;
+    background-color: rgba(255, 0, 0, 0.3);
+    border: 1px solid rgba(255, 0, 0, 0.5);
+}

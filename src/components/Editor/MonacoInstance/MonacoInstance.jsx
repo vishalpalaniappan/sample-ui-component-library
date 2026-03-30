@@ -113,7 +113,9 @@ export const MonacoInstance = ({ }) => {
     return (
         <div className="editor-container" ref={containerRef}>
             {renderEditor()}
-            <div id="overlay-layer"></div>
+            <div className="overlay-layer">
+                <div className="line-block-overlay"></div>
+            </div>
         </div>
     )
 }
