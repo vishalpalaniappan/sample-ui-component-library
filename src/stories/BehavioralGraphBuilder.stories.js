@@ -51,7 +51,6 @@ const Template = (args) => {
     useEffect(() => {
         if (editorRef.current) {
             const engine = new DALEngine({ name: "testEngine" });
-            // engine.deserialize(JSON.stringify(design));
             setEngine(engine);
             editorRef.current.updateEngine(engine);
             setTimeout(() => {
