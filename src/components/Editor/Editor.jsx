@@ -17,6 +17,11 @@ import { EditorContext } from "./EditorContext";
 
 import { editorReducer, initialState } from "./EditorReducer";
 
+const MODES = {
+    MAPPING: 1,
+    IMPLEMENTATION: 2
+}
+
 /**
  * Renders the editor component with support for tabs.
  * 
