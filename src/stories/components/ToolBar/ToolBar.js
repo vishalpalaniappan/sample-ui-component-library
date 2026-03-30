@@ -30,12 +30,13 @@ export function ToolBar({ onSelectTool }) {
           className="icon"
         />
       </div>
-      <div className="toolbarContainer bottom"></div>
+      <div className="toolbarContainer bottom">
         <Floppy
           onClick={(e) => selectTool("save")}
           title="Save Design"
           className="icon"
         />
+      </div>
     </div>
   );
 }
