@@ -16,6 +16,7 @@ export const MonacoInstance = ({ }) => {
     const content = useRef();
     const containerRef = useRef(null);
     const frameRef = useRef(0);
+    const [overlayStyle, setOverlayStyle] = useState();
 
     useEffect(() => {
         if (state.activeTab) {
@@ -45,14 +46,21 @@ export const MonacoInstance = ({ }) => {
         }
         editorRef.current.layout();
 
-        addOverlay(10,12);
+        addOverlay(10,13);
     }
 
     const addOverlay = (startLine, endLine) => {
         if (!editorRef.current) return;
 
         const top = editorRef.current.getTopForLineNumber(startLine) - editorRef.current.getScrollTop();
-        const bottom = editorRef.current.getTopForLineNumber(endLine) - editorRef.current.getScrollTop();
+        const bottom = editorRef.current.getTopForLineNumber(endLine + 1) - editorRef.current.getScrollTop();
+
+        console.log(top, bottom);
+
+        setOverlayStyle({
+            top: top + "px",
+            height: (bottom - top) + "px"
+        });
     }
 
     // Editor options for Monaco Editor.
@@ -114,7 +122,7 @@ export const MonacoInstance = ({ }) => {
         <div className="editor-container" ref={containerRef}>
             {renderEditor()}
             <div className="overlay-layer">
-                <div className="line-block-overlay"></div>
+                <div style={overlayStyle}  className="line-block-overlay"></div>
             </div>
         </div>
     )
