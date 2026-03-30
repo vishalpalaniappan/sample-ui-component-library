@@ -55,8 +55,6 @@ export const MonacoInstance = ({ }) => {
         const top = editorRef.current.getTopForLineNumber(startLine) - editorRef.current.getScrollTop();
         const bottom = editorRef.current.getTopForLineNumber(endLine + 1) - editorRef.current.getScrollTop();
 
-        console.log(top, bottom);
-
         setOverlayStyle({
             top: top + "px",
             height: (bottom - top) + "px"
