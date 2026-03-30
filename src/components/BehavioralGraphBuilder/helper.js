@@ -1,11 +1,10 @@
 
 /**
- * Converts a DAL design specification object into React Flow elements (nodes and edges).
- * @param {Object} design 
+ * Converts a DAL design specification object into nodes and edges for reaflow.
+ * @param {Object} engine - The engine instance containing the design specification.
  * @returns {Object} An object containing nodes and edges for React Flow
  */
 export const designToNodes = (engine) => {
-
     let edges = [];
     let nodes = [];
 
