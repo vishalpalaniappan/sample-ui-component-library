@@ -44,6 +44,15 @@ export const MonacoInstance = ({ }) => {
             editorRef.current.setValue(content.current);
         }
         editorRef.current.layout();
+
+        addOverlay(10,12);
+    }
+
+    const addOverlay = (startLine, endLine) => {
+        if (!editorRef.current) return;
+
+        const top = editorRef.current.getTopForLineNumber(startLine) - editorRef.current.getScrollTop();
+        const bottom = editorRef.current.getTopForLineNumber(endLine) - editorRef.current.getScrollTop();
     }
 
     // Editor options for Monaco Editor.
@@ -104,6 +113,7 @@ export const MonacoInstance = ({ }) => {
     return (
         <div className="editor-container" ref={containerRef}>
             {renderEditor()}
+            <div id="overlay-layer"></div>
         </div>
     )
 }
