@@ -53,11 +53,12 @@ const Template = (args) => {
             const engine = new DALEngine({ name: "testEngine" });
             setEngine(engine);
             editorRef.current.updateEngine(engine);
-            setTimeout(() => {
+            const timerId = setTimeout(() => {
                 engine.addNode("testBehavior", []);
                 engine.addNode("testBehavior2", []);
                 editorRef.current.updateEngine(engine);
             }, 4000);
+            return () => clearTimeout(timerId);
         }
     }, [design, editorRef]);
 
