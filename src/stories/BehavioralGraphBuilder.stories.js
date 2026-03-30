@@ -46,7 +46,7 @@ const Template = (args) => {
             activeTool: activeTool,
             design: design,
         });
-    }, []);
+    }, [activeTool, design]);
 
     useEffect(() => {
         if (editorRef.current) {
