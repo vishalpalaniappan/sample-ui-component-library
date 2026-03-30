@@ -16,6 +16,7 @@
 .overlay-layer {
   position: absolute;
   inset: 0;
+  overflow:hidden;
 }
 
 .line-block-overlay {
@@ -23,9 +24,9 @@
     position: absolute;
     left: 0;
     right: 0;
-    background-color: rgba(0, 255, 0, 0.1);
 }
 
 .line-block-overlay:hover {
-    background-color: rgba(255, 0, 0, 0.1);
+    background-color: rgba(255, 166, 0, 0.3);
+    cursor: pointer;
 }

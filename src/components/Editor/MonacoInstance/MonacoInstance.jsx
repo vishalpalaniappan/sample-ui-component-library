@@ -16,8 +16,9 @@ export const MonacoInstance = ({ }) => {
     const content = useRef();
     const containerRef = useRef(null);
     const frameRef = useRef(0);
-    const [overlayStyle, setOverlayStyle] = useState({});
+
     const [overlayDivs, setOverlayDivs] = useState();
+    const [overlayRanges, setOverlayRanges] = useState();
 
     useEffect(() => {
         if (state.activeTab) {
@@ -47,7 +48,17 @@ export const MonacoInstance = ({ }) => {
         }
         editorRef.current.layout();
 
-        addOverlays([[10,13],[2,4],[15,17]]);
+        const lineCount = editor.getModel().getLineCount();
+
+        const ranges = [];
+        for (let i = 1; i <= lineCount; i++) {
+            const startLine = i;
+            const endLine = i;
+            ranges.push([startLine, endLine]);
+        }
+
+        setOverlayRanges(ranges);
+        addOverlays(ranges);
     }
 
     // Add overlays to editor for the given line ranges.
@@ -71,8 +82,8 @@ export const MonacoInstance = ({ }) => {
         const deltaY = e.deltaY;
         const currentScrollTop = editorRef.current.getScrollTop();
         editorRef.current.setScrollTop(currentScrollTop + deltaY);
-        addOverlays([[10,13],[2,4],[15,17]]);     
-    }, []);
+        addOverlays(overlayRanges);     
+    }, [overlayRanges]);
 
 
 
