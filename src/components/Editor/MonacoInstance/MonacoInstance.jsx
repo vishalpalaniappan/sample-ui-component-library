@@ -16,7 +16,8 @@ export const MonacoInstance = ({ }) => {
     const content = useRef();
     const containerRef = useRef(null);
     const frameRef = useRef(0);
-    const [overlayStyle, setOverlayStyle] = useState();
+    const [overlayStyle, setOverlayStyle] = useState({});
+    const [overlayDivs, setOverlayDivs] = useState();
 
     useEffect(() => {
         if (state.activeTab) {
@@ -46,20 +47,34 @@ export const MonacoInstance = ({ }) => {
         }
         editorRef.current.layout();
 
-        addOverlay(10,13);
+        addOverlays([[10,13],[2,4],[15,17]]);
     }
 
-    const addOverlay = (startLine, endLine) => {
+    // Add overlays to editor for the given line ranges.
+    const addOverlays = (ranges) => {
         if (!editorRef.current) return;
 
-        const top = editorRef.current.getTopForLineNumber(startLine) - editorRef.current.getScrollTop();
-        const bottom = editorRef.current.getTopForLineNumber(endLine + 1) - editorRef.current.getScrollTop();
+        const divs = [];
 
-        setOverlayStyle({
-            top: top + "px",
-            height: (bottom - top) + "px"
+        ranges.forEach(([startLine, endLine]) => {
+             const top = editorRef.current.getTopForLineNumber(startLine) - editorRef.current.getScrollTop();
+             const bottom = editorRef.current.getTopForLineNumber(endLine + 1) - editorRef.current.getScrollTop();
+             const overlayDiv = <div className="line-block-overlay" style={{ top: top + "px", height: (bottom - top) + "px" }}></div>;
+             divs.push(overlayDiv);
         });
+        setOverlayDivs(divs);
     }
+
+    // Scroll the editor and update overlays on wheel event.
+    const handleWheel = useCallback((e) => {
+        if (!editorRef.current) return;
+        const deltaY = e.deltaY;
+        const currentScrollTop = editorRef.current.getScrollTop();
+        editorRef.current.setScrollTop(currentScrollTop + deltaY);
+        addOverlays([[10,13],[2,4],[15,17]]);     
+    }, []);
+
+
 
     // Editor options for Monaco Editor.
     const editorOptions = {
@@ -96,16 +111,6 @@ export const MonacoInstance = ({ }) => {
         };
     }, []);
 
-
-    const handleWheel = useCallback((e) => {
-        if (!editorRef.current) return;
-
-        const deltaY = e.deltaY;
-        const currentScrollTop = editorRef.current.getScrollTop();
-        editorRef.current.setScrollTop(currentScrollTop + deltaY);
-        addOverlay(10,13);
-    }, []);
-
     /**
      * Render the editor if there is an active tab, otherwise render a placeholder message.
      * @returns JSX
@@ -130,7 +135,7 @@ export const MonacoInstance = ({ }) => {
         <div className="editor-container" ref={containerRef}>
             {renderEditor()}
             <div className="overlay-layer" onWheel={handleWheel}>
-                <div style={overlayStyle}  className="line-block-overlay"></div>
+                {overlayDivs}
             </div>
         </div>
     )
