@@ -52,15 +52,10 @@ const Template = (args) => {
             }
         });
 
-
-        const node = {
-            "name": "SAMPLE",
-            "type": "file",
-            "uid": "dissr-f6459410-1634-4dbc-8d76-35896822158d",
-            "content": "1234"
-        }
-
-        editorRef.current.addTab(node,2);
+        const result = flattenTree(WorkspaceSampleTree.tree).find(
+            (obj) => obj.name === "library_manager.py"
+        );
+        editorRef.current.addTab(result);
     }, []);
 
 const [dragging, setDragging] = useState(false);
