@@ -53,7 +53,9 @@ export const BehavioralGraphBuilder = forwardRef(({connectBehaviors, deleteTrans
 
     // Callbacks
     const handleWheel = useCallback((e) => {
-        (e.deltaY < 0)?canvasRef.current.zoomIn():canvasRef.current.zoomOut();
+        if (canvasRef.current) {
+            (e.deltaY < 0)?canvasRef.current.zoomIn():canvasRef.current.zoomOut();
+        }
     }, [canvasRef]);
 
     const nodeClick = useCallback((e, node) => {
