@@ -46,6 +46,7 @@
     "@storybook/test": "^8.6.11",
     "@storybook/theming": "^8.6.11",
     "css-loader": "^7.1.2",
+    "dal-engine-core-js-lib-dev": "^0.0.4",
     "gh-pages": "^6.3.0",
     "prop-types": "^15.8.1",
     "raw-loader": "^4.0.2",
@@ -70,7 +71,6 @@
     "@dagrejs/dagre": "^1.1.4",
     "@monaco-editor/react": "^4.7.0",
     "@xyflow/react": "^12.6.0",
-    "dal-engine-core-js-lib-dev": "^0.0.4",
     "react-bootstrap-icons": "^1.11.5"
   }
 }
