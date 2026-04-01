@@ -14,13 +14,15 @@
 }
 
 .overlay-layer {
-  position: absolute;
-  inset: 0;
-  overflow:hidden;
+    position: absolute; 
+    left: 0;
+    right: 0;
+    inset: 0;
+    overflow:hidden;
 }
 
 .line-block-overlay {
-    z-index:999;
+    z-index: 999;
     position: absolute;
     left: 0;
     right: 0;
