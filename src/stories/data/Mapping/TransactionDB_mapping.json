@@ -1,0 +1,221 @@
+[
+    {
+        "type": "Import",
+        "uid": "a1667074-7041-4a37-8c9f-9b119c697652",
+        "start_line": 1,
+        "end_line": 1,
+        "source": "import sqlite3"
+    },
+    {
+        "type": "Import",
+        "uid": "13e6e627-614a-4d42-bd2b-a827e4cbdd31",
+        "start_line": 2,
+        "end_line": 2,
+        "source": "import atexit"
+    },
+    {
+        "type": "Import",
+        "uid": "bf72c648-414c-469d-bd18-984b4808cc19",
+        "start_line": 3,
+        "end_line": 3,
+        "source": "import uuid"
+    },
+    {
+        "type": "ClassDef",
+        "uid": "744e229f-b3dd-4af5-833d-a77ffef4b503",
+        "start_line": 5,
+        "end_line": 5,
+        "source": [
+            "class TransactionDB():"
+        ]
+    },
+    {
+        "type": "FunctionDef",
+        "uid": "ca716786-e419-48d5-84ad-344902bc682d",
+        "start_line": 7,
+        "end_line": 7,
+        "source": [
+            "    def __init__(self):"
+        ]
+    },
+    {
+        "type": "FunctionDef",
+        "uid": "7237343f-52b4-4d61-be2c-b7066854696d",
+        "start_line": 11,
+        "end_line": 11,
+        "source": [
+            "    def cleanup_function(self):"
+        ]
+    },
+    {
+        "type": "FunctionDef",
+        "uid": "0670b013-72d0-4322-b461-a9f4329edc6c",
+        "start_line": 14,
+        "end_line": 14,
+        "source": [
+            "    def initializeDB(self):"
+        ]
+    },
+    {
+        "type": "FunctionDef",
+        "uid": "f2b6b529-771b-4848-9c46-b4e899e6a05b",
+        "start_line": 32,
+        "end_line": 32,
+        "source": [
+            "    def addJob(self, data):"
+        ]
+    },
+    {
+        "type": "FunctionDef",
+        "uid": "21037a51-3c3c-48fa-ad6b-3fd2a63930f4",
+        "start_line": 48,
+        "end_line": 48,
+        "source": [
+            "    def addTranslation(self, msg):"
+        ]
+    },
+    {
+        "type": "FunctionDef",
+        "uid": "2fb7e6b7-852e-47f7-ba61-20cf5aa7d33f",
+        "start_line": 60,
+        "end_line": 60,
+        "source": [
+            "    def isDone(self, uid):"
+        ]
+    },
+    {
+        "type": "FunctionDef",
+        "uid": "126d088f-3f1f-4ad5-b1cc-15d5c0f2da0f",
+        "start_line": 75,
+        "end_line": 75,
+        "source": [
+            "    def setDone(self, uid):"
+        ]
+    },
+    {
+        "type": "Expr",
+        "uid": "433bea9b-b0ba-4f29-9ba1-692c0a567a56",
+        "start_line": 8,
+        "end_line": 8,
+        "source": "atexit.register(self.cleanup_function)"
+    },
+    {
+        "type": "Expr",
+        "uid": "80979fa9-4213-4a70-aa68-9c16ca651a50",
+        "start_line": 9,
+        "end_line": 9,
+        "source": "self.initializeDB()"
+    },
+    {
+        "type": "Expr",
+        "uid": "f7144244-b7d7-40f3-8a86-7a8b0a60f354",
+        "start_line": 12,
+        "end_line": 12,
+        "source": "self.conn.close()"
+    },
+    {
+        "type": "Assign",
+        "uid": "96d2695b-31d1-4395-8e39-b703b0ed45ca",
+        "start_line": 16,
+        "end_line": 16,
+        "source": "self.conn = sqlite3.connect(\"translations.db\")"
+    },
+    {
+        "type": "Assign",
+        "uid": "cc721e23-3fc0-4511-82ee-3259f47bad6f",
+        "start_line": 17,
+        "end_line": 17,
+        "source": "self.cursor = self.conn.cursor()"
+    },
+    {
+        "type": "Expr",
+        "uid": "c821456f-ff27-470d-a8fe-79a6de2869a9",
+        "start_line": 19,
+        "end_line": 29,
+        "source": "self.cursor.execute(\"\"\"\n        CREATE TABLE IF NOT EXISTS translation_jobs (\n            job_id   INTEGER PRIMARY KEY AUTOINCREMENT,\n            uid      TEXT NOT NULL UNIQUE,\n            english  TEXT NOT NULL,\n            french   TEXT,\n            spanish  TEXT,\n            tamil    TEXT,\n            done     INTEGER NOT NULL DEFAULT 0\n        );\n        \"\"\")"
+    },
+    {
+        "type": "Expr",
+        "uid": "b71ce3b6-d60d-4b0d-9a3b-88f0d39af32b",
+        "start_line": 30,
+        "end_line": 30,
+        "source": "self.conn.commit()"
+    },
+    {
+        "type": "Assign",
+        "uid": "b14271fb-25bd-4a33-9788-4a132b0a1db7",
+        "start_line": 33,
+        "end_line": 33,
+        "source": "uid = str(uuid.uuid4())"
+    },
+    {
+        "type": "Expr",
+        "uid": "3d9037de-9f3f-436e-a2fa-9f5dadab2e12",
+        "start_line": 34,
+        "end_line": 40,
+        "source": "self.conn.execute(\n            \"\"\"\n            INSERT INTO translation_jobs (uid, english)\n            VALUES (?, ?)\n            \"\"\",\n            (uid, data)\n        )"
+    },
+    {
+        "type": "Expr",
+        "uid": "8a1a1898-6fee-4f0c-a8f3-dd0d9ce2b328",
+        "start_line": 41,
+        "end_line": 41,
+        "source": "self.conn.commit()"
+    },
+    {
+        "type": "Return",
+        "uid": "d4b3f729-1778-4d70-bdc8-4d7aed27455d",
+        "start_line": 43,
+        "end_line": 46,
+        "source": "return {\n            \"uid\": uid,\n            \"value\": {\"data\": data}\n        }"
+    },
+    {
+        "type": "Expr",
+        "uid": "777b1041-5b87-43c4-806e-24e553be3862",
+        "start_line": 49,
+        "end_line": 56,
+        "source": "self.conn.execute(\n            f\"\"\"\n            UPDATE translation_jobs\n            SET {msg[\"value\"][\"language\"]} = ?\n            WHERE uid = ?\n            \"\"\",\n            (msg[\"value\"][\"translated\"], msg[\"uid\"])\n        )"
+    },
+    {
+        "type": "Expr",
+        "uid": "7787bd74-1e3e-42e1-843f-38976c63cf59",
+        "start_line": 57,
+        "end_line": 57,
+        "source": "self.conn.commit()"
+    },
+    {
+        "type": "Assign",
+        "uid": "00dea7a4-d351-476b-b2c1-a52fb52e0352",
+        "start_line": 61,
+        "end_line": 71,
+        "source": "cur = self.conn.execute(\n            \"\"\"\n            SELECT\n                french  IS NOT NULL\n            AND spanish IS NOT NULL\n            AND tamil   IS NOT NULL\n            FROM translation_jobs\n            WHERE uid = ?\n            \"\"\",\n            (uid,)\n        )"
+    },
+    {
+        "type": "Assign",
+        "uid": "8ea9eec3-4454-46ff-a235-a47e3c7e147e",
+        "start_line": 72,
+        "end_line": 72,
+        "source": "row = cur.fetchone()"
+    },
+    {
+        "type": "Return",
+        "uid": "4eba8b2e-c6ab-4bf2-bddc-6794abff14fa",
+        "start_line": 73,
+        "end_line": 73,
+        "source": "return bool(row[0]) if row else False"
+    },
+    {
+        "type": "Expr",
+        "uid": "05da6f22-2196-4c1f-9768-290dba8ea1e2",
+        "start_line": 76,
+        "end_line": 83,
+        "source": "self.conn.execute(\n            \"\"\"\n            UPDATE translation_jobs\n            SET done = 1\n            WHERE uid = ?\n            \"\"\",\n            (uid,)\n        )"
+    },
+    {
+        "type": "Expr",
+        "uid": "2a241283-b64a-43c6-90d4-e56c7abe8730",
+        "start_line": 84,
+        "end_line": 84,
+        "source": "self.conn.commit()"
+    }
+]
