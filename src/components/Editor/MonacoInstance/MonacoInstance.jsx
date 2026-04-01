@@ -26,6 +26,8 @@ export const MonacoInstance = ({ }) => {
             setShowEditor(true);
             if (state.activeTab.mapping) {
                 addOverlays(state.activeTab.mapping);
+            } else {
+                setOverlayDivs([]);
             }
         } else {
             setShowEditor(false);
@@ -50,17 +52,27 @@ export const MonacoInstance = ({ }) => {
             editorRef.current.setValue(content.current);
         }
         editorRef.current.layout();
-        
-        addOverlays(state.activeTab.mapping);
+        if (state.activeTab?.mapping) {
+            addOverlays(state.activeTab.mapping);
+        } else {
+            setOverlayDivs([]);
+        }
     }, [state.activeTab]);
 
     // Add overlays to editor for the given line ranges.
     const addOverlays = useCallback((ranges) => {
         if (!editorRef.current) return;
+
+        const lineCount = editorRef.current.getModel().getLineCount();
+        const lineHeight = editorRef.current.getOption(monaco.editor.EditorOption.lineHeight);
+        
         const divs = [];
         ranges.forEach((entry) => {
              const top = editorRef.current.getTopForLineNumber(entry.start_line) - editorRef.current.getScrollTop();
-             const bottom = editorRef.current.getTopForLineNumber(entry.end_line + 1) - editorRef.current.getScrollTop();
+             let bottom = editorRef.current.getTopForLineNumber(entry.end_line + 1) - editorRef.current.getScrollTop();
+            if (entry.end_line >= lineCount) {
+                bottom = bottom + lineHeight;
+            }
              const overlayDiv = <div className="line-block-overlay" style={{ top: top + "px", height: (bottom - top) + "px" }}></div>;
              divs.push(overlayDiv);
         });
@@ -73,7 +85,11 @@ export const MonacoInstance = ({ }) => {
         const deltaY = e.deltaY;
         const currentScrollTop = editorRef.current.getScrollTop();
         editorRef.current.setScrollTop(currentScrollTop + deltaY);
-        addOverlays(state.activeTab.mapping); 
+        if (state.activeTab?.mapping) {
+            addOverlays(state.activeTab.mapping);
+        } else {
+            setOverlayDivs([]);
+        }
     }, [overlayRanges, state.activeTab]);
 
 

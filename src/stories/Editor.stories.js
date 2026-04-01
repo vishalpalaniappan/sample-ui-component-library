@@ -47,11 +47,11 @@ const Template = (args) => {
 
     useLayoutEffect(() => {
         editorRef.current.setTabGroupId("tab-group-1");
-        // flattenTree(WorkspaceSampleTree.tree).forEach((node, index) => {
-        //     if (node.type === "file") {
-        //         editorRef.current.addTab(node);
-        //     }
-        // });
+        flattenTree(WorkspaceSampleTree.tree).forEach((node, index) => {
+            if (node.type === "file") {
+                editorRef.current.addTab(node);
+            }
+        });
 
         const result = flattenTree(WorkspaceSampleTree.tree).find(
             (obj) => obj.name === "FrenchTranslator.py"
