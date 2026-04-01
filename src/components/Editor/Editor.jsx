@@ -50,6 +50,10 @@ export const Editor = forwardRef(({ }, ref) => {
         dispatch({ type: "RESET_STATE"});
         dispatch({ type: "SET_PARENT_TAB_GROUP_ID", payload: id });
     }, []);
+    
+    const setMapping = useCallback((fileName, mapping) => {
+        dispatch({ type: "SET_MAPPING", payload: { fileName, mapping } });
+    }, []);
 
     const api = useMemo(() => {
         return {
@@ -58,9 +62,10 @@ export const Editor = forwardRef(({ }, ref) => {
             setTabGroupId,
             selectTab,
             closeTab,
-            moveTab
+            moveTab,
+            setMapping
         };
-    }, [state, addTab, selectTab, closeTab, moveTab, setTabGroupId]);
+    }, [state, addTab, selectTab, closeTab, moveTab, setTabGroupId, setMapping]);
 
     useImperativeHandle(ref, () => api, [api]);
 

@@ -99,6 +99,25 @@ export const editorReducer = (state, action) => {
                 tabs: prevTabs
             };
         }
+
+        case "SET_MAPPING": {
+            const { mapping, fileName } = action.payload;
+            console.log(state);
+            for (let i = 0; i < state.tabs.length; i++) {
+                const tab = state.tabs[i];
+                if (tab.name === fileName) {
+                    const updatedTab = { ...tab, mapping: mapping };
+                    const newTabs = [...state.tabs];
+                    newTabs[i] = updatedTab;
+                    return {
+                        ...state,
+                        tabs: newTabs,
+                        activeTab: updatedTab
+                    };
+                }
+            }
+            return state;
+        }
         
         case "RESET_STATE": {
             return initialState;

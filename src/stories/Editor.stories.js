@@ -11,6 +11,7 @@ import {
 } from "@dnd-kit/core";
 
 import WorkspaceSampleTree from "./data/FileBrowser/workspace_sample.json"
+import mapping from "./data/Mapping/mapping.json"
 
 import "./EditorStories.scss"
 
@@ -46,16 +47,17 @@ const Template = (args) => {
 
     useLayoutEffect(() => {
         editorRef.current.setTabGroupId("tab-group-1");
-        flattenTree(WorkspaceSampleTree.tree).forEach((node, index) => {
-            if (node.type === "file") {
-                editorRef.current.addTab(node);
-            }
-        });
+        // flattenTree(WorkspaceSampleTree.tree).forEach((node, index) => {
+        //     if (node.type === "file") {
+        //         editorRef.current.addTab(node);
+        //     }
+        // });
 
         const result = flattenTree(WorkspaceSampleTree.tree).find(
-            (obj) => obj.name === "library_manager.py"
+            (obj) => obj.name === "FrenchTranslator.py"
         );
         editorRef.current.addTab(result);
+        editorRef.current.setMapping("FrenchTranslator.py", mapping);
     }, []);
 
 const [dragging, setDragging] = useState(false);
