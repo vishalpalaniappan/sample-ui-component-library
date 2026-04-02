@@ -147,7 +147,7 @@ export const MonacoInstance = ({ }) => {
         <div className="editor-container" ref={containerRef}>
             {renderEditor()}
             {
-                state.mode === EDITOR_MODES.MAPPING && state.mapping.get(state.activeTab?.name) && overlayDivs &&
+                state.mode === EDITOR_MODES.MAPPING &&
                 <div className="overlay-layer" onWheel={handleWheel}>
                     {overlayDivs}
                 </div>
