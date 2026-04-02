@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef, useLayoutEffect } from "react";
 import { Editor } from "../components/Editor";
 import { useArgs } from "@storybook/preview-api";
+import EDITOR_MODES from "../components/Editor/EDITOR_MODES";
 import { action } from "@storybook/addon-actions";
 import {
     DndContext,
@@ -58,11 +59,14 @@ const Template = (args) => {
             (obj) => obj.name === "TransactionDB.py"
         );
         editorRef.current.addTab(result);
-        // editorRef.current.setMapping("FrenchTranslator.py", mapping);
         editorRef.current.setMapping("TransactionDB.py", transactiondb_mapping);
+
+        setTimeout(() => {
+            editorRef.current.setMode(EDITOR_MODES.MAPPING);
+        }, 4000);
     }, []);
 
-const [dragging, setDragging] = useState(false);
+    const [dragging, setDragging] = useState(false);
   
     /**
      * Callback for when drag ends.

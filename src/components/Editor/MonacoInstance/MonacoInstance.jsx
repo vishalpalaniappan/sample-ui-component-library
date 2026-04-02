@@ -56,7 +56,7 @@ export const MonacoInstance = ({ }) => {
     const addOverlays = useCallback(() => {
         if (!editorRef.current) return;
 
-        if (state.mode !== EDITOR_MODES.DESIGN || !state.activeTab?.mapping) {
+        if (state.mode !== EDITOR_MODES.MAPPING || !state.activeTab?.mapping) {
             setOverlayDivs([]);
             return;
         }
@@ -111,7 +111,7 @@ export const MonacoInstance = ({ }) => {
             cancelAnimationFrame(frameRef.current);
             frameRef.current = requestAnimationFrame(() => {
                 editorRef.current?.layout();
-                addOverlays(state.activeTab.mapping); 
+                addOverlays(); 
             });
         });
 
@@ -147,7 +147,7 @@ export const MonacoInstance = ({ }) => {
         <div className="editor-container" ref={containerRef}>
             {renderEditor()}
             {
-                state.mode === EDITOR_MODES.DESIGN && state.activeTab?.mapping && overlayDivs &&
+                state.mode === EDITOR_MODES.MAPPING && state.activeTab?.mapping && overlayDivs &&
                 <div className="overlay-layer" onWheel={handleWheel}>
                     {overlayDivs}
                 </div>

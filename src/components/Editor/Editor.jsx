@@ -56,7 +56,7 @@ export const Editor = forwardRef(({ }, ref) => {
     }, []);
     
     const setMode = useCallback((mode) => {
-        dispatch({ type: "SET_DESIGN", payload: mode });
+        dispatch({ type: "SET_MODE", payload: mode });
     }, []);
 
     const api = useMemo(() => {
