@@ -9,7 +9,7 @@ import "./MonacoInstance.scss"
 
 import { useEditor } from "../Editor";
 
-export const MonacoInstance = ({ }) => {
+export const MonacoInstance = ({onSelectAbstraction}) => {
     const { state } = useEditor();
     const [editorContent, setEditorContent] = useState("Loading content...");
     const [showEditor, setShowEditor] = useState(false);
@@ -67,16 +67,25 @@ export const MonacoInstance = ({ }) => {
         const divs = [];
 
         ranges.forEach((entry) => {
-             const top = editorRef.current.getTopForLineNumber(entry.start_line) - editorRef.current.getScrollTop();
-             let bottom = editorRef.current.getTopForLineNumber(entry.end_line + 1) - editorRef.current.getScrollTop();
+            const top = editorRef.current.getTopForLineNumber(entry.start_line) - editorRef.current.getScrollTop();
+            let bottom = editorRef.current.getTopForLineNumber(entry.end_line + 1) - editorRef.current.getScrollTop();
             if (entry.end_line >= lineCount) {
                 bottom = bottom + lineHeight;
             }
-             const overlayDiv = <div className="line-block-overlay" style={{ top: top + "px", height: (bottom - top) + "px" }}></div>;
-             divs.push(overlayDiv);
+
+            const style= {
+                top: top + "px", 
+                height: (bottom - top) + "px" 
+            }
+            if (state.mappedIds.includes(entry.uid)) {
+                style["backgroundColor"] = "rgba(255, 0, 0, 0.3)";
+            }
+            const overlayDiv = <div className="line-block-overlay" onClick={onSelectAbstraction} style={style}></div>;
+            divs.push(overlayDiv);
+         
         });
         setOverlayDivs(divs);
-    }, [editorRef?.current, state]);
+    }, [editorRef?.current, state, onSelectAbstraction]);
 
     // Scroll the editor and update overlays on wheel event.
     const handleWheel = useCallback((e) => {

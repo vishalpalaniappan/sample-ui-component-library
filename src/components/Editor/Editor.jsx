@@ -27,7 +27,7 @@ const MODES = {
  * 
  * @return {JSX}
  */
-export const Editor = forwardRef(({ }, ref) => {
+export const Editor = forwardRef(({ onSelectAbstraction }, ref) => {
     const [state, dispatch] = useReducer(editorReducer, initialState);
 
     const selectTab = useCallback((id) => {
@@ -59,6 +59,10 @@ export const Editor = forwardRef(({ }, ref) => {
         dispatch({ type: "SET_MODE", payload: mode });
     }, []);
 
+    const setMappedIds = useCallback((ids) => {
+        dispatch({ type: "SET_MAPPED_IDS", payload: ids });
+    }, []);
+
     const api = useMemo(() => {
         return {
             state,
@@ -68,9 +72,10 @@ export const Editor = forwardRef(({ }, ref) => {
             closeTab,
             moveTab,
             setMapping,
-            setMode
+            setMode,
+            setMappedIds
         };
-    }, [state, addTab, selectTab, closeTab, moveTab, setTabGroupId, setMapping, setMode]);
+    }, [state, addTab, selectTab, closeTab, moveTab, setTabGroupId, setMapping, setMode, setMappedIds]);
 
     useImperativeHandle(ref, () => api, [api]);
 
@@ -81,7 +86,7 @@ export const Editor = forwardRef(({ }, ref) => {
                     <Tabs />
                 </div>
                 <div className="monacoContainer">
-                    <MonacoInstance />
+                    <MonacoInstance onSelectAbstraction={onSelectAbstraction}/>
                 </div>
             </div>
         </EditorContext.Provider>

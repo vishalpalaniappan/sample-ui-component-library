@@ -6,7 +6,8 @@ export const initialState = {
     activeTab: null,
     mode: EDITOR_MODES.DESIGN,
     mapping: new Map(),
-    parentTabGroupId: null
+    parentTabGroupId: null,
+    mappedIds: []
 };
 
 export const editorReducer = (state, action) => {
@@ -118,6 +119,13 @@ export const editorReducer = (state, action) => {
             return {
                 ...state,
                 mode: action.payload
+            };
+        }
+
+        case "SET_MAPPED_IDS": {
+            return {
+                ...state,
+                mappedIds: action.payload
             };
         }
 

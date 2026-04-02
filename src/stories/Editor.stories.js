@@ -63,6 +63,8 @@ const Template = (args) => {
         editorRef.current.addTab(result);translator_mapping
         editorRef.current.setMapping("TransactionDB.py", transactiondb_mapping);
         editorRef.current.setMapping("FrenchTranslator.py", translator_mapping);
+
+        editorRef.current.setMappedIds(["c4f43010-71ef-46e6-bf38-0548d3a34012"]);
     }, []);
 
     const [dragging, setDragging] = useState(false);
@@ -139,6 +141,10 @@ const Template = (args) => {
         }
     }, [editorRef]);
 
+    const onSelectAbstraction = useCallback(() => {
+        action("Abstraction Selected")();
+    }, []);
+
     return (
         <DndContext sensors={sensors} onDragStart={onDragStart} onDragEnd={handleDragEnd}>
 
@@ -147,7 +153,7 @@ const Template = (args) => {
                     <ToolBarEditor onSelectTool={onSelectTool} />
                 </div>
                 <div className="flow">
-                    <Editor ref={editorRef}{...args} />
+                    <Editor ref={editorRef} onSelectAbstraction={onSelectAbstraction} {...args} />
                     {dragging && (
                         <div
                             style={{
