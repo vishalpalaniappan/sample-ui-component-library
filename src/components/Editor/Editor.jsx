@@ -54,6 +54,10 @@ export const Editor = forwardRef(({ }, ref) => {
     const setMapping = useCallback((fileName, mapping) => {
         dispatch({ type: "SET_MAPPING", payload: { fileName, mapping } });
     }, []);
+    
+    const setMode = useCallback((mode) => {
+        dispatch({ type: "SET_DESIGN", payload: mode });
+    }, []);
 
     const api = useMemo(() => {
         return {
@@ -63,9 +67,10 @@ export const Editor = forwardRef(({ }, ref) => {
             selectTab,
             closeTab,
             moveTab,
-            setMapping
+            setMapping,
+            setMode
         };
-    }, [state, addTab, selectTab, closeTab, moveTab, setTabGroupId, setMapping]);
+    }, [state, addTab, selectTab, closeTab, moveTab, setTabGroupId, setMapping, setMode]);
 
     useImperativeHandle(ref, () => api, [api]);
 

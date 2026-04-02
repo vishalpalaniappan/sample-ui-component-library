@@ -1,7 +1,10 @@
+import EDITOR_MODES from "./EDITOR_MODES";
+
 export const initialState = {
     uid: crypto.randomUUID(),
     tabs: [],
     activeTab: null,
+    mode: EDITOR_MODES.DESIGN,
     parentTabGroupId: null
 };
 
@@ -118,7 +121,14 @@ export const editorReducer = (state, action) => {
             }
             return state;
         }
-        
+
+        case "SET_MODE": {
+            return {
+                ...state,
+                mode: action.payload
+            };
+        }
+
         case "RESET_STATE": {
             return initialState;
         }
