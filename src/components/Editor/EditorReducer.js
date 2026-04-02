@@ -5,6 +5,7 @@ export const initialState = {
     tabs: [],
     activeTab: null,
     mode: EDITOR_MODES.DESIGN,
+    mapping: new Map(),
     parentTabGroupId: null
 };
 
@@ -105,21 +106,12 @@ export const editorReducer = (state, action) => {
 
         case "SET_MAPPING": {
             const { mapping, fileName } = action.payload;
-            console.log(state);
-            for (let i = 0; i < state.tabs.length; i++) {
-                const tab = state.tabs[i];
-                if (tab.name === fileName) {
-                    const updatedTab = { ...tab, mapping: mapping };
-                    const newTabs = [...state.tabs];
-                    newTabs[i] = updatedTab;
-                    return {
-                        ...state,
-                        tabs: newTabs,
-                        activeTab: updatedTab
-                    };
-                }
-            }
-            return state;
+            const newMapping = new Map(state.mapping);
+            newMapping.set(fileName, mapping);
+            return {
+                ...state,
+                mapping: newMapping
+            };
         }
 
         case "SET_MODE": {
