@@ -1,6 +1,8 @@
 import React, { useCallback, useLayoutEffect, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 
+import EDITOR_MODES from '../EDITOR_MODES';
+
 import Editor from '@monaco-editor/react';
 
 import "./MonacoInstance.scss"
@@ -18,17 +20,12 @@ export const MonacoInstance = ({ }) => {
     const frameRef = useRef(0);
 
     const [overlayDivs, setOverlayDivs] = useState();
-    const [overlayRanges, setOverlayRanges] = useState();
 
     useLayoutEffect(() => {
         if (state.activeTab) {
             setEditorContent(state.activeTab.content);
             setShowEditor(true);
-            if (state.activeTab.mapping) {
-                addOverlays(state.activeTab.mapping);
-            } else {
-                setOverlayDivs([]);
-            }
+            addOverlays();
         } else {
             setShowEditor(false);
         }
@@ -52,21 +49,23 @@ export const MonacoInstance = ({ }) => {
             editorRef.current.setValue(content.current);
         }
         editorRef.current.layout();
-        if (state.activeTab?.mapping) {
-            addOverlays(state.activeTab.mapping);
-        } else {
-            setOverlayDivs([]);
-        }
+        addOverlays();
     }, [state.activeTab]);
 
     // Add overlays to editor for the given line ranges.
-    const addOverlays = useCallback((ranges) => {
+    const addOverlays = useCallback(() => {
         if (!editorRef.current) return;
 
+        if (state.mode !== EDITOR_MODES.DESIGN || !state.activeTab?.mapping) {
+            setOverlayDivs([]);
+            return;
+        }
+
+        const ranges = state.activeTab.mapping;
         const lineCount = editorRef.current.getModel().getLineCount();
-        const lineHeight = editorRef.current.getOption(monaco.editor.EditorOption.lineHeight);
-        
+        const lineHeight = editorRef.current.getOption(monaco.editor.EditorOption.lineHeight);        
         const divs = [];
+
         ranges.forEach((entry) => {
              const top = editorRef.current.getTopForLineNumber(entry.start_line) - editorRef.current.getScrollTop();
              let bottom = editorRef.current.getTopForLineNumber(entry.end_line + 1) - editorRef.current.getScrollTop();
@@ -77,7 +76,7 @@ export const MonacoInstance = ({ }) => {
              divs.push(overlayDiv);
         });
         setOverlayDivs(divs);
-    }, [editorRef?.current]);
+    }, [editorRef?.current, state]);
 
     // Scroll the editor and update overlays on wheel event.
     const handleWheel = useCallback((e) => {
@@ -85,14 +84,8 @@ export const MonacoInstance = ({ }) => {
         const deltaY = e.deltaY;
         const currentScrollTop = editorRef.current.getScrollTop();
         editorRef.current.setScrollTop(currentScrollTop + deltaY);
-        if (state.activeTab?.mapping) {
-            addOverlays(state.activeTab.mapping);
-        } else {
-            setOverlayDivs([]);
-        }
-    }, [overlayRanges, state.activeTab]);
-
-
+        addOverlays();
+    }, [state.activeTab]);
 
     // Editor options for Monaco Editor.
     const editorOptions = {
@@ -153,9 +146,12 @@ export const MonacoInstance = ({ }) => {
     return (
         <div className="editor-container" ref={containerRef}>
             {renderEditor()}
-            <div className="overlay-layer" onWheel={handleWheel}>
-                {overlayDivs}
-            </div>
+            {
+                state.mode === EDITOR_MODES.DESIGN && state.activeTab?.mapping && overlayDivs &&
+                <div className="overlay-layer" onWheel={handleWheel}>
+                    {overlayDivs}
+                </div>
+            }
         </div>
     )
 }
