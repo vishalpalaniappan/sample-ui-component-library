@@ -85,7 +85,7 @@ export const MonacoInstance = ({ }) => {
         const currentScrollTop = editorRef.current.getScrollTop();
         editorRef.current.setScrollTop(currentScrollTop + deltaY);
         addOverlays();
-    }, [state.activeTab]);
+    }, [state.activeTab, addOverlays]);
 
     // Editor options for Monaco Editor.
     const editorOptions = {
