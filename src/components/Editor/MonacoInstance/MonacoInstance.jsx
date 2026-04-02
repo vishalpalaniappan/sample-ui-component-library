@@ -29,7 +29,7 @@ export const MonacoInstance = ({onSelectAbstraction}) => {
         } else {
             setShowEditor(false);
         }
-    }, [state.activeTab, editorRef]);
+    }, [state, editorRef]);
 
     useEffect(() => {
         content.current = editorContent;
@@ -80,7 +80,11 @@ export const MonacoInstance = ({onSelectAbstraction}) => {
             if (state.mappedIds.includes(entry.uid)) {
                 style["backgroundColor"] = "rgba(255, 0, 0, 0.3)";
             }
-            const overlayDiv = <div className="line-block-overlay" onClick={onSelectAbstraction} style={style}></div>;
+            const overlayDiv = <div 
+                className="line-block-overlay" 
+                onClick={(e) => onSelectAbstraction(entry)} 
+                style={style}>
+            </div>;
             divs.push(overlayDiv);
          
         });

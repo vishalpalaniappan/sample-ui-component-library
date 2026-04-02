@@ -46,6 +46,10 @@ const Template = (args) => {
 
     const [dragPreviewLabel, setDragPreviewLabel] = useState(<></>);
     const [selectTool, setSelectTool] = useState("select");
+    const [mappedIds, setMappedIds] = useState([
+        "c4f43010-71ef-46e6-bf38-0548d3a34012",
+        "8bf2605a-1940-49de-9b2f-0efa22bf658c"
+    ]);
 
     const editorRef = useRef();
 
@@ -63,11 +67,7 @@ const Template = (args) => {
         editorRef.current.addTab(result);translator_mapping
         editorRef.current.setMapping("TransactionDB.py", transactiondb_mapping);
         editorRef.current.setMapping("FrenchTranslator.py", translator_mapping);
-
-        editorRef.current.setMappedIds([
-            "c4f43010-71ef-46e6-bf38-0548d3a34012",
-            "8bf2605a-1940-49de-9b2f-0efa22bf658c"
-        ]);
+        editorRef.current.setMappedIds(mappedIds);
     }, []);
 
     const [dragging, setDragging] = useState(false);
@@ -144,9 +144,15 @@ const Template = (args) => {
         }
     }, [editorRef]);
 
-    const onSelectAbstraction = useCallback(() => {
-        action("Abstraction Selected")();
-    }, []);
+    const onSelectAbstraction = useCallback((entry) => {
+        action("Abstraction Selected")(entry);
+        const found = mappedIds.find((id) => id === entry.uid);
+        const newMap = (found)?
+            mappedIds.filter((id) => id !== found):
+            [...mappedIds, entry.uid];
+        setMappedIds(newMap);
+        editorRef.current.setMappedIds(newMap);
+    }, [mappedIds, setMappedIds, editorRef]);
 
     return (
         <DndContext sensors={sensors} onDragStart={onDragStart} onDragEnd={handleDragEnd}>
