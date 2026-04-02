@@ -14,7 +14,7 @@ import {
 import WorkspaceSampleTree from "./data/FileBrowser/workspace_sample.json"
 import transactiondb_mapping from "./data/Mapping/TransactionDB_mapping.json"
 import { ToolBarEditor } from "./components/ToolBarEditor/ToolBarEditor";
-import mapping from "./data/Mapping/mapping.json"
+import translator_mapping from "./data/Mapping/FrenchTranslator_mapping.json"
 
 import "./EditorStories.scss"
 
@@ -60,8 +60,9 @@ const Template = (args) => {
         const result = flattenTree(WorkspaceSampleTree.tree).find(
             (obj) => obj.name === "TransactionDB.py"
         );
-        editorRef.current.addTab(result);
+        editorRef.current.addTab(result);translator_mapping
         editorRef.current.setMapping("TransactionDB.py", transactiondb_mapping);
+        editorRef.current.setMapping("FrenchTranslator.py", translator_mapping);
     }, []);
 
     const [dragging, setDragging] = useState(false);
