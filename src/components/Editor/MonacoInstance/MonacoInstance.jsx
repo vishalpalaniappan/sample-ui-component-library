@@ -56,12 +56,12 @@ export const MonacoInstance = ({ }) => {
     const addOverlays = useCallback(() => {
         if (!editorRef.current) return;
 
-        if (state.mode !== EDITOR_MODES.MAPPING || !state.activeTab?.mapping) {
+        if (state.mode !== EDITOR_MODES.MAPPING || !state.mapping.get(state.activeTab?.name)) {
             setOverlayDivs([]);
             return;
         }
 
-        const ranges = state.activeTab.mapping;
+        const ranges = state.mapping.get(state.activeTab?.name);
         const lineCount = editorRef.current.getModel().getLineCount();
         const lineHeight = editorRef.current.getOption(monaco.editor.EditorOption.lineHeight);        
         const divs = [];
@@ -147,7 +147,7 @@ export const MonacoInstance = ({ }) => {
         <div className="editor-container" ref={containerRef}>
             {renderEditor()}
             {
-                state.mode === EDITOR_MODES.MAPPING && state.activeTab?.mapping && overlayDivs &&
+                state.mode === EDITOR_MODES.MAPPING && state.mapping.get(state.activeTab?.name) && overlayDivs &&
                 <div className="overlay-layer" onWheel={handleWheel}>
                     {overlayDivs}
                 </div>
