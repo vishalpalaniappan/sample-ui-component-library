@@ -11,8 +11,8 @@ export const designToNodes = (engine) => {
     for (let i = 0; i < engine.graph.nodes.length; i++) {
         const node = engine.graph.nodes[i];
         nodes.push({
-            id: node.getBehavior().name,
-            text: node.getBehavior().name,
+            id: node.getBehavior().getName(),
+            text: node.getBehavior().getName(),
         });
     }
     
@@ -24,8 +24,8 @@ export const designToNodes = (engine) => {
 
         node.getGoToBehaviors().forEach((goTo) => {
             edges.push({
-                id: `${node.getBehavior().name}->${goTo}`,
-                from: node.getBehavior().name,
+                id: `${node.getBehavior().getName()}->${goTo}`,
+                from: node.getBehavior().getName(),
                 to: goTo,
             });
         });
