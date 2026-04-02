@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, useLayoutEffect } from "react";
+import { useEffect, useState, useRef, useLayoutEffect, useCallback } from "react";
 import { Editor } from "../components/Editor";
 import { useArgs } from "@storybook/preview-api";
 import EDITOR_MODES from "../components/Editor/EDITOR_MODES";
@@ -13,6 +13,7 @@ import {
 
 import WorkspaceSampleTree from "./data/FileBrowser/workspace_sample.json"
 import transactiondb_mapping from "./data/Mapping/TransactionDB_mapping.json"
+import { ToolBarEditor } from "./components/ToolBarEditor/ToolBarEditor";
 import mapping from "./data/Mapping/mapping.json"
 
 import "./EditorStories.scss"
@@ -44,6 +45,7 @@ const Template = (args) => {
     const [, updateArgs] = useArgs();
 
     const [dragPreviewLabel, setDragPreviewLabel] = useState(<></>);
+    const [selectTool, setSelectTool] = useState("select");
 
     const editorRef = useRef();
 
@@ -60,10 +62,6 @@ const Template = (args) => {
         );
         editorRef.current.addTab(result);
         editorRef.current.setMapping("TransactionDB.py", transactiondb_mapping);
-
-        setTimeout(() => {
-            editorRef.current.setMode(EDITOR_MODES.MAPPING);
-        }, 4000);
     }, []);
 
     const [dragging, setDragging] = useState(false);
@@ -108,10 +106,21 @@ const Template = (args) => {
 
         window.addEventListener("pointermove", handleMove);
 
+        const handleKeyDown = (event) => {
+            console.log("KEY DOWN");
+            if (event.code === "KeyA") {
+                editorRef.current.setMode(EDITOR_MODES.DESIGN);
+            } else if (event.code === "KeyB") {
+                editorRef.current.setMode(EDITOR_MODES.MAPPING);
+            }
+        };
+        document.addEventListener("keydown", handleKeyDown);
+
         return () => {
+            document.removeEventListener("keydown", handleKeyDown);
             window.removeEventListener("pointermove", handleMove);
         };
-    }, [dragging]);
+    }, [dragging, editorRef]);
 
     const sensors = useSensors(
         useSensor(PointerSensor, {
@@ -121,23 +130,38 @@ const Template = (args) => {
         })
     );
 
+    const onSelectTool = useCallback((tool) => {
+        if (tool === "mapping-mode") {
+            editorRef.current.setMode(EDITOR_MODES.MAPPING);
+        } else if (tool === "implementation-mode") {
+            editorRef.current.setMode(EDITOR_MODES.DESIGN);
+        }
+    }, [editorRef]);
+
     return (
         <DndContext sensors={sensors} onDragStart={onDragStart} onDragEnd={handleDragEnd}>
-            <div className="editorStoryWrapper">
-                <Editor ref={editorRef}{...args} />
-            </div>
-            {dragging && (
-                <div
-                    style={{
-                        position: "fixed",
-                        left: pos.x,
-                        top: pos.y,
-                        pointerEvents: "none",
-                        zIndex: 9999,
-                    }}>
-                    {dragPreviewLabel}
+
+            <div className="editorRootContainer">
+                <div className="toolbar">
+                    <ToolBarEditor onSelectTool={onSelectTool} />
                 </div>
-            )}  
+                <div className="flow">
+                    <Editor ref={editorRef}{...args} />
+                    {dragging && (
+                        <div
+                            style={{
+                                position: "fixed",
+                                left: pos.x,
+                                top: pos.y,
+                                pointerEvents: "none",
+                                zIndex: 9999,
+                            }}>
+                            {dragPreviewLabel}
+                        </div>
+                    )}  
+                </div>
+            </div>
+            
         </DndContext>
     )
 }
