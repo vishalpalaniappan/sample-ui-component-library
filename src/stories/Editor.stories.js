@@ -64,7 +64,10 @@ const Template = (args) => {
         editorRef.current.setMapping("TransactionDB.py", transactiondb_mapping);
         editorRef.current.setMapping("FrenchTranslator.py", translator_mapping);
 
-        editorRef.current.setMappedIds(["c4f43010-71ef-46e6-bf38-0548d3a34012"]);
+        editorRef.current.setMappedIds([
+            "c4f43010-71ef-46e6-bf38-0548d3a34012",
+            "8bf2605a-1940-49de-9b2f-0efa22bf658c"
+        ]);
     }, []);
 
     const [dragging, setDragging] = useState(false);
