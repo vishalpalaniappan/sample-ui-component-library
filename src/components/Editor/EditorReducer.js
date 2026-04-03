@@ -139,7 +139,7 @@ export const editorReducer = (state, action) => {
             return initialState;
         }
 
-        case "UPDATE_CONTENT": {
+        case "SET_UPDATED_CONTENT": {
             const { tab, content } = action.payload;
             tab.updatedContent = content;
             tab.isDirty = (tab.content !== tab.updatedContent);
