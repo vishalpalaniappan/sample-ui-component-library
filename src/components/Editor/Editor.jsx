@@ -89,7 +89,6 @@ export const Editor = forwardRef(({ onSelectAbstraction, onSelectTab }, ref) => 
         dispatch({ type: "SET_CONTENT", payload: {tab, content} });
     }, []);
 
-
     const api_entries = {
         state,
         addTab,
