@@ -1,4 +1,4 @@
-import React, { useCallback, useLayoutEffect, useEffect, useRef, useState } from 'react';
+import React, { useCallback, forwardRef, useLayoutEffect, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import EDITOR_MODES from '../EDITOR_MODES';
@@ -16,20 +16,29 @@ export const MonacoInstance = ({onSelectAbstraction, updateContent}) => {
     const activeTabRef = useRef(state.activeTab);
 
     const editorRef = useRef(null);
+    const modelsRef = useRef(new Map());
     const content = useRef();
-    const containerRef = useRef(null);
-    const frameRef = useRef(0);
 
     // When active tab changes, update the editor content and add overlays for the new active tab.
     useLayoutEffect(() => {
         if (state.activeTab) {
-            activeTabRef.current = state.activeTab;
-            setEditorContent(state.activeTab.updatedContent);
+            (editorRef.current) && editorRef.current.setModel(getModel(state.activeTab));
             setShowEditor(true);
         } else {
             setShowEditor(false);
         }
     }, [state.activeTab, editorRef]);
+
+    // Get the model given the tab.
+    const getModel = useCallback((activeTab) => {
+        if (modelsRef.current.has(activeTab.name)) {
+            return modelsRef.current.get(activeTab.name);
+        }
+        const uri = monaco.Uri.parse(`file:///${activeTab.name}`);
+        const model = monaco.editor.createModel(activeTab.content, "python", uri);
+        modelsRef.current.set(activeTab.name, model);
+        return model;
+    }, []);
 
     // When the editor content changes, update the content in the context for the active tab.
     // Setup content change listener for the editor to update the content in the context 
@@ -48,13 +57,19 @@ export const MonacoInstance = ({onSelectAbstraction, updateContent}) => {
     // Editor mounted callback to setup editor reference and initial content.
     const handleEditorDidMount = useCallback((editor, monaco) => {
         editorRef.current = editor;
-        if (content?.current) {
-            editorRef.current.setValue(content.current);
+        // Clear existing models to prevent duplicates and memory leaks.
+        modelsRef.current = new Map();
+        monaco.editor.getModels().forEach(model => model.dispose());
+
+        if (state.activeTab) {
+            editorRef.current.setModel(getModel(state.activeTab));
+            setShowEditor(true);
         }
-        editorRef.current.layout();
-    }, []);
+    }, [state.activeTab, modelsRef]);
 
     // Disable automatic layout and Manually layout the editor to avoid resize observer loops
+    const containerRef = useRef(null);
+    const frameRef = useRef(0);
     useEffect(() => {
         if (!containerRef.current) return;
         const ro = new ResizeObserver(() => {
@@ -79,7 +94,7 @@ export const MonacoInstance = ({onSelectAbstraction, updateContent}) => {
             return (
                 <Editor
                     defaultLanguage="python"
-                    defaultValue={editorContent}
+                    defaultValue={"Loading content..."}
                     onMount={handleEditorDidMount}
                     theme="vs-dark"
                     options={{
