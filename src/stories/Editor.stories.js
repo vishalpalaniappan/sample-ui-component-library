@@ -55,24 +55,24 @@ const Template = (args) => {
 
     useLayoutEffect(() => {
         editorRef.current.setTabGroupId("tab-group-1");
-        flattenTree(WorkspaceSampleTree.tree).forEach((node, index) => {
+        flattenTree(WorkspaceSampleTree.tree).slice(1,3).forEach((node, index) => {
             if (node.type === "file") {
                 editorRef.current.addTab(node);
             }
         });
 
-        const result = flattenTree(WorkspaceSampleTree.tree).find(
-            (obj) => obj.name === "TransactionDB.py"
-        );
-        editorRef.current.addTab(result);translator_mapping
-        editorRef.current.setMapping("TransactionDB.py", transactiondb_mapping);
-        editorRef.current.setMapping("FrenchTranslator.py", translator_mapping);
-        editorRef.current.setMappedIds(mappedIds);
+        // const result = flattenTree(WorkspaceSampleTree.tree).find(
+        //     (obj) => obj.name === "TransactionDB.py"
+        // );
+        // editorRef.current.addTab(result);translator_mapping
+        // editorRef.current.setMapping("TransactionDB.py", transactiondb_mapping);
+        // editorRef.current.setMapping("FrenchTranslator.py", translator_mapping);
+        // editorRef.current.setMappedIds(mappedIds);
 
-        setTimeout(() => {
-            console.log(editorRef.current.getTabs());
-            console.log(editorRef.current.getActiveTab());
-        }, 5000);
+        // setTimeout(() => {
+        //     console.log(editorRef.current.getTabs());
+        //     console.log(editorRef.current.getActiveTab());
+        // }, 5000);
     }, []);
 
     const [dragging, setDragging] = useState(false);
