@@ -70,6 +70,10 @@ export const Editor = forwardRef(({ onSelectAbstraction, onSelectTab }, ref) => 
         return state.tabs;
     }, [state.tabs]);
 
+    const getTab = useCallback((id) => {
+        return state.tabs.find((tab) => tab.uid === id);
+    }, [state.tabs]);
+
     const getActiveTab = useCallback(() => {
         return state.tabs.find((tab) => tab.id === state.activeTabId);
     }, [state.tabs, state.activeTabId]);
@@ -89,11 +93,12 @@ export const Editor = forwardRef(({ onSelectAbstraction, onSelectTab }, ref) => 
             setMapping,
             setMode,
             setMappedIds,
+            getTab,
             getTabs,
             getActiveTab
 
         };
-    }, [state, addTab, selectTab, closeTab, moveTab, setTabGroupId, setMapping, setMode, setMappedIds, getTabs, getActiveTab]);
+    }, [state, addTab, selectTab, closeTab, moveTab, setTabGroupId, setMapping, setMode, setMappedIds, getTab, getTabs, getActiveTab]);
 
     useImperativeHandle(ref, () => api, [api]);
 

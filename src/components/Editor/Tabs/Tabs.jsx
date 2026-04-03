@@ -22,7 +22,7 @@ export const Tabs = () => {
         if (state.tabs?.length >= 0 && state.parentTabGroupId != null) {
             drawTabs(state.tabs, state.parentTabGroupId);
         }
-    }, [state.tabs, state.parentTabGroupId]);
+    }, [state.tabs, state.modifiedIndicator, state.parentTabGroupId]);
 
     /**
      * Draw the tabs provided in the tabs info. This includes the gutters
@@ -34,7 +34,7 @@ export const Tabs = () => {
         const list = [];
         tabs.forEach((tab, index) => {
             list.push(<Gutter key={tab.uid + "-gutter"} id={tabGroupId + "-" + index} index={index} parentId={tabGroupId} />);
-            list.push(<Tab key={tab.uid} id={tabGroupId + "-" + tab.uid} parentId={tabGroupId} node={tab} />);
+            list.push(<Tab key={tab.uid} isDirty={tab.isDirty} id={tabGroupId + "-" + tab.uid} parentId={tabGroupId} node={tab} />);
         });
         list.push(<Gutter key="last-gutter" id={tabGroupId + "-" + tabs.length} index={tabs.length} parentId={tabGroupId} />);
         setTabsList(list);

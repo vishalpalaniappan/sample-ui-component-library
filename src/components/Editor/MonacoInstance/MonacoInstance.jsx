@@ -13,6 +13,7 @@ export const MonacoInstance = ({onSelectAbstraction, updateContent}) => {
     const { state } = useEditor();
     const [editorContent, setEditorContent] = useState("Loading content...");
     const [showEditor, setShowEditor] = useState(false);
+    const activeTabRef = useRef(state.activeTab);
 
     const editorRef = useRef(null);
     const content = useRef();
@@ -21,20 +22,29 @@ export const MonacoInstance = ({onSelectAbstraction, updateContent}) => {
 
     const [overlayDivs, setOverlayDivs] = useState();
 
+    // When active tab changes, update the editor content and add overlays for the new active tab.
     useLayoutEffect(() => {
         if (state.activeTab) {
-            setEditorContent(state.activeTab.content);
+            activeTabRef.current = state.activeTab;
+            setEditorContent(state.activeTab.updatedContent);
             setShowEditor(true);
             addOverlays();
         } else {
             setShowEditor(false);
         }
-    }, [state, editorRef]);
+    }, [state.activeTab, editorRef]);
 
+    // When the editor content changes, update the content in the context for the active tab.
+    // Setup content change listener for the editor to update the content in the context and track dirty state of the tab.
     useEffect(() => {
         content.current = editorContent;
         if (editorRef?.current && content.current !== undefined && content.current !== null) {  
             editorRef.current.setValue(content.current);
+    
+            const model = editorRef.current.getModel();
+            model.onDidChangeContent((content) => {
+                updateContent(activeTabRef.current, model.getValue());
+            });
         }
     }, [editorContent]);
 
@@ -51,13 +61,7 @@ export const MonacoInstance = ({onSelectAbstraction, updateContent}) => {
         editorRef.current.layout();
         addOverlays();
 
-        const model = editor.getModel();
-
-        model.onDidChangeContent((content) => {
-            updateContent(state.activeTab, model.getValue());
-        });
-
-    }, [state.activeTab]);
+    }, []);
 
     // Add overlays to editor for the given line ranges.
     const addOverlays = useCallback(() => {
