@@ -36,10 +36,6 @@ export const Tab = ({ id, isDirty, parentId, node }) => {
     });
 
     useEffect(() => {
-        console.log(isDirty);
-    }, [isDirty]);
-
-    useEffect(() => {
         renderTab(state.activeTab && state.activeTab.uid === node.uid);
     }, [state.activeTab]);
 
