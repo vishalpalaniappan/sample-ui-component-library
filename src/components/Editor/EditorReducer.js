@@ -133,6 +133,16 @@ export const editorReducer = (state, action) => {
             return initialState;
         }
 
+        case "UPDATE_CONTENT": {
+            const { tab, content } = action.payload;
+            tab.updatedContent = content;
+            tab.isDirty = (tab.content !== content);
+            return {
+                ...state,
+                tabs: state.tabs.map(t => t.uid === tab.uid ? tab : t)
+            };
+        }
+
         default: {
             return state;
         }

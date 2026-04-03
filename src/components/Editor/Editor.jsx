@@ -74,8 +74,8 @@ export const Editor = forwardRef(({ onSelectAbstraction, onSelectTab }, ref) => 
         return state.tabs.find((tab) => tab.id === state.activeTabId);
     }, [state.tabs, state.activeTabId]);
 
-    const updateContent = useCallback((tabId, content) => {
-        // dispatch({ type: "UPDATE_CONTENT", payload: {tabId, content} });
+    const updateContent = useCallback((tab, content) => {
+        dispatch({ type: "UPDATE_CONTENT", payload: {tab, content} });
     }, []);
 
     const api = useMemo(() => {
