@@ -41,12 +41,12 @@ export const MonacoInstance = forwardRef(({ onSelectAbstraction, updateContent }
         // Get the model given the tab.
         const getModel = useCallback((activeTab) => {
             let model;
-            if (modelsRef.current.has(activeTab.name)) {
-                model = modelsRef.current.get(activeTab.name);
+            if (modelsRef.current.has(activeTab.uid)) {
+                model = modelsRef.current.get(activeTab.uid);
             } else {
-                const uri = monaco.Uri.parse(`file:///${activeTab.name}`);
+                const uri = monaco.Uri.parse(`file:///${activeTab.uid}`);
                 model = monaco.editor.createModel(activeTab.content, "python", uri);
-                modelsRef.current.set(activeTab.name, model);
+                modelsRef.current.set(activeTab.uid, model);
             }
             model.onDidChangeContent((content) => {
                 updateContent(activeTabRef.current, editorRef.current.getValue());
@@ -89,11 +89,11 @@ export const MonacoInstance = forwardRef(({ onSelectAbstraction, updateContent }
         }, [state.activeTab]);
 
         // Setup imperative handle to clear model when tab is closed to prevent mem leak
-        const clearModel = useCallback((tab) => {
-            if (modelsRef.current.has(tab.name)) {
-                const model = modelsRef.current.get(tab.name);
+        const clearModel = useCallback((id) => {
+            if (modelsRef.current.has(id)) {
+                const model = modelsRef.current.get(id);
                 model.dispose();
-                modelsRef.current.delete(tab.name);
+                modelsRef.current.delete(id);
             }
         }, []);
 

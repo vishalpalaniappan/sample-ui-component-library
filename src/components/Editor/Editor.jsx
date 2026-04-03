@@ -10,7 +10,8 @@ import React, {
     useImperativeHandle,
     useMemo,
     useReducer,
-    useContext
+    useContext,
+    useRef
 } from "react";
 
 import { EditorContext } from "./EditorContext";
@@ -29,6 +30,7 @@ const MODES = {
  */
 export const Editor = forwardRef(({ onSelectAbstraction, onSelectTab }, ref) => {
     const [state, dispatch] = useReducer(editorReducer, initialState);
+    const editorRef = useRef();
 
     const selectTab = useCallback((id) => {
         dispatch({ type: "SELECT_TAB", payload: id });
@@ -38,6 +40,7 @@ export const Editor = forwardRef(({ onSelectAbstraction, onSelectTab }, ref) => 
     }, [onSelectTab]);
 
     const closeTab = useCallback((id) => {
+        editorRef.current && editorRef.current.clearModel(id);
         dispatch({ type: "CLOSE_TAB", payload: id });
     }, []);
 
@@ -110,6 +113,7 @@ export const Editor = forwardRef(({ onSelectAbstraction, onSelectTab }, ref) => 
                 </div>
                 <div className="monacoContainer">
                     <MonacoInstance 
+                        ref={editorRef}
                         updateContent={updateContent}
                         onSelectAbstraction={onSelectAbstraction}/>
                 </div>
