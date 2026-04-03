@@ -89,23 +89,27 @@ export const Editor = forwardRef(({ onSelectAbstraction, onSelectTab }, ref) => 
         dispatch({ type: "SET_CONTENT", payload: {tab, content} });
     }, []);
 
+
+    const api_entries = {
+        state,
+        addTab,
+        setTabGroupId,
+        selectTab,
+        closeTab,
+        moveTab,
+        setMapping,
+        setMode,
+        setMappedIds,
+        getTab,
+        getTabs,
+        getActiveTab,
+        setUpdatedContent,
+        setContent
+    }
+
     const api = useMemo(() => {
-        return {
-            state,
-            addTab,
-            setTabGroupId,
-            selectTab,
-            closeTab,
-            moveTab,
-            setMapping,
-            setMode,
-            setMappedIds,
-            getTab,
-            getTabs,
-            getActiveTab,
-            setUpdatedContent
-        };
-    }, [state, addTab, selectTab, closeTab, moveTab, setTabGroupId, setMapping, setMode, setMappedIds, getTab, getTabs, getActiveTab, setUpdatedContent]);
+        return api_entries;
+    }, Object.values(api_entries));
 
     useImperativeHandle(ref, () => api, [api]);
 
