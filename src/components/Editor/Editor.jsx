@@ -11,7 +11,7 @@ import React, {
     useMemo,
     useReducer,
     useContext,
-    useRef
+    useRef,
 } from "react";
 
 import { EditorContext } from "./EditorContext";
@@ -81,8 +81,12 @@ export const Editor = forwardRef(({ onSelectAbstraction, onSelectTab }, ref) => 
         return state.tabs.find((tab) => tab.id === state.activeTabId);
     }, [state.tabs, state.activeTabId]);
 
-    const updateContent = useCallback((tab, content) => {
-        dispatch({ type: "UPDATE_CONTENT", payload: {tab, content} });
+    const setUpdatedContent = useCallback((tab, content) => {
+        dispatch({ type: "SET_UPDATED_CONTENT", payload: {tab, content} });
+    }, []);
+
+    const setContent = useCallback((tab, content) => {
+        dispatch({ type: "SET_CONTENT", payload: {tab, content} });
     }, []);
 
     const api = useMemo(() => {
@@ -98,10 +102,10 @@ export const Editor = forwardRef(({ onSelectAbstraction, onSelectTab }, ref) => 
             setMappedIds,
             getTab,
             getTabs,
-            getActiveTab
-
+            getActiveTab,
+            setUpdatedContent
         };
-    }, [state, addTab, selectTab, closeTab, moveTab, setTabGroupId, setMapping, setMode, setMappedIds, getTab, getTabs, getActiveTab]);
+    }, [state, addTab, selectTab, closeTab, moveTab, setTabGroupId, setMapping, setMode, setMappedIds, getTab, getTabs, getActiveTab, setUpdatedContent]);
 
     useImperativeHandle(ref, () => api, [api]);
 
@@ -114,7 +118,6 @@ export const Editor = forwardRef(({ onSelectAbstraction, onSelectTab }, ref) => 
                 <div className="monacoContainer">
                     <MonacoInstance 
                         ref={editorRef}
-                        updateContent={updateContent}
                         onSelectAbstraction={onSelectAbstraction}/>
                 </div>
             </div>
