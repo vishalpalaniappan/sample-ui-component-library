@@ -10,16 +10,16 @@ import React, {
 } from "react";
 import PropTypes from "prop-types";
 
+import { useEditor } from "../Editor";
+
 import EDITOR_MODES from "../EDITOR_MODES";
 
 import Editor from "@monaco-editor/react";
 
 import "./MonacoInstance.scss";
 
-import { useEditor } from "../Editor";
-
-export const MonacoInstance = forwardRef(({ onSelectAbstraction, updateContent }, ref) => {
-        const { state } = useEditor();
+export const MonacoInstance = forwardRef(({ onSelectAbstraction }, ref) => {
+        const { state, setUpdatedContent } = useEditor();
         const [showEditor, setShowEditor] = useState(false);
         const activeTabRef = useRef(state.activeTab);
 
@@ -27,7 +27,7 @@ export const MonacoInstance = forwardRef(({ onSelectAbstraction, updateContent }
         const modelsRef = useRef(new Map());
 
         // When active tab changes, update the editor content and add overlays for the new active tab.
-        useLayoutEffect(() => {
+        useEffect(() => {
             if (state.activeTab) {
                 activeTabRef.current = state.activeTab;
                 editorRef.current && editorRef.current.setModel(getModel(state.activeTab));
@@ -37,6 +37,14 @@ export const MonacoInstance = forwardRef(({ onSelectAbstraction, updateContent }
                 setShowEditor(false);
             }
         }, [state.activeTab, editorRef]);
+
+        useEffect(() => {
+            return () => {
+                // Dispose all models on unmount to prevent memory leaks.
+                modelsRef.current.forEach((model) => model.dispose());
+                modelsRef.current.clear();
+            }
+        }, []); 
 
         // Get the model given the tab.
         const getModel = useCallback((activeTab) => {
@@ -49,26 +57,23 @@ export const MonacoInstance = forwardRef(({ onSelectAbstraction, updateContent }
                 modelsRef.current.set(activeTab.uid, model);
             }
             model.onDidChangeContent((content) => {
-                updateContent(activeTabRef.current, editorRef.current.getValue());
+                setUpdatedContent(activeTabRef.current, editorRef.current.getValue());
             });
             return model;
-        }, [editorRef, modelsRef]);
+        }, [editorRef, modelsRef, setUpdatedContent]);
 
-        // Editor mounted callback to setup editor reference and initial content.
-        const handleEditorDidMount = useCallback(
-            (editor, monaco) => {
-                editorRef.current = editor;
-                // Clear existing models to prevent duplicates and memory leaks.
-                modelsRef.current = new Map();
-                monaco.editor.getModels().forEach((model) => model.dispose());
+        // Setup editor ref, and clear existing models on mount to prevent mem leak from old models.
+        const handleEditorDidMount = useCallback((editor, monaco) => {
+            editorRef.current = editor;
+            editor.layout();
+            modelsRef.current = new Map();
+            monaco.editor.getModels().forEach((model) => model.dispose());
 
-                if (state.activeTab) {
-                    editorRef.current.setModel(getModel(state.activeTab));
-                    setShowEditor(true);
-                }
-            },
-            [state.activeTab, modelsRef],
-        );
+            if (activeTabRef.current) {
+                editorRef.current.setModel(getModel(activeTabRef.current));
+                setShowEditor(true);
+            }
+        }, []);
 
         // Disable automatic layout and Manually layout the editor to avoid resize observer loops
         const containerRef = useRef(null);
