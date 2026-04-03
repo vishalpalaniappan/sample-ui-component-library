@@ -68,6 +68,11 @@ const Template = (args) => {
         editorRef.current.setMapping("TransactionDB.py", transactiondb_mapping);
         editorRef.current.setMapping("FrenchTranslator.py", translator_mapping);
         editorRef.current.setMappedIds(mappedIds);
+
+        setTimeout(() => {
+            console.log(editorRef.current.getTabs());
+            console.log(editorRef.current.getActiveTab());
+        }, 5000);
     }, []);
 
     const [dragging, setDragging] = useState(false);

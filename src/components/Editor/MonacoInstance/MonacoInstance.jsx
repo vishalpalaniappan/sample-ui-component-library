@@ -9,7 +9,7 @@ import "./MonacoInstance.scss"
 
 import { useEditor } from "../Editor";
 
-export const MonacoInstance = ({onSelectAbstraction}) => {
+export const MonacoInstance = ({onSelectAbstraction, updateContent}) => {
     const { state } = useEditor();
     const [editorContent, setEditorContent] = useState("Loading content...");
     const [showEditor, setShowEditor] = useState(false);
@@ -50,6 +50,13 @@ export const MonacoInstance = ({onSelectAbstraction}) => {
         }
         editorRef.current.layout();
         addOverlays();
+
+        const model = editor.getModel();
+
+        model.onDidChangeContent((content) => {
+            updateContent(state.activeTab, model.getValue());
+        });
+
     }, [state.activeTab]);
 
     // Add overlays to editor for the given line ranges.
@@ -112,7 +119,6 @@ export const MonacoInstance = ({onSelectAbstraction}) => {
         renderWhitespace: "none",
         wordWrap: "on",
         scrollBeyondLastLine: false,
-        readOnly: true,
         automaticLayout: false
     }
 

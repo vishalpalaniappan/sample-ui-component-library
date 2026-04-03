@@ -27,12 +27,15 @@ const MODES = {
  * 
  * @return {JSX}
  */
-export const Editor = forwardRef(({ onSelectAbstraction }, ref) => {
+export const Editor = forwardRef(({ onSelectAbstraction, onSelectTab }, ref) => {
     const [state, dispatch] = useReducer(editorReducer, initialState);
 
     const selectTab = useCallback((id) => {
         dispatch({ type: "SELECT_TAB", payload: id });
-    }, []);
+        if (onSelectTab) {
+            onSelectTab(id);
+        }
+    }, [onSelectTab]);
 
     const closeTab = useCallback((id) => {
         dispatch({ type: "CLOSE_TAB", payload: id });
@@ -63,6 +66,18 @@ export const Editor = forwardRef(({ onSelectAbstraction }, ref) => {
         dispatch({ type: "SET_MAPPED_IDS", payload: ids });
     }, []);
 
+    const getTabs = useCallback(() => {
+        return state.tabs;
+    }, [state.tabs]);
+
+    const getActiveTab = useCallback(() => {
+        return state.tabs.find((tab) => tab.id === state.activeTabId);
+    }, [state.tabs, state.activeTabId]);
+
+    const updateContent = useCallback((tabId, content) => {
+        // dispatch({ type: "UPDATE_CONTENT", payload: {tabId, content} });
+    }, []);
+
     const api = useMemo(() => {
         return {
             state,
@@ -73,9 +88,12 @@ export const Editor = forwardRef(({ onSelectAbstraction }, ref) => {
             moveTab,
             setMapping,
             setMode,
-            setMappedIds
+            setMappedIds,
+            getTabs,
+            getActiveTab
+
         };
-    }, [state, addTab, selectTab, closeTab, moveTab, setTabGroupId, setMapping, setMode, setMappedIds]);
+    }, [state, addTab, selectTab, closeTab, moveTab, setTabGroupId, setMapping, setMode, setMappedIds, getTabs, getActiveTab]);
 
     useImperativeHandle(ref, () => api, [api]);
 
@@ -86,7 +104,9 @@ export const Editor = forwardRef(({ onSelectAbstraction }, ref) => {
                     <Tabs />
                 </div>
                 <div className="monacoContainer">
-                    <MonacoInstance onSelectAbstraction={onSelectAbstraction}/>
+                    <MonacoInstance 
+                        updateContent={updateContent}
+                        onSelectAbstraction={onSelectAbstraction}/>
                 </div>
             </div>
         </EditorContext.Provider>
