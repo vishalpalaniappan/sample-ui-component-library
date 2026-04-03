@@ -151,6 +151,18 @@ export const editorReducer = (state, action) => {
             };
         }
 
+        case "SET_CONTENT": {
+            const { tab, content } = action.payload;
+            tab.content = content;
+            tab.isDirty = (tab.content !== tab.updatedContent);
+            
+            return {
+                ...state,
+                modifiedIndicator: !state.modifiedIndicator,
+                tabs: state.tabs.map(t => t.uid === tab.uid ? tab : t)
+            };
+        }
+
         default: {
             return state;
         }
