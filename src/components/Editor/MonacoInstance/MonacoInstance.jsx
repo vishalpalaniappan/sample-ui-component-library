@@ -112,23 +112,23 @@ export const MonacoInstance = forwardRef(({ onSelectAbstraction }, ref) => {
 
         return (
             <div className="editor-container" ref={containerRef}>
+                <Editor
+                    defaultLanguage="python"
+                    defaultValue={"Loading content..."}
+                    onMount={handleEditorDidMount}
+                    theme="vs-dark"
+                    options={{
+                        minimap: { enabled: false },
+                        padding: { top: 10 },
+                        renderWhitespace: "none",
+                        wordWrap: "on",
+                        scrollBeyondLastLine: false,
+                        automaticLayout: false,
+                    }}
+                />
                 {
-                    showEditor ? 
-                    <Editor
-                        defaultLanguage="python"
-                        defaultValue={"Loading content..."}
-                        onMount={handleEditorDidMount}
-                        theme="vs-dark"
-                        options={{
-                            minimap: { enabled: false },
-                            padding: { top: 10 },
-                            renderWhitespace: "none",
-                            wordWrap: "on",
-                            scrollBeyondLastLine: false,
-                            automaticLayout: false,
-                        }}
-                    />: 
-                    <div className="no-tab">Select file or drag and drop to view.</div>
+                    !showEditor ? 
+                    <div className="no-tab">Select file or drag and drop to view.</div>:null
                 }
                 {state.mode === EDITOR_MODES.MAPPING && (
                     <div className="overlay-layer" onWheel={handleWheel}>

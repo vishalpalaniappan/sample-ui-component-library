@@ -143,7 +143,9 @@ const Template = (args) => {
 
     const onSelectTool = useCallback((tool) => {
         if (tool === "mapping-mode") {
-            editorRef.current.setMode(EDITOR_MODES.MAPPING);
+            editorRef.current.addTab(
+                flattenTree(WorkspaceSampleTree.tree).slice(2,2)
+            );
         } else if (tool === "implementation-mode") {
             editorRef.current.setMode(EDITOR_MODES.DESIGN);
         }
