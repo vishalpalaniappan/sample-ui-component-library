@@ -12,6 +12,7 @@ import React, {
     useReducer,
     useContext,
     useRef,
+    useEffect
 } from "react";
 
 import { EditorContext } from "./EditorContext";
@@ -32,11 +33,15 @@ export const Editor = forwardRef(({ onSelectAbstraction, onSelectTab, onUpdateCo
     const [state, dispatch] = useReducer(editorReducer, initialState);
     const editorRef = useRef();
 
+    useEffect(() => {
+        if (onSelectTab) {
+            console.log(state.activeTab);
+            onSelectTab(state.activeTab);
+        }
+    }, [state.activeTab]);
+
     const selectTab = useCallback((id) => {
         dispatch({ type: "SELECT_TAB", payload: id });
-        if (onSelectTab) {
-            onSelectTab(id);
-        }
     }, [onSelectTab]);
 
     const closeTab = useCallback((id) => {
