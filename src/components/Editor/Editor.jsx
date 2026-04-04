@@ -28,7 +28,7 @@ const MODES = {
  * 
  * @return {JSX}
  */
-export const Editor = forwardRef(({ onSelectAbstraction, onSelectTab }, ref) => {
+export const Editor = forwardRef(({ onSelectAbstraction, onSelectTab, onUpdateContent }, ref) => {
     const [state, dispatch] = useReducer(editorReducer, initialState);
     const editorRef = useRef();
 
@@ -83,10 +83,17 @@ export const Editor = forwardRef(({ onSelectAbstraction, onSelectTab }, ref) => 
 
     const setUpdatedContent = useCallback((tab, content) => {
         dispatch({ type: "SET_UPDATED_CONTENT", payload: {tab, content} });
-    }, []);
+        if (onUpdateContent) {
+            onUpdateContent(tab, content);
+        }
+    }, [onUpdateContent]);
 
     const setContent = useCallback((tab, content) => {
         dispatch({ type: "SET_CONTENT", payload: {tab, content} });
+    }, []);
+
+    const saveAll = useCallback(() => {
+        dispatch({ type: "SAVE_ALL", payload: {} });
     }, []);
 
     const api_entries = {
@@ -103,7 +110,8 @@ export const Editor = forwardRef(({ onSelectAbstraction, onSelectTab }, ref) => 
         getTabs,
         getActiveTab,
         setUpdatedContent,
-        setContent
+        setContent,
+        saveAll
     }
 
     const api = useMemo(() => {

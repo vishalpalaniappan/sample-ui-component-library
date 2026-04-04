@@ -147,7 +147,7 @@ const Template = (args) => {
                 flattenTree(WorkspaceSampleTree.tree).slice(2,2)
             );
         } else if (tool === "implementation-mode") {
-            editorRef.current.setMode(EDITOR_MODES.DESIGN);
+            editorRef.current.saveAll();
         }
     }, [editorRef]);
 
@@ -161,6 +161,11 @@ const Template = (args) => {
         editorRef.current.setMappedIds(newMap);
     }, [mappedIds, setMappedIds, editorRef]);
 
+
+    const onUpdateContent = useCallback((tab, content) => {
+        action("Content Updated")(tab, content);
+    }, []);
+
     return (
         <DndContext sensors={sensors} onDragStart={onDragStart} onDragEnd={handleDragEnd}>
 
@@ -169,7 +174,7 @@ const Template = (args) => {
                     <ToolBarEditor onSelectTool={onSelectTool} />
                 </div>
                 <div className="flow">
-                    <Editor ref={editorRef} onSelectAbstraction={onSelectAbstraction} {...args} />
+                    <Editor ref={editorRef} onUpdateContent={onUpdateContent} onSelectAbstraction={onSelectAbstraction} {...args} />
                     {dragging && (
                         <div
                             style={{

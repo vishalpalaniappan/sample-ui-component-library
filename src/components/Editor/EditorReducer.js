@@ -163,6 +163,20 @@ export const editorReducer = (state, action) => {
             };
         }
 
+        case "SAVE_ALL": {
+            const newTabs = state.tabs.map(tab => {
+                tab.content = tab.updatedContent;
+                tab.isDirty = false;
+                return tab;
+            });
+
+            return {
+                ...state,
+                modifiedIndicator: !state.modifiedIndicator,
+                tabs: newTabs
+            };
+        }
+
         default: {
             return state;
         }
