@@ -151,6 +151,7 @@ export const MonacoInstance = forwardRef(({ onSelectAbstraction }, ref) => {
             }
         }, []);
 
+        // Programatically trigger layout of editor and render overlays.
         const layoutModel = useCallback(() => {
             editorRef.current?.layout();
             updateOverlays();
