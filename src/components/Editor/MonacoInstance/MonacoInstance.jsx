@@ -131,8 +131,7 @@ export const MonacoInstance = forwardRef(({ onSelectAbstraction }, ref) => {
                     <div className="no-tab">Select file or drag and drop to view.</div>:null
                 }
                 {state.mode === EDITOR_MODES.MAPPING && (
-                    <div className="overlay-layer" onWheel={handleWheel}>
-                        {overlayDivs}
+                    <div className="overlay-layer">
                     </div>
                 )}
             </div>

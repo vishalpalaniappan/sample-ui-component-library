@@ -4,7 +4,7 @@ export const initialState = {
     uid: crypto.randomUUID(),
     tabs: [],
     activeTab: null,
-    mode: EDITOR_MODES.DESIGN,
+    mode: EDITOR_MODES.MAPPING,
     mapping: new Map(),
     parentTabGroupId: null,
     mappedIds: [],
