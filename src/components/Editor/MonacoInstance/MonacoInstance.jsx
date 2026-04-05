@@ -37,9 +37,6 @@ export const MonacoInstance = forwardRef(({ onSelectAbstraction }, ref) => {
                 editorRef.current && editorRef.current.setModel(getModel(state.activeTab));
                 updateOverlays();
                 setShowEditor(true);
-                editorRef.current?.onDidScrollChange((e) => {
-                    updateOverlays();
-                });
             } else {
                 activeTabRef.current = null;
                 setShowEditor(false);
@@ -86,6 +83,7 @@ export const MonacoInstance = forwardRef(({ onSelectAbstraction }, ref) => {
             const deltaY = e.deltaY;
             const currentScrollTop = editorRef.current.getScrollTop();
             editorRef.current.setScrollTop(currentScrollTop + deltaY);
+            updateOverlays();
         }, [state.activeTab, updateOverlays]);
         
 

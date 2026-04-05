@@ -25,7 +25,7 @@ export const OverlayRow =({ entry, top, bottom, onSelectAbstraction }) => {
     const selectRow = (e) => {
         e.preventDefault();
         e.stopPropagation();
-        onSelectAbstraction(entry);
+        onSelectAbstraction(entry, e.shiftKey);
     }
 
     return (
