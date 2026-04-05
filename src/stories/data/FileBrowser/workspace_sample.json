@@ -260,6 +260,7 @@
                 "uid": "915ae10a-aab9-4003-9dbc-45772015b366",
                 "start_line": 71,
                 "end_line": 71,
+                "isMappedOther": true,
                 "source": "book_shelf = place_books_on_shelf_from_basket(book_shelf, basket)"
             },
             {
@@ -287,7 +288,7 @@
                 "uid": "f9fff770-f748-407e-99ac-e94246a9d4d3",
                 "start_line": 75,
                 "end_line": 75,
-                "backgroundColor": "#33000033",
+                "isMappedCurrent": true,
                 "source": "print(\"\\nLibrary Audit:\", json.dumps(audit[\"value\"], indent=2))"
             },
             {

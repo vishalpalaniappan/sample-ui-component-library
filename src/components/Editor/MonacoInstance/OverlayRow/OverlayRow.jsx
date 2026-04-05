@@ -8,12 +8,17 @@ export const OverlayRow =({ entry, top, bottom, onSelectAbstraction }) => {
     const style= {
         "top": top + "px",
         "height": (bottom - top) + "px",
-        "backgroundColor": entry?.backgroundColor || "none"
     };
 
-    // If entry doesn't have background color, add hover effect.
     let className = "line-block-overlay";
-    if (!entry.backgroundColor) {
+    if (entry.isMappedCurrent) {
+        style["backgroundColor"] = "rgba(123, 255, 0, 0.2)";
+    } else if (entry.isMappedOther) {
+        style["backgroundColor"] = "rgba(138, 138, 138, 0.2)";
+    }
+
+    // If entry is not mapped, add hover effect.
+    if (!entry.isMappedCurrent && !entry.isMappedOther) {
         className += " line-block-overlay-hover";
     }   
 
