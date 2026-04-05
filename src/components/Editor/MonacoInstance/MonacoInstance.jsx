@@ -155,7 +155,7 @@ export const MonacoInstance = forwardRef(({ onSelectAbstraction }, ref) => {
         const layoutModel = useCallback(() => {
             editorRef.current?.layout();
             updateOverlays();
-        }, []);
+        }, [editorRef, state.activeTab, state.mode, onSelectAbstraction]);
 
         const api = useMemo(() => {
             return {

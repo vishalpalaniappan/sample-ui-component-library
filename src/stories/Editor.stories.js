@@ -145,8 +145,11 @@ const Template = (args) => {
         if (tool === "mapping-mode") {
             editorRef.current.setMode(EDITOR_MODES.MAPPING);
         } else if (tool === "implementation-mode") {    
-            editorRef.current.setMode(EDITOR_MODES.DESIGN);
-        }
+            console.log("draing");
+            editorRef.current.layoutEditor();
+            // editorRef.current.setMode(EDITOR_MODES.MAPPING);
+            // editorRef.current.setMode(EDITOR_MODES.DESIGN);
+        } 
     }, [editorRef]);
 
     const onSelectAbstraction = useCallback((entry) => {
