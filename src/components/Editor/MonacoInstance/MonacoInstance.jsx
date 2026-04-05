@@ -46,11 +46,14 @@ export const MonacoInstance = forwardRef(({ onSelectAbstraction }, ref) => {
 
         // Update overlays for mapping mode.
         const updateOverlays = useCallback(() => {
-            if (state.mode !== EDITOR_MODES.MAPPING || !editorRef.current || !activeTabRef?.current?.mapping) {
+            if (!editorRef.current) return;
+            if (state.mode !== EDITOR_MODES.MAPPING  || !activeTabRef?.current?.mapping) {
+                editorRef.current.updateOptions({stickyScroll: { enabled: true }});
                 setOverlayDivs(null);
                 return;
             };
             const _editor = editorRef.current;
+            _editor.updateOptions({stickyScroll: { enabled: false }});
             const lineCount = _editor.getModel().getLineCount();
             const lineHeight = _editor.getOption(monaco.editor.EditorOption.lineHeight);        
             const divs = [];

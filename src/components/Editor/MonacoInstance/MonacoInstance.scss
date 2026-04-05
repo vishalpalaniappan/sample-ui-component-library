@@ -17,9 +17,7 @@
 }
 
 .overlay-layer {
-    position: absolute; 
-    left: 0;
-    right: 20px;
-    inset: 0;
+    position: absolute;
+    inset:0;
     overflow:hidden;
 }
