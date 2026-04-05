@@ -151,11 +151,16 @@ export const MonacoInstance = forwardRef(({ onSelectAbstraction }, ref) => {
             }
         }, []);
 
+        const layoutModel = useCallback(() => {
+            editorRef.current?.layout();
+        }, []);
+
         const api = useMemo(() => {
             return {
                 clearModel,
+                layoutModel,
             };
-        }, [clearModel]);
+        }, [clearModel, layoutModel]);
 
         useImperativeHandle(ref, () => api, [api]);
 

@@ -100,6 +100,10 @@ export const Editor = forwardRef(({ onSelectAbstraction, onSelectTab, onUpdateCo
         dispatch({ type: "SAVE_ALL", payload: {} });
     }, []);
 
+    const layoutEditor = useCallback(() => {
+        editorRef.current && editorRef.current.layoutModel();
+    }, []);
+
     const api_entries = {
         state,
         addTab,
@@ -115,7 +119,8 @@ export const Editor = forwardRef(({ onSelectAbstraction, onSelectTab, onUpdateCo
         getActiveTab,
         setUpdatedContent,
         setContent,
-        saveAll
+        saveAll,
+        layoutEditor
     }
 
     const api = useMemo(() => {
