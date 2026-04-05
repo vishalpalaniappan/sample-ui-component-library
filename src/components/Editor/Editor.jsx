@@ -35,7 +35,6 @@ export const Editor = forwardRef(({ onSelectAbstraction, onSelectTab, onUpdateCo
 
     useEffect(() => {
         if (onSelectTab) {
-            console.log(state.activeTab);
             onSelectTab(state.activeTab);
         }
     }, [state.activeTab]);

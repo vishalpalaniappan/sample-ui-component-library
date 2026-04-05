@@ -22,6 +22,8 @@ export const MonacoInstance = forwardRef(({ onSelectAbstraction }, ref) => {
         const { state, setUpdatedContent } = useEditor();
         const [showEditor, setShowEditor] = useState(false);
         const activeTabRef = useRef(state.activeTab);
+        
+        const [overlayDivs, setOverlayDivs] = useState();
 
         const editorRef = useRef(null);
         const modelsRef = useRef(new Map());
@@ -31,12 +33,58 @@ export const MonacoInstance = forwardRef(({ onSelectAbstraction }, ref) => {
             if (state.activeTab) {
                 activeTabRef.current = state.activeTab;
                 editorRef.current && editorRef.current.setModel(getModel(state.activeTab));
+                updateOverlays();
                 setShowEditor(true);
             } else {
                 activeTabRef.current = null;
                 setShowEditor(false);
             }
         }, [state.activeTab, editorRef]);
+
+        const updateOverlays = useCallback(() => {
+            if (!editorRef.current) return;
+            if (!activeTabRef?.current?.mapping) return;
+            if (state.mode !== EDITOR_MODES.MAPPING) return;
+
+            const mapping = activeTabRef.current.mapping;
+            const lineCount = editorRef.current.getModel().getLineCount();
+            const lineHeight = editorRef.current.getOption(monaco.editor.EditorOption.lineHeight);        
+            const divs = [];
+
+            mapping.forEach((entry) => {
+                const top = editorRef.current.getTopForLineNumber(entry.start_line) - editorRef.current.getScrollTop();
+                let bottom = editorRef.current.getTopForLineNumber(entry.end_line + 1) - editorRef.current.getScrollTop();
+                if (entry.end_line >= lineCount) {
+                    bottom = bottom + lineHeight;
+                }
+
+                const style= {
+                    top: top + "px", 
+                    height: (bottom - top) + "px" 
+                }
+                if (state.mappedIds.includes(entry.uid)) {
+                    style["backgroundColor"] = "rgba(255, 0, 0, 0.3)";
+                }
+                const overlayDiv = <div 
+                    className="line-block-overlay" 
+                    onClick={(e) => onSelectAbstraction(entry)} 
+                    style={style}>
+                </div>;
+                divs.push(overlayDiv);
+            
+            });
+            setOverlayDivs(divs);
+        }, [editorRef, state.activeTab]);
+
+        // Scroll the editor and update overlays on wheel event.
+        const handleWheel = useCallback((e) => {
+            if (!editorRef.current) return;
+            const deltaY = e.deltaY;
+            const currentScrollTop = editorRef.current.getScrollTop();
+            editorRef.current.setScrollTop(currentScrollTop + deltaY);
+            updateOverlays();
+        }, [state.activeTab, updateOverlays]);
+        
 
         useEffect(() => {
             return () => {
@@ -131,7 +179,8 @@ export const MonacoInstance = forwardRef(({ onSelectAbstraction }, ref) => {
                     <div className="no-tab">Select file or drag and drop to view.</div>:null
                 }
                 {state.mode === EDITOR_MODES.MAPPING && (
-                    <div className="overlay-layer">
+                    <div className="overlay-layer" onWheel={handleWheel}>
+                        {overlayDivs}
                     </div>
                 )}
             </div>
