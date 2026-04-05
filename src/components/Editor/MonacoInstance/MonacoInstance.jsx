@@ -38,14 +38,16 @@ export const MonacoInstance = forwardRef(({ onSelectAbstraction }, ref) => {
             } else {
                 activeTabRef.current = null;
                 setShowEditor(false);
+                setOverlayDivs(null);
             }
-        }, [state.activeTab, editorRef]);
+        }, [state.activeTab, state.mode, editorRef]);
 
         // Update overlays for mapping mode.
         const updateOverlays = useCallback(() => {
-            if (state.mode !== EDITOR_MODES.MAPPING) return;
-            if (!editorRef.current || !activeTabRef?.current?.mapping) return;
-
+            if (state.mode !== EDITOR_MODES.MAPPING || !editorRef.current || !activeTabRef?.current?.mapping) {
+                setOverlayDivs(null);
+                return;
+            };
             const mapping = activeTabRef.current.mapping;
             const lineCount = editorRef.current.getModel().getLineCount();
             const lineHeight = editorRef.current.getOption(monaco.editor.EditorOption.lineHeight);        
@@ -65,7 +67,7 @@ export const MonacoInstance = forwardRef(({ onSelectAbstraction }, ref) => {
                 divs.push(<div className="line-block-overlay" onClick={(e) => onSelectAbstraction(entry)} style={style}></div>);
             });
             setOverlayDivs(divs);
-        }, [editorRef, state.activeTab]);
+        }, [editorRef, state.activeTab, state.mode]);
 
         // Scroll the editor and update overlays on wheel event in mapping mode.
         const handleWheel = useCallback((e) => {
