@@ -55,7 +55,7 @@ const Template = (args) => {
 
     useLayoutEffect(() => {
         editorRef.current.setTabGroupId("tab-group-1");
-        flattenTree(WorkspaceSampleTree).forEach((node, index) => {
+        WorkspaceSampleTree.forEach((node, index) => {
             if (node.type === "file") {
                 editorRef.current.addTab(node);
             }
@@ -143,11 +143,9 @@ const Template = (args) => {
 
     const onSelectTool = useCallback((tool) => {
         if (tool === "mapping-mode") {
-            editorRef.current.addTab(
-                flattenTree(WorkspaceSampleTree.tree).slice(2,2)
-            );
-        } else if (tool === "implementation-mode") {
-            editorRef.current.saveAll();
+            editorRef.current.setMode(EDITOR_MODES.MAPPING);
+        } else if (tool === "implementation-mode") {    
+            editorRef.current.setMode(EDITOR_MODES.DESIGN);
         }
     }, [editorRef]);
 
