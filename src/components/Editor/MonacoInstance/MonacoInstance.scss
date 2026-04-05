@@ -23,15 +23,3 @@
     inset: 0;
     overflow:hidden;
 }
-
-.line-block-overlay {
-    z-index: 999;
-    position: absolute;
-    left: 0;
-    right: 0;
-}
-
-.line-block-overlay:hover {
-    background-color: rgba(255, 166, 0, 0.3);
-    cursor: pointer;
-}

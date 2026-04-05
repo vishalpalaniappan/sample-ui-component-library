@@ -14,6 +14,8 @@ import { useEditor } from "../Editor";
 
 import EDITOR_MODES from "../EDITOR_MODES";
 
+import { OverlayRow } from "./OverlayRow/OverlayRow";
+
 import Editor from "@monaco-editor/react";
 
 import "./MonacoInstance.scss";
@@ -48,26 +50,29 @@ export const MonacoInstance = forwardRef(({ onSelectAbstraction }, ref) => {
                 setOverlayDivs(null);
                 return;
             };
-            const mapping = activeTabRef.current.mapping;
-            const lineCount = editorRef.current.getModel().getLineCount();
-            const lineHeight = editorRef.current.getOption(monaco.editor.EditorOption.lineHeight);        
+            const _editor = editorRef.current;
+            const lineCount = _editor.getModel().getLineCount();
+            const lineHeight = _editor.getOption(monaco.editor.EditorOption.lineHeight);        
             const divs = [];
 
-            mapping.forEach((entry) => {
-                const top = editorRef.current.getTopForLineNumber(entry.start_line) - editorRef.current.getScrollTop();
-                let bottom = editorRef.current.getTopForLineNumber(entry.end_line + 1) - editorRef.current.getScrollTop();
+            activeTabRef.current.mapping.forEach((entry) => {
+                const top = _editor.getTopForLineNumber(entry.start_line) - _editor.getScrollTop();
+                let bottom = _editor.getTopForLineNumber(entry.end_line + 1) - _editor.getScrollTop();
                 if (entry.end_line >= lineCount) {
                     bottom = bottom + lineHeight;
                 }
-
-                const style= {};
-                style["top"] = top + "px";
-                style["height"] = (bottom - top) + "px";
-
-                divs.push(<div className="line-block-overlay" onClick={(e) => onSelectAbstraction(entry)} style={style}></div>);
+                divs.push(
+                    <OverlayRow
+                        key={entry.uid}
+                        entry={entry}
+                        top={top}
+                        bottom={bottom}
+                        onSelectAbstraction={onSelectAbstraction}
+                    />
+                );
             });
             setOverlayDivs(divs);
-        }, [editorRef, state.activeTab, state.mode]);
+        }, [editorRef, state.activeTab, state.mode, onSelectAbstraction]);
 
         // Scroll the editor and update overlays on wheel event in mapping mode.
         const handleWheel = useCallback((e) => {
