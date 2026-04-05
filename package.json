@@ -1,6 +1,6 @@
 {
   "name": "sample-ui-component-library",
-  "version": "0.0.66-dev",
+  "version": "0.0.67-dev",
   "description": "A library which contains sample UI elements that can be used for populating layouts.",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",

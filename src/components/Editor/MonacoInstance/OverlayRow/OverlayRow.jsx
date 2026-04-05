@@ -12,9 +12,9 @@ export const OverlayRow =({ entry, top, bottom, onSelectAbstraction }) => {
 
     let className = "line-block-overlay";
     if (entry.isMappedCurrent) {
-        style["backgroundColor"] = "rgba(123, 255, 0, 0.2)";
+        style["backgroundColor"] = "rgba(189, 56, 56, 0.3)";
     } else if (entry.isMappedOther) {
-        style["backgroundColor"] = "rgba(138, 138, 138, 0.2)";
+        style["backgroundColor"] = "rgba(138, 138, 138, 0.1)";
     }
 
     // If entry is not mapped, add hover effect.
