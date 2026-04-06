@@ -52,8 +52,13 @@ export const Editor = forwardRef(({ onSelectAbstraction, onSelectTab, onUpdateCo
         dispatch({ type: "MOVE_TAB", payload: { tabId, newIndex } });
     }, []);
 
-    const addTab = useCallback((tab, index) => {
+    const addTab = useCallback((tab, index, lineNumber) => {
         dispatch({ type: "ADD_TAB", payload: { tab, index } });
+        if (lineNumber) {
+            setTimeout(() => {
+                editorRef.current && editorRef.current.goToLine(lineNumber);
+            }, 100);
+        }
     }, []);
 
     const setTabGroupId = useCallback((id) => {
