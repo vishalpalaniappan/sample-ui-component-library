@@ -7,7 +7,7 @@ export const initialState = {
     mode: EDITOR_MODES.DESIGN,
     mapping: new Map(),
     parentTabGroupId: null,
-    mappedIds: [],
+    currentBehaviorId: null,
     modifiedIndicator: false,
 };
 
@@ -128,10 +128,10 @@ export const editorReducer = (state, action) => {
             };
         }
 
-        case "SET_MAPPED_IDS": {
+        case "SET_CURRENT_BEHAVIOR": {
             return {
                 ...state,
-                mappedIds: action.payload
+                currentBehaviorId: action.payload
             };
         }
 

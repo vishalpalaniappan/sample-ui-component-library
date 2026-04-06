@@ -69,8 +69,8 @@ export const Editor = forwardRef(({ onSelectAbstraction, onSelectTab, onUpdateCo
         dispatch({ type: "SET_MODE", payload: mode });
     }, []);
 
-    const setMappedIds = useCallback((ids) => {
-        dispatch({ type: "SET_MAPPED_IDS", payload: ids });
+    const setCurrentBehavior = useCallback((ids) => {
+        dispatch({ type: "SET_CURRENT_BEHAVIOR", payload: id });
     }, []);
 
     const getTabs = useCallback(() => {
@@ -117,7 +117,7 @@ export const Editor = forwardRef(({ onSelectAbstraction, onSelectTab, onUpdateCo
         moveTab,
         setMapping,
         setMode,
-        setMappedIds,
+        setCurrentBehavior,
         getTab,
         getTabs,
         getActiveTab,
