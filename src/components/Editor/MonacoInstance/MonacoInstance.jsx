@@ -161,7 +161,7 @@ export const MonacoInstance = forwardRef(({ onSelectAbstraction }, ref) => {
          * Programatically go to a line number.
          */
         const goToLine = useCallback((lineNumber) => {
-            editorRef.current && editorRef.current.revealLineInCenter(lineNumber);
+            editorRef.current && editorRef.current.revealLineNearTop(lineNumber);
         }, []);
 
         const api = useMemo(() => {

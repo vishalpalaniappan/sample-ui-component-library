@@ -56,8 +56,9 @@ const Template = (args) => {
     useLayoutEffect(() => {
         editorRef.current.setTabGroupId("tab-group-1");
         WorkspaceSampleTree.forEach((node, index) => {
-            if (node.type === "file") {
+            if (node.type === "file" && index === 0) {
                 editorRef.current.addTab(node);
+                editorRef.current.goToLine(50);
             }
         });
 
