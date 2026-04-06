@@ -109,10 +109,10 @@ export const MonacoInstance = forwardRef(({ onSelectAbstraction }, ref) => {
                 const uri = monaco.Uri.parse(`file:///${activeTab.uid}`);
                 model = monaco.editor.createModel(activeTab.content, "python", uri);
                 modelsRef.current.set(activeTab.uid, model);
+                model.onDidChangeContent((content) => {
+                    setUpdatedContent(activeTabRef.current, editorRef.current.getValue());
+                });
             }
-            model.onDidChangeContent((content) => {
-                setUpdatedContent(activeTabRef.current, editorRef.current.getValue());
-            });
             return model;
         }, [editorRef, modelsRef, setUpdatedContent]);
 
