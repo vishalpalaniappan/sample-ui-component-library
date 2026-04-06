@@ -145,8 +145,8 @@ const Template = (args) => {
         if (tool === "mapping-mode") {
             editorRef.current.setMode(EDITOR_MODES.MAPPING);
         } else if (tool === "implementation-mode") {    
-            console.log("draing");
-            editorRef.current.layoutEditor();
+            editorRef.current.goToLine(10);
+            // editorRef.current.layoutEditor();
             // editorRef.current.setMode(EDITOR_MODES.MAPPING);
             // editorRef.current.setMode(EDITOR_MODES.DESIGN);
         } 

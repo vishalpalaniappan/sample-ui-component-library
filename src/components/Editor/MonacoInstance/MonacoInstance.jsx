@@ -122,7 +122,7 @@ export const MonacoInstance = forwardRef(({ onSelectAbstraction }, ref) => {
                 editorRef.current.setModel(getModel(activeTabRef.current));
                 setShowEditor(true);
             }
-        }, []);
+        }, [getModel]);
 
         // Disable automatic layout and Manually layout the editor to avoid resize observer loops
         const containerRef = useRef(null);
@@ -157,12 +157,20 @@ export const MonacoInstance = forwardRef(({ onSelectAbstraction }, ref) => {
             updateOverlays();
         }, [editorRef, state.activeTab, state.mode, onSelectAbstraction]);
 
+        /**
+         * Programatically go to a line number.
+         */
+        const goToLine = useCallback((lineNumber) => {
+            editorRef.current && editorRef.current.revealLineInCenter(lineNumber);
+        }, []);
+
         const api = useMemo(() => {
             return {
                 clearModel,
                 layoutModel,
+                goToLine,
             };
-        }, [clearModel, layoutModel]);
+        }, [clearModel, layoutModel, goToLine]);
 
         useImperativeHandle(ref, () => api, [api]);
 
