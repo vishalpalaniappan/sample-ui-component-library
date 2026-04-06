@@ -29,6 +29,7 @@ export const MonacoInstance = forwardRef(({ onSelectAbstraction }, ref) => {
 
         const editorRef = useRef(null);
         const modelsRef = useRef(new Map());
+        const updateOverlaysRef = useRef(null);
 
         // When active tab changes, update the editor content and add overlays for the new active tab.
         useEffect(() => {
@@ -77,16 +78,20 @@ export const MonacoInstance = forwardRef(({ onSelectAbstraction }, ref) => {
             setOverlayDivs(divs);
         }, [editorRef, state.activeTab, state.mode, onSelectAbstraction]);
 
+        // Used to access update overlays in editor event listeners without causing re-subscription on every render.
+        useEffect(() => {
+            updateOverlaysRef.current = updateOverlays;
+        }, [updateOverlays]);
+
         // Scroll the editor and update overlays on wheel event in mapping mode.
         const handleWheel = useCallback((e) => {
             if (!editorRef.current) return;
             const deltaY = e.deltaY;
             const currentScrollTop = editorRef.current.getScrollTop();
             editorRef.current.setScrollTop(currentScrollTop + deltaY);
-            updateOverlays();
+            updateOverlaysRef.current?.();
         }, [state.activeTab, updateOverlays]);
         
-
         useEffect(() => {
             return () => {
                 // Dispose all models on unmount to prevent memory leaks.
@@ -122,6 +127,19 @@ export const MonacoInstance = forwardRef(({ onSelectAbstraction }, ref) => {
                 editorRef.current.setModel(getModel(activeTabRef.current));
                 setShowEditor(true);
             }
+
+            const d1 = editor.onDidScrollChange(() => {
+                updateOverlaysRef.current?.();
+            });
+
+            const d2 = editor.onDidChangeCursorPosition(() => {
+                updateOverlaysRef.current?.();
+            });
+
+            editor.onDidDispose(() => {
+                d1.dispose();
+                d2.dispose();
+            });
         }, [getModel]);
 
         // Disable automatic layout and Manually layout the editor to avoid resize observer loops
