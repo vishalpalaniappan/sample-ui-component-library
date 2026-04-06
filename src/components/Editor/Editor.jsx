@@ -69,7 +69,7 @@ export const Editor = forwardRef(({ onSelectAbstraction, onSelectTab, onUpdateCo
         dispatch({ type: "SET_MODE", payload: mode });
     }, []);
 
-    const setCurrentBehavior = useCallback((ids) => {
+    const setCurrentBehavior = useCallback((id) => {
         dispatch({ type: "SET_CURRENT_BEHAVIOR", payload: id });
     }, []);
 
