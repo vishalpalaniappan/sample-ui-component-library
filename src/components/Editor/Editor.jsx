@@ -52,8 +52,11 @@ export const Editor = forwardRef(({ onSelectAbstraction, onSelectTab, onUpdateCo
         dispatch({ type: "MOVE_TAB", payload: { tabId, newIndex } });
     }, []);
 
-    const addTab = useCallback((tab, index) => {
+    const addTab = useCallback((tab, index, lineNumber) => {
         dispatch({ type: "ADD_TAB", payload: { tab, index } });
+        if (lineNumber) {
+            goToLine(lineNumber);
+        }
     }, []);
 
     const setTabGroupId = useCallback((id) => {
@@ -104,6 +107,10 @@ export const Editor = forwardRef(({ onSelectAbstraction, onSelectTab, onUpdateCo
         editorRef.current && editorRef.current.layoutModel();
     }, []);
 
+    const goToLine = useCallback((lineNumber) => {
+        editorRef.current && editorRef.current.goToLine(lineNumber);
+    }, []);
+
     const api_entries = {
         state,
         addTab,
@@ -120,7 +127,8 @@ export const Editor = forwardRef(({ onSelectAbstraction, onSelectTab, onUpdateCo
         setUpdatedContent,
         setContent,
         saveAll,
-        layoutEditor
+        layoutEditor,
+        goToLine
     }
 
     const api = useMemo(() => {
