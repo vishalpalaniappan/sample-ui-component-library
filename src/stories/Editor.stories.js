@@ -164,7 +164,7 @@ const Template = (args) => {
     }, [mappedIds, setMappedIds, editorRef]);
 
 
-    const onUpdateContent = useCallback((tab, content) => {
+    const onContentChange = useCallback((tab, content) => {
         action("Content Updated")(tab.name + " was modified.");
     }, []);
 
@@ -180,7 +180,7 @@ const Template = (args) => {
                     <ToolBarEditor onSelectTool={onSelectTool} />
                 </div>
                 <div className="flow">
-                    <Editor ref={editorRef} onSelectTab={onSelectTab} onUpdateContent={onUpdateContent} onSelectAbstraction={onSelectAbstraction} {...args} />
+                    <Editor ref={editorRef} onSelectTab={onSelectTab} onContentChange={onContentChange} onSelectAbstraction={onSelectAbstraction} {...args} />
                     {dragging && (
                         <div
                             style={{

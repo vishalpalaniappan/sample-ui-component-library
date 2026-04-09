@@ -29,7 +29,7 @@ const MODES = {
  * 
  * @return {JSX}
  */
-export const Editor = forwardRef(({ onSelectAbstraction, onSelectTab, onUpdateContent }, ref) => {
+export const Editor = forwardRef(({ onSelectAbstraction, onSelectTab, onContentChange }, ref) => {
     const [state, dispatch] = useReducer(editorReducer, initialState);
     const editorRef = useRef();
 
@@ -92,10 +92,7 @@ export const Editor = forwardRef(({ onSelectAbstraction, onSelectTab, onUpdateCo
 
     const setUpdatedContent = useCallback((tab, content) => {
         dispatch({ type: "SET_UPDATED_CONTENT", payload: {tab, content} });
-        if (onUpdateContent) {
-            onUpdateContent(tab, content);
-        }
-    }, [onUpdateContent]);
+    }, []);
 
     const setContent = useCallback((tab, content) => {
         dispatch({ type: "SET_CONTENT", payload: {tab, content} });
@@ -148,6 +145,7 @@ export const Editor = forwardRef(({ onSelectAbstraction, onSelectTab, onUpdateCo
                 <div className="monacoContainer">
                     <MonacoInstance 
                         ref={editorRef}
+                        onContentChange={onContentChange}
                         onSelectAbstraction={onSelectAbstraction}/>
                 </div>
             </div>

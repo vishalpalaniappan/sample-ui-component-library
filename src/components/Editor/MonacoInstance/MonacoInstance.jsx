@@ -20,7 +20,7 @@ import Editor from "@monaco-editor/react";
 
 import "./MonacoInstance.scss";
 
-export const MonacoInstance = forwardRef(({ onSelectAbstraction }, ref) => {
+export const MonacoInstance = forwardRef(({ onSelectAbstraction, onContentChange }, ref) => {
         const { state, setUpdatedContent } = useEditor();
         const [showEditor, setShowEditor] = useState(false);
         const activeTabRef = useRef(state.activeTab);
@@ -111,10 +111,13 @@ export const MonacoInstance = forwardRef(({ onSelectAbstraction }, ref) => {
                 modelsRef.current.set(activeTab.uid, model);
                 model.onDidChangeContent((content) => {
                     setUpdatedContent(activeTabRef.current, editorRef.current.getValue());
+                    if (onContentChange) {
+                        onContentChange(activeTabRef.current, editorRef.current.getValue());
+                    }
                 });
             }
             return model;
-        }, [editorRef, modelsRef, setUpdatedContent]);
+        }, [editorRef, modelsRef, setUpdatedContent, onContentChange]);
 
         // Setup editor ref, and clear existing models on mount to prevent mem leak from old models.
         const handleEditorDidMount = useCallback((editor, monaco) => {
