@@ -92,13 +92,15 @@ export const Editor = forwardRef(({ onSelectAbstraction, onSelectTab, onContentC
 
     const setUpdatedContent = useCallback((tab, content) => {
         /**
-         * TODO: I am setting the updated content in the reducer and then I am
-         * also updating in the app store using the callback. However, we should
-         * only be doing one of them. Meaning the callback tells the app to update
-         * the content and then that gets pushed back to the editor when then updates
-         * the reducer state. I am thinking some more about this pattern but for now
-         * I am doing both to keep the state in sync and to allow the consuming app
-         * to react as needed.
+         * TODO: I am setting the updated content of the tab in the reducer and then I am
+         * also updating in the consuming app's store using the callback. However, 
+         * we should only be doing one of them. Meaning the callback tells the app to
+         * update the content and then that gets pushed back to the editor which then 
+         * updates the reducer state. I am thinking some more about this pattern but 
+         * for now I am doing both to keep the state in sync and to allow the consuming 
+         * app to react as needed. I just feel that there should be one source of truth
+         * and there is a way to do that without dispatching two events that might not
+         * aways be in sync.
          */
         dispatch({ type: "SET_UPDATED_CONTENT", payload: {tab, content} });
         if (onContentChange) {
