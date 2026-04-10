@@ -66,10 +66,6 @@ export const Editor = forwardRef(({ onSelectAbstraction, onSelectTab, onContentC
         dispatch({ type: "SET_PARENT_TAB_GROUP_ID", payload: id });
     }, []);
     
-    const setMapping = useCallback((fileName, mapping) => {
-        dispatch({ type: "SET_MAPPING", payload: { fileName, mapping } });
-    }, []);
-    
     const setMode = useCallback((mode) => {
         dispatch({ type: "SET_MODE", payload: mode });
     }, []);
@@ -90,16 +86,21 @@ export const Editor = forwardRef(({ onSelectAbstraction, onSelectTab, onContentC
         return state.tabs.find((tab) => tab.id === state.activeTabId);
     }, [state.tabs, state.activeTabId]);
 
+    const updateTab = useCallback((tab) => {
+        dispatch({ type: "UPDATE_TAB", payload: { tab } });
+    }, []);
+
     const setUpdatedContent = useCallback((tab, content) => {
         dispatch({ type: "SET_UPDATED_CONTENT", payload: {tab, content} });
-    }, []);
+        if (onContentChange) {
+            // Used to update the last updated state in the 
+            // consuming application.
+            onContentChange(tab, content);
+        }
+    }, [onContentChange]);
 
     const setContent = useCallback((tab, content) => {
         dispatch({ type: "SET_CONTENT", payload: {tab, content} });
-    }, []);
-
-    const saveAll = useCallback(() => {
-        dispatch({ type: "SAVE_ALL", payload: {} });
     }, []);
 
     const layoutEditor = useCallback(() => {
@@ -117,7 +118,6 @@ export const Editor = forwardRef(({ onSelectAbstraction, onSelectTab, onContentC
         selectTab,
         closeTab,
         moveTab,
-        setMapping,
         setMode,
         setCurrentBehavior,
         getTab,
@@ -125,9 +125,9 @@ export const Editor = forwardRef(({ onSelectAbstraction, onSelectTab, onContentC
         getActiveTab,
         setUpdatedContent,
         setContent,
-        saveAll,
         layoutEditor,
-        goToLine
+        goToLine,
+        updateTab
     }
 
     const api = useMemo(() => {
@@ -145,7 +145,7 @@ export const Editor = forwardRef(({ onSelectAbstraction, onSelectTab, onContentC
                 <div className="monacoContainer">
                     <MonacoInstance 
                         ref={editorRef}
-                        onContentChange={onContentChange}
+                        onContentChange={setUpdatedContent}
                         onSelectAbstraction={onSelectAbstraction}/>
                 </div>
             </div>
