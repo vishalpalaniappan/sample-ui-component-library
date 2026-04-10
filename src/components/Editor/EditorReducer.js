@@ -8,7 +8,7 @@ export const initialState = {
     mapping: new Map(),
     parentTabGroupId: null,
     currentBehaviorId: null,
-    modifiedIndicator: false,
+    modifiedIndicator: false
 };
 
 export const editorReducer = (state, action) => {
@@ -26,6 +26,13 @@ export const editorReducer = (state, action) => {
                 };
             }
 
+            // If the tab has an updated state, use it.
+            if (tab?.updatedContent) {
+                tab.content = tab.updatedContent;
+            } else {
+                tab.updatedContent = tab.content;
+            }
+
             // Initialize updatedContent and isDirty properties for the tab. 
             // These are used to track whether the content of the tab has been modified since it was opened.
             tab.isDirty = (tab.content !== tab.updatedContent);
@@ -33,15 +40,15 @@ export const editorReducer = (state, action) => {
             // Insert tab at specific location if it was provided.
             let tabs =  [...state.tabs];
             if (index !== undefined && index < state.tabs.length) {
-                tabs.splice(index, 0, tab);
+                tabs.splice(index, 0, {...tab});
             } else {
-                tabs.push(tab);
+                tabs.push({...tab});
             }
 
             return {
                 ...state,
                 tabs: tabs,
-                activeTab: tab
+                activeTab: {...tab}
             };
         }
 
@@ -60,7 +67,7 @@ export const editorReducer = (state, action) => {
             }
             return {
                 ...state,
-                activeTab: tab
+                activeTab: {...tab}
             };
         }
 
@@ -85,7 +92,7 @@ export const editorReducer = (state, action) => {
             return {
                 ...state,
                 tabs: newTabs,
-                activeTab: activeTab
+                activeTab: {...activeTab}
             };
         }
 
@@ -110,14 +117,22 @@ export const editorReducer = (state, action) => {
             };
         }
 
-        case "SET_MAPPING": {
-            const { mapping, fileName } = action.payload;
-            const newMapping = new Map(state.mapping);
-            newMapping.set(fileName, mapping);
+        case "UPDATE_TAB": {
+            const { tab } = action.payload;
+
+            console.log("Updating tab: ", tab.content, tab.updatedContent);
+
+            const tabInfo = state.tabs.find(obj => obj.uid === tab.uid);
+            if (!tabInfo) {
+                console.warn(`Tab with id ${tab.uid} not found`);
+                return state;
+            }
+
             return {
                 ...state,
-                mapping: newMapping
-            };
+                activeTab: (state.activeTab && state.activeTab.uid === tab.uid) ? {...tab} : state.activeTab,
+                tabs: state.tabs.map(t => t.uid === tab.uid ? {...tab} : t)
+            }
         }
 
         case "SET_MODE": {
@@ -142,7 +157,6 @@ export const editorReducer = (state, action) => {
             const { tab, content } = action.payload;
             tab.updatedContent = content;
             tab.isDirty = (tab.content !== tab.updatedContent);
-            
             return {
                 ...state,
                 modifiedIndicator: !state.modifiedIndicator,
@@ -154,25 +168,10 @@ export const editorReducer = (state, action) => {
             const { tab, content } = action.payload;
             tab.content = content;
             tab.isDirty = (tab.content !== tab.updatedContent);
-            
             return {
                 ...state,
                 modifiedIndicator: !state.modifiedIndicator,
                 tabs: state.tabs.map(t => t.uid === tab.uid ? tab : t)
-            };
-        }
-
-        case "SAVE_ALL": {
-            const newTabs = state.tabs.map(tab => {
-                tab.content = tab.updatedContent;
-                tab.isDirty = false;
-                return tab;
-            });
-
-            return {
-                ...state,
-                modifiedIndicator: !state.modifiedIndicator,
-                tabs: newTabs
             };
         }
 
