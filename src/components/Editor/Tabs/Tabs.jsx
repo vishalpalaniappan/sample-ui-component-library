@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 
 import { Gutter } from "./Gutter/Gutter";
 import { Tab } from "./Tab/Tab";
@@ -16,29 +16,39 @@ const TABS_CONTAINER_BG_COLOR = "#222425";
  */
 export const Tabs = () => {
     const { state } = useEditor();
-    const [tabsList, setTabsList] = useState();
+    const tabsList = useMemo(() => {
+        if (state.parentTabGroupId == null) return [];
 
-    useEffect(() => {
-        if (state.tabs?.length >= 0 && state.parentTabGroupId != null) {
-            drawTabs(state.tabs, state.parentTabGroupId);
-        }
-    }, [state.tabs, state.modifiedIndicator, state.parentTabGroupId]);
-
-    /**
-     * Draw the tabs provided in the tabs info. This includes the gutters
-     * between the tabs and on the sides for dropping tabs into empty spaces.
-     * @param {Object} tabs 
-     * @returns 
-     */
-    const drawTabs = (tabs, tabGroupId) => {
         const list = [];
-        tabs.forEach((tab, index) => {
-            list.push(<Gutter key={tab.uid + "-gutter"} id={tabGroupId + "-" + index} index={index} parentId={tabGroupId} />);
-            list.push(<Tab key={tab.uid} isDirty={tab.isDirty} id={tabGroupId + "-" + tab.uid} parentId={tabGroupId} node={tab} />);
+        state.tabs.forEach((tab, index) => {
+            list.push(
+                <Gutter
+                    key={tab.uid + "-gutter"}
+                    id={state.parentTabGroupId + "-" + index}
+                    index={index}
+                    parentId={state.parentTabGroupId}
+                />
+            );
+            list.push(
+                <Tab
+                    key={tab.uid}
+                    isDirty={tab.isDirty}
+                    id={state.parentTabGroupId + "-" + tab.uid}
+                    parentId={state.parentTabGroupId}
+                    node={tab}
+                />
+            );
         });
-        list.push(<Gutter key="last-gutter" id={tabGroupId + "-" + tabs.length} index={tabs.length} parentId={tabGroupId} />);
-        setTabsList(list);
-    };
+        list.push(
+            <Gutter
+                key="last-gutter"
+                id={state.parentTabGroupId + "-" + state.tabs.length}
+                index={state.tabs.length}
+                parentId={state.parentTabGroupId}
+            />
+        );
+        return list;
+    }, [state.tabs, state.activeTab, state.parentTabGroupId]);
 
     return (
         <div className="tabs-container" style={{background: TABS_CONTAINER_BG_COLOR }}>{tabsList}</div>
