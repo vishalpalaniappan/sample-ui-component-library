@@ -32,7 +32,7 @@ export const Tabs = () => {
             list.push(
                 <Tab
                     key={tab.uid}
-                    isDirty={tab.isDirty}
+                    isDirty={tab.content !== tab.updatedContent}
                     id={state.parentTabGroupId + "-" + tab.uid}
                     parentId={state.parentTabGroupId}
                     node={tab}

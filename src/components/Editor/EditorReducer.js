@@ -120,8 +120,6 @@ export const editorReducer = (state, action) => {
         case "UPDATE_TAB": {
             const { tab } = action.payload;
 
-            console.log("Updating tab: ", tab.content, tab.updatedContent);
-
             const tabInfo = state.tabs.find(obj => obj.uid === tab.uid);
             if (!tabInfo) {
                 console.warn(`Tab with id ${tab.uid} not found`);
@@ -156,7 +154,6 @@ export const editorReducer = (state, action) => {
         case "SET_UPDATED_CONTENT": {
             const { tab, content } = action.payload;
             tab.updatedContent = content;
-            tab.isDirty = (tab.content !== tab.updatedContent);
             return {
                 ...state,
                 modifiedIndicator: !state.modifiedIndicator,
@@ -167,7 +164,6 @@ export const editorReducer = (state, action) => {
         case "SET_CONTENT": {
             const { tab, content } = action.payload;
             tab.content = content;
-            tab.isDirty = (tab.content !== tab.updatedContent);
             return {
                 ...state,
                 modifiedIndicator: !state.modifiedIndicator,
