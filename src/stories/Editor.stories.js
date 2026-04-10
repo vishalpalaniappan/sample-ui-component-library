@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, useLayoutEffect, useCallback } from "react";
+import { useEffect, useState, useRef, useLayoutEffect, useCallback, use } from "react";
 import { Editor } from "../components/Editor";
 import { useArgs } from "@storybook/preview-api";
 import EDITOR_MODES from "../components/Editor/EDITOR_MODES";
@@ -117,22 +117,32 @@ const Template = (args) => {
         };
 
         window.addEventListener("pointermove", handleMove);
-
-        const handleKeyDown = (event) => {
-            console.log("KEY DOWN");
-            if (event.code === "KeyA") {
-                editorRef.current.setMode(EDITOR_MODES.DESIGN);
-            } else if (event.code === "KeyB") {
-                editorRef.current.setMode(EDITOR_MODES.MAPPING);
-            }
-        };
-        document.addEventListener("keydown", handleKeyDown);
-
         return () => {
-            document.removeEventListener("keydown", handleKeyDown);
             window.removeEventListener("pointermove", handleMove);
         };
     }, [dragging, editorRef]);
+
+
+    useEffect(() => {
+        // Shortcuts to simulate save. If you press M, it will modify 
+        // the updated content. If you press S, it will modify the content
+        // and save the file.
+        const handleKeyDown = (event) => {
+            if (event.code === "KeyS") {
+                const tabs = editorRef.current.getTabs();
+                tabs[0].content = "print('Hello World')";   
+                editorRef.current.updateTab(tabs[0]);
+            } else if (event.code === "KeyM") {
+                const tabs = editorRef.current.getTabs();   
+                tabs[0].updatedContent = "print('Hello World')";;
+                editorRef.current.updateTab(tabs[0]);
+            }
+        };
+        document.addEventListener("keydown", handleKeyDown);
+        return () => {
+            document.removeEventListener("keydown", handleKeyDown);
+        };
+    }, []);
 
     const sensors = useSensors(
         useSensor(PointerSensor, {
