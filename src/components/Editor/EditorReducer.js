@@ -26,16 +26,13 @@ export const editorReducer = (state, action) => {
                 };
             }
 
-            // If the tab has an updated state, use it.
+            // If the tab has an updated state, use it. This will become
+            // relevant when the ability to open same file in multiple tabs is added.
             if (tab?.updatedContent) {
                 tab.content = tab.updatedContent;
             } else {
                 tab.updatedContent = tab.content;
             }
-
-            // Initialize updatedContent and isDirty properties for the tab. 
-            // These are used to track whether the content of the tab has been modified since it was opened.
-            tab.isDirty = (tab.content !== tab.updatedContent);
             
             // Insert tab at specific location if it was provided.
             let tabs =  [...state.tabs];
