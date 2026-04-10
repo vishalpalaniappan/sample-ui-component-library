@@ -30,20 +30,24 @@ export const MonacoInstance = forwardRef(({ onSelectAbstraction, onContentChange
         const editorRef = useRef(null);
         const modelsRef = useRef(new Map());
         const updateOverlaysRef = useRef(null);
+        const shouldUpdateContentRef = useRef(null);
 
         // When active tab changes, update the editor content and add overlays for the new active tab.
         useEffect(() => {
             if (state.activeTab) {
+                shouldUpdateContentRef.current = false;
                 activeTabRef.current = state.activeTab;
                 editorRef.current && editorRef.current.setModel(getModel(state.activeTab));
                 updateOverlays();
                 setShowEditor(true);
+                shouldUpdateContentRef.current = true;
             } else {
+                shouldUpdateContentRef.current = false;
                 activeTabRef.current = null;
                 setShowEditor(false);
                 setOverlayDivs(null);
             }
-        }, [state.activeTab, state.mode, editorRef]);
+        }, [state.activeTab,state.mode, editorRef]);
 
         // Update overlays for mapping mode.
         const updateOverlays = useCallback(() => {
@@ -102,21 +106,23 @@ export const MonacoInstance = forwardRef(({ onSelectAbstraction, onContentChange
 
         // Get the model given the tab.
         const getModel = useCallback((activeTab) => {
+            console.log("GETTING MODELS");
             let model;
             if (modelsRef.current.has(activeTab.uid)) {
                 model = modelsRef.current.get(activeTab.uid);
+                model.setValue(activeTabRef.current.updatedContent);
             } else {
                 const uri = monaco.Uri.parse(`file:///${activeTab.uid}`);
-                model = monaco.editor.createModel(activeTab.content, "python", uri);
+                model = monaco.editor.createModel(activeTabRef.current.updatedContent, "python", uri);
                 modelsRef.current.set(activeTab.uid, model);
-                model.onDidChangeContent((content) => {
-                    if (onContentChange) {
-                        onContentChange(activeTabRef.current, editorRef.current.getValue());
+                model.onDidChangeContent(() => {
+                    if (onContentChange && shouldUpdateContentRef.current) {
+                        onContentChange(activeTabRef.current, model.getValue());
                     }
                 });
             }
             return model;
-        }, [editorRef, modelsRef, onContentChange]);
+        }, [editorRef, modelsRef, state.activeTab, activeTabRef, onContentChange]);
 
         // Setup editor ref, and clear existing models on mount to prevent mem leak from old models.
         const handleEditorDidMount = useCallback((editor, monaco) => {
