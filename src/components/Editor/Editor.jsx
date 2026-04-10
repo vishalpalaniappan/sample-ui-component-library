@@ -91,6 +91,15 @@ export const Editor = forwardRef(({ onSelectAbstraction, onSelectTab, onContentC
     }, []);
 
     const setUpdatedContent = useCallback((tab, content) => {
+        /**
+         * TODO: I am setting the updated content in the reducer and then I am
+         * also updating in the app store using the callback. However, we should
+         * only be doing one of them. Meaning the callback tells the app to update
+         * the content and then that gets pushed back to the editor when then updates
+         * the reducer state. I am thinking some more about this pattern but for now
+         * I am doing both to keep the state in sync and to allow the consuming app
+         * to react as needed.
+         */
         dispatch({ type: "SET_UPDATED_CONTENT", payload: {tab, content} });
         if (onContentChange) {
             // Used to update the last updated state in the 
