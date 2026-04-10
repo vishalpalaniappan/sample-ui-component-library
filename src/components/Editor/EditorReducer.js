@@ -28,8 +28,7 @@ export const editorReducer = (state, action) => {
 
             // Initialize updatedContent and isDirty properties for the tab. 
             // These are used to track whether the content of the tab has been modified since it was opened.
-            tab.updatedContent = tab.content;
-            tab.isDirty = false;
+            tab.isDirty = (tab.content !== tab.updatedContent);
             
             // Insert tab at specific location if it was provided.
             let tabs =  [...state.tabs];
