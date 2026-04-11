@@ -34,7 +34,8 @@ export const MonacoInstance = forwardRef(({ onSelectAbstraction, onContentChange
 
         // When active tab changes, update the editor content and add overlays for the new active tab.
         useEffect(() => {
-            if (state.activeTab) {
+            // Checking for updated conent is a band aid, i need to investiage why the active tab is {}
+            if (state.activeTab && state.activeTab?.updatedContent) {
                 shouldUpdateContentRef.current = false;
                 activeTabRef.current = state.activeTab;
                 editorRef.current && editorRef.current.setModel(getModel(state.activeTab));
@@ -47,17 +48,18 @@ export const MonacoInstance = forwardRef(({ onSelectAbstraction, onContentChange
                 setShowEditor(false);
                 setOverlayDivs(null);
             }
-        }, [state.activeTab,state.mode, editorRef]);
+        }, [state.activeTab, state.mode, editorRef]);
 
         // Update overlays for mapping mode.
         const updateOverlays = useCallback(() => {
-            if (!editorRef.current) return;
+            if (!editorRef.current ) return;
             if (state.mode !== EDITOR_MODES.MAPPING  || !activeTabRef?.current?.mapping) {
                 editorRef.current.updateOptions({stickyScroll: { enabled: true }});
                 setOverlayDivs(null);
                 return;
             };
             const _editor = editorRef.current;
+            if (_editor.getModel() === null) return;
             _editor.updateOptions({stickyScroll: { enabled: false }});
             const lineCount = _editor.getModel().getLineCount();
             const lineHeight = _editor.getOption(monaco.editor.EditorOption.lineHeight);        
@@ -106,7 +108,6 @@ export const MonacoInstance = forwardRef(({ onSelectAbstraction, onContentChange
 
         // Get the model given the tab.
         const getModel = useCallback((activeTab) => {
-            console.log("GETTING MODELS");
             let model;
             if (modelsRef.current.has(activeTab.uid)) {
                 model = modelsRef.current.get(activeTab.uid);
