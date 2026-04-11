@@ -35,7 +35,7 @@ export const MonacoInstance = forwardRef(({ onSelectAbstraction, onContentChange
         // When active tab changes, update the editor content and add overlays for the new active tab.
         useEffect(() => {
             // Checking for updated conent is a band aid, i need to investiage why the active tab is {}
-            if (state.activeTab && state.activeTab?.updatedContent) {
+            if (state.activeTab && "content" in state.activeTab) {
                 shouldUpdateContentRef.current = false;
                 activeTabRef.current = state.activeTab;
                 editorRef.current && editorRef.current.setModel(getModel(state.activeTab));
