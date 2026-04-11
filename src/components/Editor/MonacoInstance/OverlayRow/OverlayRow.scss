@@ -1,0 +1,11 @@
+.line-block-overlay {
+    z-index: 999;
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    cursor: pointer;
+}
+
+.line-block-overlay-hover:hover {
+    background-color: rgba(93, 97, 90, 0.2)
+}

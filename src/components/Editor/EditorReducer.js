@@ -1,8 +1,14 @@
+import EDITOR_MODES from "./EDITOR_MODES";
+
 export const initialState = {
     uid: crypto.randomUUID(),
     tabs: [],
     activeTab: null,
-    parentTabGroupId: null
+    mode: EDITOR_MODES.DESIGN,
+    mapping: new Map(),
+    parentTabGroupId: null,
+    currentBehaviorId: null,
+    modifiedIndicator: false
 };
 
 export const editorReducer = (state, action) => {
@@ -19,19 +25,27 @@ export const editorReducer = (state, action) => {
                     activeTab: tabInfo
                 };
             }
+
+            // If the tab has an updated state, use it. This will become
+            // relevant when the ability to open same file in multiple tabs is added.
+            if (tab?.updatedContent) {
+                tab.content = tab.updatedContent;
+            } else {
+                tab.updatedContent = tab.content;
+            }
             
             // Insert tab at specific location if it was provided.
             let tabs =  [...state.tabs];
             if (index !== undefined && index < state.tabs.length) {
-                tabs.splice(index, 0, tab);
+                tabs.splice(index, 0, {...tab});
             } else {
-                tabs.push(tab);
+                tabs.push({...tab});
             }
 
             return {
                 ...state,
                 tabs: tabs,
-                activeTab: tab
+                activeTab: {...tab}
             };
         }
 
@@ -50,7 +64,7 @@ export const editorReducer = (state, action) => {
             }
             return {
                 ...state,
-                activeTab: tab
+                activeTab: {...tab}
             };
         }
 
@@ -75,7 +89,7 @@ export const editorReducer = (state, action) => {
             return {
                 ...state,
                 tabs: newTabs,
-                activeTab: activeTab
+                activeTab: {...activeTab}
             };
         }
 
@@ -99,9 +113,59 @@ export const editorReducer = (state, action) => {
                 tabs: prevTabs
             };
         }
-        
+
+        case "UPDATE_TAB": {
+            const { tab } = action.payload;
+
+            const tabInfo = state.tabs.find(obj => obj.uid === tab.uid);
+            if (!tabInfo) {
+                console.warn(`Tab with id ${tab.uid} not found`);
+                return state;
+            }
+
+            return {
+                ...state,
+                activeTab: (state.activeTab && state.activeTab.uid === tab.uid) ? {...tab} : state.activeTab,
+                tabs: state.tabs.map(t => t.uid === tab.uid ? {...tab} : t)
+            }
+        }
+
+        case "SET_MODE": {
+            return {
+                ...state,
+                mode: action.payload
+            };
+        }
+
+        case "SET_CURRENT_BEHAVIOR": {
+            return {
+                ...state,
+                currentBehaviorId: action.payload
+            };
+        }
+
         case "RESET_STATE": {
             return initialState;
+        }
+
+        case "SET_UPDATED_CONTENT": {
+            const { tab, content } = action.payload;
+            tab.updatedContent = content;
+            return {
+                ...state,
+                modifiedIndicator: !state.modifiedIndicator,
+                tabs: state.tabs.map(t => t.uid === tab.uid ? tab : t)
+            };
+        }
+
+        case "SET_CONTENT": {
+            const { tab, content } = action.payload;
+            tab.content = content;
+            return {
+                ...state,
+                modifiedIndicator: !state.modifiedIndicator,
+                tabs: state.tabs.map(t => t.uid === tab.uid ? tab : t)
+            };
         }
 
         default: {

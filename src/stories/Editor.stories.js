@@ -1,6 +1,7 @@
-import { useEffect, useState, useRef, useLayoutEffect } from "react";
+import { useEffect, useState, useRef, useLayoutEffect, useCallback, use } from "react";
 import { Editor } from "../components/Editor";
 import { useArgs } from "@storybook/preview-api";
+import EDITOR_MODES from "../components/Editor/EDITOR_MODES";
 import { action } from "@storybook/addon-actions";
 import {
     DndContext,
@@ -11,6 +12,9 @@ import {
 } from "@dnd-kit/core";
 
 import WorkspaceSampleTree from "./data/FileBrowser/workspace_sample.json"
+import transactiondb_mapping from "./data/Mapping/TransactionDB_mapping.json"
+import { ToolBarEditor } from "./components/ToolBarEditor/ToolBarEditor";
+import translator_mapping from "./data/Mapping/FrenchTranslator_mapping.json"
 
 import "./EditorStories.scss"
 
@@ -41,29 +45,38 @@ const Template = (args) => {
     const [, updateArgs] = useArgs();
 
     const [dragPreviewLabel, setDragPreviewLabel] = useState(<></>);
+    const [selectTool, setSelectTool] = useState("select");
+    const [mappedIds, setMappedIds] = useState([
+        "c4f43010-71ef-46e6-bf38-0548d3a34012",
+        "8bf2605a-1940-49de-9b2f-0efa22bf658c"
+    ]);
 
     const editorRef = useRef();
 
     useLayoutEffect(() => {
         editorRef.current.setTabGroupId("tab-group-1");
-        flattenTree(WorkspaceSampleTree.tree).forEach((node, index) => {
-            if (node.type === "file") {
+        WorkspaceSampleTree.forEach((node, index) => {
+            if (node.type === "file" && index === 0) {
                 editorRef.current.addTab(node);
+                editorRef.current.goToLine(50);
             }
         });
 
+        // const result = flattenTree(WorkspaceSampleTree.tree).find(
+        //     (obj) => obj.name === "TransactionDB.py"
+        // );
+        // editorRef.current.addTab(result);translator_mapping
+        // editorRef.current.setMapping("TransactionDB.py", transactiondb_mapping);
+        // editorRef.current.setMapping("FrenchTranslator.py", translator_mapping);
+        // editorRef.current.setMappedIds(mappedIds);
 
-        const node = {
-            "name": "SAMPLE",
-            "type": "file",
-            "uid": "dissr-f6459410-1634-4dbc-8d76-35896822158d",
-            "content": "1234"
-        }
-
-        editorRef.current.addTab(node,2);
+        // setTimeout(() => {
+        //     console.log(editorRef.current.getTabs());
+        //     console.log(editorRef.current.getActiveTab());
+        // }, 5000);
     }, []);
 
-const [dragging, setDragging] = useState(false);
+    const [dragging, setDragging] = useState(false);
   
     /**
      * Callback for when drag ends.
@@ -104,11 +117,32 @@ const [dragging, setDragging] = useState(false);
         };
 
         window.addEventListener("pointermove", handleMove);
-
         return () => {
             window.removeEventListener("pointermove", handleMove);
         };
-    }, [dragging]);
+    }, [dragging, editorRef]);
+
+
+    useEffect(() => {
+        // Shortcuts to simulate save. If you press M, it will modify 
+        // the updated content. If you press S, it will modify the content
+        // and save the file.
+        const handleKeyDown = (event) => {
+            if (event.code === "KeyS") {
+                const tabs = editorRef.current.getTabs();
+                tabs[0].content = "print('Hello World')";   
+                editorRef.current.updateTab(tabs[0]);
+            } else if (event.code === "KeyM") {
+                const tabs = editorRef.current.getTabs();   
+                tabs[0].updatedContent = "print('Hello World')";;
+                editorRef.current.updateTab(tabs[0]);
+            }
+        };
+        document.addEventListener("keydown", handleKeyDown);
+        return () => {
+            document.removeEventListener("keydown", handleKeyDown);
+        };
+    }, []);
 
     const sensors = useSensors(
         useSensor(PointerSensor, {
@@ -118,23 +152,60 @@ const [dragging, setDragging] = useState(false);
         })
     );
 
+    const onSelectTool = useCallback((tool) => {
+        if (tool === "mapping-mode") {
+            editorRef.current.setMode(EDITOR_MODES.MAPPING);
+        } else if (tool === "implementation-mode") {    
+            editorRef.current.goToLine(10);
+            // editorRef.current.layoutEditor();
+            // editorRef.current.setMode(EDITOR_MODES.MAPPING);
+            // editorRef.current.setMode(EDITOR_MODES.DESIGN);
+        } 
+    }, [editorRef]);
+
+    const onSelectAbstraction = useCallback((entry) => {
+        action("Abstraction Selected")(entry);
+        const found = mappedIds.find((id) => id === entry.uid);
+        const newMap = (found)?
+            mappedIds.filter((id) => id !== found):
+            [...mappedIds, entry.uid];
+        setMappedIds(newMap);
+        editorRef.current.setMappedIds(newMap);
+    }, [mappedIds, setMappedIds, editorRef]);
+
+
+    const onContentChange = useCallback((tab, content) => {
+        action("Content Updated")(tab.name + " was modified.");
+    }, []);
+
+    const onSelectTab = useCallback((tab) => {
+        action("Tab Selected")(tab&&tab.name);
+    }, []);
+
     return (
         <DndContext sensors={sensors} onDragStart={onDragStart} onDragEnd={handleDragEnd}>
-            <div className="editorStoryWrapper">
-                <Editor ref={editorRef}{...args} />
-            </div>
-            {dragging && (
-                <div
-                    style={{
-                        position: "fixed",
-                        left: pos.x,
-                        top: pos.y,
-                        pointerEvents: "none",
-                        zIndex: 9999,
-                    }}>
-                    {dragPreviewLabel}
+
+            <div className="editorRootContainer">
+                <div className="toolbar">
+                    <ToolBarEditor onSelectTool={onSelectTool} />
                 </div>
-            )}  
+                <div className="flow">
+                    <Editor ref={editorRef} onSelectTab={onSelectTab} onContentChange={onContentChange} onSelectAbstraction={onSelectAbstraction} {...args} />
+                    {dragging && (
+                        <div
+                            style={{
+                                position: "fixed",
+                                left: pos.x,
+                                top: pos.y,
+                                pointerEvents: "none",
+                                zIndex: 9999,
+                            }}>
+                            {dragPreviewLabel}
+                        </div>
+                    )}  
+                </div>
+            </div>
+            
         </DndContext>
     )
 }
