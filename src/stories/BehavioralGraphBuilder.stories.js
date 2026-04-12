@@ -36,6 +36,8 @@ const Template = (args) => {
             if (tool === "add-node") {
                 engine.addNode("node-" + count++, []);
                 editorRef.current.updateEngine(engine);
+            } else if (tool === "select-node") {
+                editorRef.current.highlightBehavior("testBehavior");
             }
         },
         [activeTool, setActiveTool, engine],
@@ -57,7 +59,7 @@ const Template = (args) => {
                 engine.addNode("testBehavior", []);
                 engine.addNode("testBehavior2", []);
                 editorRef.current.updateEngine(engine);
-            }, 4000);
+            }, 1000);
             return () => clearTimeout(timerId);
         }
     }, [design, editorRef]);

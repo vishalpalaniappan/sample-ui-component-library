@@ -13,6 +13,7 @@ import "./BehavioralGraphBuilder.scss";
  */
 export const BehavioralGraphBuilder = forwardRef(({connectBehaviors, deleteTransition, deleteBehavior, selectBehavior}, ref) => {
     const canvasRef = useRef();
+    const [selectedBehavior, setSelectedBehavior] = useState(null);
 
     // Resizer to set canvas size to match container
     // TODO: Issues with zooming and resizing, need to explore.
@@ -42,11 +43,18 @@ export const BehavioralGraphBuilder = forwardRef(({connectBehaviors, deleteTrans
         }
     }, [setNodes, setEdges]);
 
+
+    const highlightBehavior = useCallback((id) => {
+        // setSelectedBehavior(id);
+        setSelections(id?[id]:[]);
+    }, [setSelectedBehavior, setSelections]);
+
     const api = useMemo(() => {
         return {
-            updateEngine
+            updateEngine,
+            highlightBehavior
         };
-    }, [updateEngine]);
+    }, [updateEngine, highlightBehavior]);
     
     useImperativeHandle(ref, () => api, [api]);
 

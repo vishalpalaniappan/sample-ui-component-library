@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
 import {
+  Eye,
   PlusSquare,
   Floppy
 } from "react-bootstrap-icons";
@@ -27,6 +28,11 @@ export function ToolBar({ onSelectTool }) {
         <PlusSquare
           onClick={(e) => selectTool("add-node")}
           title="Add Node"
+          className="icon"
+        />
+        <Eye
+          onClick={(e) => selectTool("select-node")}
+          title="Select Node"
           className="icon"
         />
       </div>
