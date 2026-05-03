@@ -9,10 +9,11 @@ import { babel } from '@rollup/plugin-babel';
 export default {
     input: 'src/index.js',
     external: [
+        "reaflow",
         'react',
         'react-dom',
         '@dnd-kit/core',
-        "reaflow"
+        '@monaco-editor/react'
     ],
     output: [
         {
