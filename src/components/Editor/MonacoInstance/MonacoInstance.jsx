@@ -16,7 +16,7 @@ import EDITOR_MODES from "../EDITOR_MODES";
 
 import { OverlayRow } from "./OverlayRow/OverlayRow";
 
-import Editor from "@monaco-editor/react";
+import MonacoEditor from "@monaco-editor/react";
 
 import "./MonacoInstance.scss";
 
@@ -28,6 +28,7 @@ export const MonacoInstance = forwardRef(({ onSelectAbstraction, onContentChange
         const [overlayDivs, setOverlayDivs] = useState();
 
         const editorRef = useRef(null);
+        const monacoRef = useRef(null);
         const modelsRef = useRef(new Map());
         const updateOverlaysRef = useRef(null);
         const shouldUpdateContentRef = useRef(null);
@@ -62,7 +63,7 @@ export const MonacoInstance = forwardRef(({ onSelectAbstraction, onContentChange
             if (_editor.getModel() === null) return;
             _editor.updateOptions({stickyScroll: { enabled: false }});
             const lineCount = _editor.getModel().getLineCount();
-            const lineHeight = _editor.getOption(monaco.editor.EditorOption.lineHeight);        
+            const lineHeight = _editor.getOption(monacoRef.current.editor.EditorOption.lineHeight);        
             const divs = [];
 
             activeTabRef.current.mapping.forEach((entry) => {
@@ -113,8 +114,8 @@ export const MonacoInstance = forwardRef(({ onSelectAbstraction, onContentChange
                 model = modelsRef.current.get(activeTab.uid);
                 model.setValue(activeTabRef.current.updatedContent);
             } else {
-                const uri = monaco.Uri.parse(`file:///${activeTab.uid}`);
-                model = monaco.editor.createModel(activeTabRef.current.updatedContent, "python", uri);
+                const uri = monacoRef.current.Uri.parse(`file:///${activeTab.uid}`);
+                model = monacoRef.current.editor.createModel(activeTabRef.current.updatedContent, "python", uri);
                 modelsRef.current.set(activeTab.uid, model);
                 model.onDidChangeContent(() => {
                     if (onContentChange && shouldUpdateContentRef.current) {
@@ -128,9 +129,9 @@ export const MonacoInstance = forwardRef(({ onSelectAbstraction, onContentChange
         // Setup editor ref, and clear existing models on mount to prevent mem leak from old models.
         const handleEditorDidMount = useCallback((editor, monaco) => {
             editorRef.current = editor;
+            monacoRef.current = monaco;
             editor.layout();
             modelsRef.current = new Map();
-            monaco.editor.getModels().forEach((model) => model.dispose());
 
             if (activeTabRef.current) {
                 editorRef.current.setModel(getModel(activeTabRef.current));
@@ -203,7 +204,7 @@ export const MonacoInstance = forwardRef(({ onSelectAbstraction, onContentChange
 
         return (
             <div className="editor-container" ref={containerRef}>
-                <Editor
+                <MonacoEditor
                     defaultLanguage="python"
                     defaultValue={"Loading content..."}
                     onMount={handleEditorDidMount}
