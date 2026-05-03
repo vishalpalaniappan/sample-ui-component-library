@@ -1,0 +1,131 @@
+[
+    {
+        "type": "Import",
+        "uid": "039c9c46-3788-4017-84cf-2abeb3932507",
+        "start_line": 1,
+        "end_line": 1,
+        "source": "import threading"
+    },
+    {
+        "type": "Import",
+        "uid": "bf733fea-d7c8-4794-8fd1-cfc6fd2bca62",
+        "start_line": 2,
+        "end_line": 2,
+        "source": "import queue"
+    },
+    {
+        "type": "ImportFrom",
+        "uid": "9a0f0e12-558d-4304-ad22-f4ebd2b91928",
+        "start_line": 3,
+        "end_line": 3,
+        "source": "from deep_translator import GoogleTranslator"
+    },
+    {
+        "type": "ClassDef",
+        "uid": "c4a41b12-0ac1-4032-ab1b-5437ed633eb1",
+        "start_line": 5,
+        "end_line": 5,
+        "source": [
+            "class FrenchTranslator(threading.Thread):"
+        ]
+    },
+    {
+        "type": "FunctionDef",
+        "uid": "74e069aa-bcb8-4323-be03-20b55491659e",
+        "start_line": 6,
+        "end_line": 6,
+        "source": [
+            "    def __init__(self, id, queue, packerQueue):"
+        ]
+    },
+    {
+        "type": "FunctionDef",
+        "uid": "daf299b9-7a1e-421f-a0ee-91c5f8da02e1",
+        "start_line": 13,
+        "end_line": 13,
+        "source": [
+            "    def run(self):"
+        ]
+    },
+    {
+        "type": "Expr",
+        "uid": "06d8f1f0-580f-47c1-9fd6-9f8a8995d419",
+        "start_line": 7,
+        "end_line": 7,
+        "source": "super().__init__(daemon=True)"
+    },
+    {
+        "type": "Assign",
+        "uid": "f6a558d1-977f-4881-ab8e-0365c35e1c91",
+        "start_line": 8,
+        "end_line": 8,
+        "source": "self.queue = queue"
+    },
+    {
+        "type": "Assign",
+        "uid": "1da17a50-6792-4fe1-8a1d-de37a0042ba5",
+        "start_line": 9,
+        "end_line": 9,
+        "source": "self.id = id"
+    },
+    {
+        "type": "Assign",
+        "uid": "5d8e18b0-7520-494d-9511-c707402733e6",
+        "start_line": 10,
+        "end_line": 10,
+        "source": "self.packerQueue = packerQueue"
+    },
+    {
+        "type": "Expr",
+        "uid": "613a77d5-8adb-4a62-be61-96b121dbb03f",
+        "start_line": 11,
+        "end_line": 11,
+        "source": "self.start()"
+    },
+    {
+        "type": "While",
+        "uid": "4b76898c-ead0-4f47-b3f5-28130cfaa2d2",
+        "start_line": 14,
+        "end_line": 14,
+        "source": [
+            "        while True:"
+        ]
+    },
+    {
+        "type": "Try",
+        "uid": "944b63bf-01ba-45cc-a24a-9b20aa7e753a",
+        "start_line": 15,
+        "end_line": 15,
+        "source": [
+            "            try:"
+        ]
+    },
+    {
+        "type": "Assign",
+        "uid": "cb68a874-432e-4d5b-8a3b-1674a19b73d9",
+        "start_line": 20,
+        "end_line": 20,
+        "source": "translatedMsg = GoogleTranslator(source=\"auto\", target=\"french\").translate(job[\"value\"][\"data\"])"
+    },
+    {
+        "type": "Expr",
+        "uid": "b03928c0-673e-4ff5-a205-89207ec8a26c",
+        "start_line": 21,
+        "end_line": 28,
+        "source": "self.packerQueue.put({\n                \"uid\": job[\"uid\"],\n                \"value\": {\n                    \"language\": \"french\",\n                    \"original\": job[\"value\"][\"data\"],\n                    \"translated\": translatedMsg\n                }\n            })"
+    },
+    {
+        "type": "Assign",
+        "uid": "145c185d-8e8c-427b-a192-cb1da0f79f53",
+        "start_line": 16,
+        "end_line": 16,
+        "source": "job = self.queue.get(timeout=10)"
+    },
+    {
+        "type": "Continue",
+        "uid": "7cbe5c90-9bf8-49de-a952-0b8e601828f7",
+        "start_line": 18,
+        "end_line": 18,
+        "source": "continue"
+    }
+]

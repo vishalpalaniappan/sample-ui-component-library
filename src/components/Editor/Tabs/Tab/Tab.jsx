@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { FileEarmark, XLg } from "react-bootstrap-icons";
+import { FileEarmark, XLg, CircleFill } from "react-bootstrap-icons";
 import { useDraggable } from "@dnd-kit/core";
 import PropTypes from "prop-types";
 
@@ -19,7 +19,7 @@ const INACTIVE_TAB_FG_COLOR = "#969690";
  * @param {String} label
  * @returns
  */
-export const Tab = ({ id, parentId, node }) => {
+export const Tab = ({ id, isDirty, parentId, node }) => {
     const [tabStyle, setTabStyle] = useState();
 
     const { selectTab, closeTab, state } = useEditor();
@@ -70,6 +70,11 @@ export const Tab = ({ id, parentId, node }) => {
             {...attributes}
         >
             <div className="tab-content">
+                {isDirty && 
+                    <div className="icon">
+                        <CircleFill size={6}/>
+                    </div>
+                }
                 <div className="icon">
                     <FileEarmark size={14} style={{ pointerEvents: "none" }} />
                 </div>

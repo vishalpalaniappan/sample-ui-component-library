@@ -10,26 +10,41 @@ import React, {
     useImperativeHandle,
     useMemo,
     useReducer,
-    useContext
+    useContext,
+    useRef,
+    useEffect
 } from "react";
 
 import { EditorContext } from "./EditorContext";
 
 import { editorReducer, initialState } from "./EditorReducer";
 
+const MODES = {
+    MAPPING: 1,
+    IMPLEMENTATION: 2
+}
+
 /**
  * Renders the editor component with support for tabs.
  * 
  * @return {JSX}
  */
-export const Editor = forwardRef(({ }, ref) => {
+export const Editor = forwardRef(({ onSelectAbstraction, onSelectTab, onContentChange }, ref) => {
     const [state, dispatch] = useReducer(editorReducer, initialState);
+    const editorRef = useRef();
+
+    useEffect(() => {
+        if (onSelectTab) {
+            onSelectTab(state.activeTab);
+        }
+    }, [state.activeTab]);
 
     const selectTab = useCallback((id) => {
         dispatch({ type: "SELECT_TAB", payload: id });
-    }, []);
+    }, [onSelectTab]);
 
     const closeTab = useCallback((id) => {
+        editorRef.current && editorRef.current.clearModel(id);
         dispatch({ type: "CLOSE_TAB", payload: id });
     }, []);
 
@@ -37,25 +52,98 @@ export const Editor = forwardRef(({ }, ref) => {
         dispatch({ type: "MOVE_TAB", payload: { tabId, newIndex } });
     }, []);
 
-    const addTab = useCallback((tab, index) => {
+    const addTab = useCallback((tab, index, lineNumber) => {
         dispatch({ type: "ADD_TAB", payload: { tab, index } });
+        if (lineNumber) {
+            setTimeout(() => {
+                editorRef.current && editorRef.current.goToLine(lineNumber);
+            }, 100);
+        }
     }, []);
 
     const setTabGroupId = useCallback((id) => {
         dispatch({ type: "RESET_STATE"});
         dispatch({ type: "SET_PARENT_TAB_GROUP_ID", payload: id });
     }, []);
+    
+    const setMode = useCallback((mode) => {
+        dispatch({ type: "SET_MODE", payload: mode });
+    }, []);
+
+    const setCurrentBehavior = useCallback((id) => {
+        dispatch({ type: "SET_CURRENT_BEHAVIOR", payload: id });
+    }, []);
+
+    const getTabs = useCallback(() => {
+        return state.tabs;
+    }, [state.tabs]);
+
+    const getTab = useCallback((id) => {
+        return state.tabs.find((tab) => tab.uid === id);
+    }, [state.tabs]);
+
+    const getActiveTab = useCallback(() => {
+        return state.tabs.find((tab) => tab.id === state.activeTabId);
+    }, [state.tabs, state.activeTabId]);
+
+    const updateTab = useCallback((tab) => {
+        dispatch({ type: "UPDATE_TAB", payload: { tab } });
+    }, []);
+
+    const setUpdatedContent = useCallback((tab, content) => {
+        /**
+         * TODO: I am setting the updated content of the tab in the reducer and then I am
+         * also updating in the consuming app's store using the callback. However, 
+         * we should only be doing one of them. Meaning the callback tells the app to
+         * update the content and then that gets pushed back to the editor which then 
+         * updates the reducer state. I am thinking some more about this pattern but 
+         * for now I am doing both to keep the state in sync and to allow the consuming 
+         * app to react as needed. I just feel that there should be one source of truth
+         * and there is a way to do that without dispatching two events that might not
+         * aways be in sync.
+         */
+        dispatch({ type: "SET_UPDATED_CONTENT", payload: {tab, content} });
+        if (onContentChange) {
+            // Used to update the last updated state in the 
+            // consuming application.
+            onContentChange(tab, content);
+        }
+    }, [onContentChange]);
+
+    const setContent = useCallback((tab, content) => {
+        dispatch({ type: "SET_CONTENT", payload: {tab, content} });
+    }, []);
+
+    const layoutEditor = useCallback(() => {
+        editorRef.current && editorRef.current.layoutModel();
+    }, []);
+
+    const goToLine = useCallback((lineNumber) => {
+        editorRef.current && editorRef.current.goToLine(lineNumber);
+    }, []);
+
+    const api_entries = {
+        state,
+        addTab,
+        setTabGroupId,
+        selectTab,
+        closeTab,
+        moveTab,
+        setMode,
+        setCurrentBehavior,
+        getTab,
+        getTabs,
+        getActiveTab,
+        setUpdatedContent,
+        setContent,
+        layoutEditor,
+        goToLine,
+        updateTab
+    }
 
     const api = useMemo(() => {
-        return {
-            state,
-            addTab,
-            setTabGroupId,
-            selectTab,
-            closeTab,
-            moveTab
-        };
-    }, [state, addTab, selectTab, closeTab, moveTab, setTabGroupId]);
+        return api_entries;
+    }, Object.values(api_entries));
 
     useImperativeHandle(ref, () => api, [api]);
 
@@ -66,7 +154,10 @@ export const Editor = forwardRef(({ }, ref) => {
                     <Tabs />
                 </div>
                 <div className="monacoContainer">
-                    <MonacoInstance />
+                    <MonacoInstance 
+                        ref={editorRef}
+                        onContentChange={setUpdatedContent}
+                        onSelectAbstraction={onSelectAbstraction}/>
                 </div>
             </div>
         </EditorContext.Provider>

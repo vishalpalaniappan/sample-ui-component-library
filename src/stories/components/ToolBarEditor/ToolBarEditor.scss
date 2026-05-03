@@ -1,0 +1,29 @@
+.toolbarWrapper {
+    display:flex;
+    flex-direction: column;
+    justify-content:space-around;
+    height: 100%;
+    background-color: #333333;
+}
+
+.toolbarContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width:100%;
+    align-items: center;
+    padding: 10px 0;
+}
+
+.toolbarWrapper > .bottom {
+  margin-top: auto;
+}
+
+.toolbarContainer > .icon {
+    color:grey;
+}
+
+.toolbarContainer > .icon:hover {
+    color:white;
+    cursor:pointer;
+}
