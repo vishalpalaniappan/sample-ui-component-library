@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef, useLayoutEffect } from "react";
-import { Editor } from "../components/Editor";
-import { FileBrowser } from "../components/FileBrowser";
+import { Editor } from "../../components/Editor";
+import { FileBrowser } from "../../components/FileBrowser";
 import { useArgs } from "@storybook/preview-api";
 import { action } from "@storybook/addon-actions";
 import {
@@ -11,7 +11,7 @@ import {
     useSensors
 } from "@dnd-kit/core";
 
-import WorkspaceSampleTree from "./data/FileBrowser/workspace_sample.json"
+import WorkspaceSampleTree from "../data/FileBrowser/workspace_sample.json"
 
 import "./ArthaEditor.scss"
 

@@ -2,12 +2,12 @@ import { useEffect, useState, useCallback, useRef } from "react";
 import { useArgs } from "@storybook/preview-api";
 import { action } from "@storybook/addon-actions";
 
-import { BehavioralGraphBuilder } from "../components/BehavioralGraphBuilder/BehavioralGraphBuilder";
-import { ToolBar } from "./components/ToolBar/ToolBar";
+import { BehavioralGraphBuilder } from "../../components/BehavioralGraphBuilder/BehavioralGraphBuilder";
+import { ToolBar } from "../components/ToolBar/ToolBar";
 
 import { DALEngine } from "dal-engine-core-js-lib-dev";
 
-import design from "./data/Designs/simple_designs_temp.json";
+import design from "../data/Designs/simple_designs_temp.json";
 
 import "./BehavioralGraphBuilder.scss";
 

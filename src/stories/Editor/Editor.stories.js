@@ -1,5 +1,5 @@
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { FileBrowser } from "../components/FileBrowser";
+import { useEffect, useState, useRef, useLayoutEffect } from "react";
+import { Editor } from "../../components/Editor";
 import { useArgs } from "@storybook/preview-api";
 import { action } from "@storybook/addon-actions";
 import {
@@ -10,16 +10,15 @@ import {
     useSensors
 } from "@dnd-kit/core";
 
-import WorkspaceSampleTree from "./data/FileBrowser/workspace_sample.json"
+import WorkspaceSampleTree from "../data/FileBrowser/workspace_sample.json"
 
-import "./FileBrowserStories.scss"
+import "./EditorStories.scss"
 
 export default {
-    title: 'FileBrowser', 
-    component: FileBrowser,
+    title: 'Editor', 
+    component: Editor,
     argTypes: {}
 };
-
 /**
  * Offset for the drag overlay.
  * @returns 
@@ -32,27 +31,39 @@ const offsetOverlay = ({ transform }) => {
   };
 };
 
+const flattenTree = (tree, level = 0) =>
+  tree.flatMap(node => [
+    { ...node, level },
+    ...(node.children ? flattenTree(node.children, level + 1) : [])
+  ]);
 
 const Template = (args) => {
     const [, updateArgs] = useArgs();
-    const fileBrowserRef = useRef();
-    
+
     const [dragPreviewLabel, setDragPreviewLabel] = useState(<></>);
 
-    const onSelectFile = (selectedFile) => {
-        action('Selected Node:')(selectedFile);
-    }
-
-    useEffect(() => {
-        updateArgs({onSelectFile : onSelectFile});
-    }, []);
+    const editorRef = useRef();
 
     useLayoutEffect(() => {
-        fileBrowserRef.current.addFileTree(args.tree);
+        editorRef.current.setTabGroupId("tab-group-1");
+        flattenTree(WorkspaceSampleTree.tree).forEach((node, index) => {
+            if (node.type === "file") {
+                editorRef.current.addTab(node);
+            }
+        });
+
+
+        const node = {
+            "name": "SAMPLE",
+            "type": "file",
+            "uid": "dissr-f6459410-1634-4dbc-8d76-35896822158d",
+            "content": "1234"
+        }
+
+        editorRef.current.addTab(node,2);
     }, []);
 
-
-    const [dragging, setDragging] = useState(false);
+const [dragging, setDragging] = useState(false);
   
     /**
      * Callback for when drag ends.
@@ -109,10 +120,8 @@ const Template = (args) => {
 
     return (
         <DndContext sensors={sensors} onDragStart={onDragStart} onDragEnd={handleDragEnd}>
-            <div className="viewerStoryWrapper">
-                <div className="file-browser">
-                    <FileBrowser ref={fileBrowserRef} {...args} />
-                </div>
+            <div className="editorStoryWrapper">
+                <Editor ref={editorRef}{...args} />
             </div>
             {dragging && (
                 <div
@@ -130,8 +139,6 @@ const Template = (args) => {
     )
 }
 
-export const SampleTree = Template.bind({});
+export const Default = Template.bind({});
 
-SampleTree.args = {
-    tree: WorkspaceSampleTree.tree
-}
+Default.args = {}
