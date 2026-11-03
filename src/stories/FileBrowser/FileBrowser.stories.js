@@ -10,7 +10,8 @@ import {
     useSensors
 } from "@dnd-kit/core";
 
-import WorkspaceSampleTree from "../data/FileBrowser/workspace_sample.json"
+
+import WorkspaceSampleTree from "../data/Artha/coffee_shop/designFiles.json"
 
 import "./FileBrowserStories.scss"
 
@@ -133,5 +134,5 @@ const Template = (args) => {
 export const SampleTree = Template.bind({});
 
 SampleTree.args = {
-    tree: WorkspaceSampleTree.tree
+    tree: WorkspaceSampleTree
 }

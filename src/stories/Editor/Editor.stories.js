@@ -10,7 +10,8 @@ import {
     useSensors
 } from "@dnd-kit/core";
 
-import WorkspaceSampleTree from "../data/FileBrowser/workspace_sample.json"
+
+import WorkspaceSampleTree from "../data/Artha/coffee_shop/designFiles.json"
 
 import "./EditorStories.scss"
 
@@ -46,7 +47,7 @@ const Template = (args) => {
 
     useLayoutEffect(() => {
         editorRef.current.setTabGroupId("tab-group-1");
-        flattenTree(WorkspaceSampleTree.tree).forEach((node, index) => {
+        flattenTree(WorkspaceSampleTree).forEach((node, index) => {
             if (node.type === "file") {
                 editorRef.current.addTab(node);
             }
