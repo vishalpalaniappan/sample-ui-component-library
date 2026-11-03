@@ -1,0 +1,110 @@
+import(file = "includes/user_choice.ar")
+import(file = "participants/Cart.ar")
+
+behavior coffeeShop() {
+    introduce(
+        alias= shopping_cart, 
+        role= cart
+    )
+    introduce(
+        alias= menu, 
+        role= menu,
+        participant= menu
+    )
+    visitShop()
+}
+
+behavior visitShop() {
+    baristaPresentsMenu()
+
+    acceptChoice(
+        alias = user_choice
+    )
+
+    checkIfUserChoseCoffee(
+        alias = user_chose_coffee,
+        choice = user_choice
+    )
+    if (condition = user_chose_coffee) {
+        addCoffeeToCart(
+            cart = shopping_cart
+        )
+        visitShop()
+    }
+
+
+    checkIfUserChoseBagel(
+        alias = user_chose_bagel,
+        choice = user_choice
+    )
+    if (condition = user_chose_bagel) {
+        addBagelToCart(
+            cart = shopping_cart
+        )
+        visitShop()
+    }
+
+
+    checkIfUserChoseDisplayCart(
+        alias = user_chose_display_cart,
+        choice = user_choice
+    )
+    if (condition = user_chose_display_cart) {
+        displayCart(
+            cart = shopping_cart
+        )
+        visitShop()
+    }
+
+
+    checkIfUserChoseClearCart(
+        alias = user_chose_clear_cart,
+        choice = user_choice
+    )
+    if (condition = user_chose_clear_cart) {
+        clearCart(
+            cart = shopping_cart
+        )
+        visitShop()
+    }
+}
+
+behavior baristaPresentsMenu() {
+    terminal_display(
+        value = menu
+    )
+}
+
+behavior acceptChoice() {
+    terminal_input(
+        alias = terminal_input
+    )
+    yield(value=terminal_input)
+}
+
+behavior addCoffeeToCart(cart = cart) {
+    insert_at_end_of_list(
+        value = "Coffee", 
+        list = cart
+    )
+}
+
+behavior addBagelToCart(cart = cart) {
+    insert_at_end_of_list(
+        value = "Bagel", 
+        list = cart
+    )
+}
+
+behavior displayCart(cart = cart) {
+    terminal_display(
+        value = cart
+    )
+}
+
+behavior clearCart(cart = cart) {
+    clear_list(
+        list = cart
+    )
+}
+
