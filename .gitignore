@@ -4,3 +4,27 @@ package-lock.json
 storybook-static
 package-lock.json
 dist
+
+# LaTeX Folders to ignore
+svg-inkscape
+_minted-*
+_minted
+
+# LaTeX temporary/build files
+*.aux
+*.log
+*.out
+*.toc
+*.lof
+*.lot
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.bbl
+*.blg
+*.bcf
+*.run.xml
+*.nav
+*.snm
+*.vrb
+*.listing
