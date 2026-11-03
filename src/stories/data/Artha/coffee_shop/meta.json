@@ -1,0 +1,5 @@
+{
+    "entry": "coffee_shop.ar",
+    "atomic_behavior": "coffeeShop",
+    "version": "v0.0"
+}

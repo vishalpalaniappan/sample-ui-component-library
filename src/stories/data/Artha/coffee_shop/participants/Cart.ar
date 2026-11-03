@@ -1,0 +1,8 @@
+participant Cart() {
+    structural_type(
+        type= "list"
+    )
+    list_contains(
+        values= ["Coffee", "Bagel"]
+    )
+}
