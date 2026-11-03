@@ -1,0 +1,51 @@
+\documentclass{article}
+\usepackage{svg}
+\usepackage{parskip}
+\usepackage[most]{tcolorbox}
+\usepackage{minted}
+\usepackage{graphicx}
+\usepackage{pdflscape}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{graphicx}
+\usepackage{enumitem}
+\usepackage[
+    colorlinks=true,
+    linkcolor=blue,
+    urlcolor=blue,
+    citecolor=blue
+]{hyperref}
+\usepackage[
+    top=0.5in,
+    bottom=1in,
+    left=1in,
+    right=1in
+]{geometry}
+
+\newcommand{\labelledsection}[2]{
+  \noindent\textbf{#1}\par
+  \nopagebreak
+  \leftskip=2em
+  \noindent #2\par
+  \leftskip=0pt
+}
+
+% Define custom grey quote box environment
+\newtcolorbox{greyquote}{
+  colback=black!5!white,       % Light grey background (5% black, 95% white)
+  colframe=black!20!white,     % Subtle grey border line
+  arc=3pt,                     % Slightly rounded corners
+  boxrule=0.5pt,               % Border thickness
+  left=15pt, right=15pt,       % Horizontal padding
+  top=12pt, bottom=12pt,       % Vertical padding
+}
+
+\begin{document}
+
+
+\newpage
+\section{Introduction}
+\input{sections/introduction.tex}
+
+
+\end{document}
